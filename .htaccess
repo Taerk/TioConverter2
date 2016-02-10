@@ -1,0 +1,7 @@
+Options -Indexes
+
+RewriteEngine on
+RewriteBase		/t/
+RewriteCond 	%{REQUEST_FILENAME} !-f
+RewriteCond 	%{REQUEST_FILENAME} !-d
+RewriteRule    	^([^/.]*)?/?([^/.]*)?/?(.*)?$			index.php?tioevent=$1&tiogame=$2&other=$3  [L,QSA,NC]
