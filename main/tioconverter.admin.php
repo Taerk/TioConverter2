@@ -38,7 +38,7 @@ if (isset($_GET['login'])) {
 					$_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
 					$_SESSION['username'] = $user;
 					
-					header("location:admin");
+					header("location:../admin");
 				}
 			} else {
 				$error = 901; // passwd is not readable

@@ -48,14 +48,20 @@ switch (true) {
 								header("Content-type: text/css; charset=utf-8");
 								break;
 							default:
-								header("Content-type: text/plain; charset=utf-8");
+								header("HTTP/1.1 404 Not Found");
 								break;
 						}
 						echo file_get_contents(PATH . CONVERTER . '/' . $_GET['tiogame']);
 						
 						die;
 					} else {
-						require_once(PATH . CONVERTER . '/tioconverter.admin.php');
+						if (trim($_GET['tiogame']) == "" || !isset($_SESSION['admin'])) {
+							require_once(PATH . CONVERTER . '/tioconverter.admin.php');
+						} else {
+							header("HTTP/1.1 404 Not Found");
+							echo "404 Not Found";
+						}
+						die;
 					}
 					break;
 			}
