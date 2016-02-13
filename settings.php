@@ -8,13 +8,14 @@ define('PATH', 			dirname(__FILE__) . '/');
 define('CACHE', 		'cache');
 define('ARCHIVE',	 	'archive');
 define('CONVERTER', 	'main');
-define('THIRDPARTY', 	'3rdparty');
+define('THIRDPARTY',	'3rdparty');
+define('VARIABLE',		'etc');
 
 // Files
-define('CONFIG', 		PATH . 'library.json');
-define('LOGFILE',	 	PATH . 'tioconverter.log');
+define('CONFIG', 		PATH . VARIABLE . '/library.json');
+define('LOGFILE',	 	PATH . VARIABLE . '/tioconverter.log');
+define('PASSWD', 		PATH . VARIABLE . '/passwd');
 define('BCRYPT', 		PATH . 'brypt.php');
-define('PASSWD', 		PATH . ARCHIVE . '/passwd');
 
 require_once(PATH . CONVERTER . '/tioconverter.class.php');
 

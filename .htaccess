@@ -1,7 +1,15 @@
 Options -Indexes
 
+# Everything Else
 RewriteEngine on
-RewriteBase		/t/
-RewriteCond 	%{REQUEST_FILENAME} !-f
-RewriteCond 	%{REQUEST_FILENAME} !-d
-RewriteRule    	^([^/.]*)?/?([^/.]*)?/?(.*)?$			index.php?tioevent=$1&tiogame=$2&other=$3  [L,QSA,NC]
+RewriteBase	/t/
+
+# Add trailing slash to admin URL
+RewriteCond	%{REQUEST_FILENAME} !-f
+RewriteCond	%{REQUEST_FILENAME} !-d
+RewriteRule	^admin$		/t/admin/  [L,R=301,NC]
+
+# Admin page
+RewriteCond	%{REQUEST_FILENAME} !-f
+RewriteCond	%{REQUEST_FILENAME} !-d
+RewriteRule	^([^/.]*)?/?([^\/]*)?/?(.*)?$			index.php?tioevent=$1&tiogame=$2&other=$3  [L,QSA,NC]

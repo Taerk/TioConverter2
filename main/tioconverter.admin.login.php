@@ -8,7 +8,7 @@
 		<script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-		<link href="main/tioconverter.panel.index.css" rel="stylesheet" type="text/css">
+		<link href="../main/tioconverter.panel.login.css" rel="stylesheet" type="text/css">
 	</head>
 	<body>
 		<form action="?login" method="post" id="container">
@@ -29,12 +29,17 @@
 						case 901:
 							$type = "error";
 							$message = 'Permanent authentication failure';
-							custom_log("Error $error - Permanent authentication failure - " . PASSWD ." is not readable");
+							custom_log("Error $error - Permanent authenticaotion failure - " . PASSWD ." is not readable");
 							break;
 						case 902:
 							$type = "error";
 							$message = 'Invalid Credentials';
 							custom_log("Error $error - Invalid Credentials - No user found with matching password");
+							break;
+						case 903:
+							$type = "warning";
+							$message = 'Logged Out';
+							custom_log("Logged out due to visiting login page");
 							break;
 						case 990:
 							$type = "good";

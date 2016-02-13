@@ -37,7 +37,7 @@ body { background-image: linear-gradient(to bottom, #ddd, #fff 100px); }
 #login .btn {
 	height: 100%;
 }
-#message.warning { background-color: #cc0 }
+#message.warning { background-color: #ba0 }
 #message.good { background-color: #0a0 }
 #message.error { background-color: #c00 }
 form { display: inline; }

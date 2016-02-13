@@ -4,38 +4,48 @@ error_reporting(-1);
 require_once(PATH . '/settings.php');
 
 if (isset($_GET['login'])) {
-	if (file_exists(PASSWD)) {
-		if (is_readable(PASSWD)) {
-			$load_passwords = file_get_contents(PASSWD);
-			$load_passwords = str_replace("\r", "", $load_passwords);
-			$password_lines = explode("\n", $load_passwords);
-			foreach ($password_lines as $key=>$line) {
-				$tmp = explode("::", $line);
-				$password_lines[$key] = ['user' => $tmp[0], 'password' => $tmp[1]];
-			}
-			
-			$user = -1;
-			for ($i = 0, $pass_found = false; $i < count($password_lines) && !$pass_found; $i++) {
-				if (password_verify($_POST['secret'], $password_lines[$i]['password'])) {
-					$pass_found = true;
-					$user = $password_lines[$i]['user'];
+	if (!isset($_POST['secret'])) {
+		if ($_GET['login'] != '0') {
+			$error = 903; // auth token missing
+		}
+		session_destroy();
+		session_start();
+	} else if (trim($_POST['secret']) != "") {
+		if (file_exists(PASSWD)) {
+			if (is_readable(PASSWD)) {
+				$load_passwords = file_get_contents(PASSWD);
+				$load_passwords = str_replace("\r", "", $load_passwords);
+				$password_lines = explode("\n", $load_passwords);
+				foreach ($password_lines as $key=>$line) {
+					$tmp = explode("::", $line);
+					$password_lines[$key] = ['user' => $tmp[0], 'password' => $tmp[1]];
 				}
-			}
-			
-			if ($user == -1) {
-				$error = 902; // invalid password (user not found)
+				
+				$user = -1;
+				for ($i = 0, $pass_found = false; $i < count($password_lines) && !$pass_found; $i++) {
+					if (password_verify($_POST['secret'], $password_lines[$i]['password'])) {
+						$pass_found = true;
+						$user = $password_lines[$i]['user'];
+					}
+				}
+				
+				if ($user == -1) {
+					$error = 902; // invalid password (user not found)
+				} else {
+					$error = 990; // ** VALID LOGIN **
+					
+					$_SESSION['admin'] = true;
+					$_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
+					$_SESSION['username'] = $user;
+					
+					header("location:admin");
+				}
 			} else {
-				$error = 990; // ** VALID LOGIN **
-				
-				
-				$_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
-				$_SESSION['username'] = $user;
+				$error = 901; // passwd is not readable
 			}
 		} else {
-			$error = 901; // passwd is not readable
+			$error = 900; // passwd does not exist
 		}
-	} else {
-		$error = 900; // passwd does not exist
 	}
 }
 
@@ -72,6 +82,22 @@ if (!isset($_SESSION['admin'])) {
 // $default_game  = (isset($get_defaults_split[2])) ? (int)$get_defaults_split[2] : 0;
 // $download_from_dropbox = ($get_defaults_split[3] == "true") ? true : false;
 // $enable_results = ($get_defaults_split[4] == "true") ? true : false;
+
+require_once('tioconverter.admin.library.php');
+
+if (isset($_GET['page'])) {
+	switch ($_GET['page']) {
+		case 'manage':
+			$page = 'manage';
+			break;
+		default:
+			$page = 'add';
+			break;
+	}
+} else {
+	$page = 'add';
+}
+
 ?><!DOCTYPE html>
 <html>
 	<head>
@@ -79,12 +105,16 @@ if (!isset($_SESSION['admin'])) {
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-		<script type="text/javascript" src="js/jquery.color.plus-names-2.1.2.min.js"></script>
 		<script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.min.js"></script>
+		<script type="text/javascript" src="../3rdparty/jquery/jscolor/jquery.color.plus-names-2.1.2.min.js"></script>
+		<script type="text/javascript" src="../3rdparty/jquery/datetimepicker/build/jquery.datetimepicker.full.min.js"></script>
+		<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.min.js"></script> -->
+		<script type="text/javascript" src="tioconverter.panel.js"></script>
 		<link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 		<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-		<link href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.standalone.min.css" rel="stylesheet" type="text/css">
+		<!-- <link href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.standalone.min.css" rel="stylesheet" type="text/css"> -->
+		<link href="../3rdparty/jquery/datetimepicker/jquery.datetimepicker.css" rel="stylesheet" type="text/css">
+		<link href="tioconverter.panel.css" rel="stylesheet" type="text/css">
 		<title>Polarity - Bracket Panel</title>
 		<style type="text/css">
 		form {
@@ -95,9 +125,9 @@ if (!isset($_SESSION['admin'])) {
 		</style>
 		<script type="text/javascript">
 		$(document).ready(function() {
-			$('#tio-update-until').datepicker({
-				format: 'yyyy-mm-dd',
-				startDate: '+3d'
+			$('#tio-update-until').datetimepicker({
+				format: 'm/d/Y H:i',
+				startDate: '<?php echo date('m/d/Y H:00', strtotime('+1 hour')); ?>'
 			});
 		});
 		</script>
@@ -119,122 +149,25 @@ if (!isset($_SESSION['admin'])) {
 				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
-						<li<?php if (!isset($_GET['add'])) { ?> class="active" <?php } ?>><a href="?manage">Manage Bracket</a></li>
-						<li<?php if (isset($_GET['add'])) { ?> class="active" <?php } ?>><a href="?add">Add a New Bracket</a></li>
+						<li<?php if ($page == 'add') { ?> class="active" <?php } ?>><a href="?page=add">Add a Bracket</a></li>
+						<li<?php if ($page == 'manage') { ?> class="active" <?php } ?>><a href="?page=manage">Manage Bracket</a></li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li><a><?php echo $_SESSION['username']; ?></a></li>
+						<li class="pull-right"><a href="?login=0">Log Out</a></li>
 					</ul>
 				</div><!-- /.navbar-collapse -->
 			</div><!-- /.container-fluid -->
 		</nav>
-		<?php if (!isset($_GET['add'])) { ?>
-		<form action="" method="post" class="form-horizontal form-group" role="form" id="manage_bracket">
-			<div class="page-header"><h1>Manage Bracket</h1></div>
-			
-			<label for="basic-url">Select Bracket</label>
-			<select size="5" class="form-control"><?php
-			foreach ($tio->getEvents() as $id=>$event) {
-				echo '<option value="'.$id.'">'.$event.'</option>';
-			}
-			?></select>
-			<h5><a href="#" class="text-danger pull-right">Delete Bracket</a></h5>
-			
-			<div class="page-header"><h3>Update Information</h3></div>
-			
-			<label for="basic-url">Bracket URL</label>
-			<div class="input-group">
-				<span class="input-group-btn">
-					<button class="btn btn-success" type="button">Enabled</button>
-				</span>
-				<input type="text" class="form-control" id="basic-url">
-				<span class="input-group-btn">
-					<button class="btn btn-default" type="button">Check bracket link</button>
-				</span>
-			</div>
-			
-			<br>
-			
-			<div class="input-group">
-				<span class="input-group-addon" id="basic-addon2">tio ID</span>
-				<input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon2" readonly>
-			</div>
-			
-			<br>
-			
-			<div class="form-group">
-				<div class="col-xs-5">
-					<label for="tio-tourney-name">Tournament Name</label>
-					<input type="text" class="form-control" id="tio-tourney-name">
-				</div>
-				
-				<div class="col-xs-3">
-					<label for="tio-tourney-name">Check Interval</label>
-					<div class="input-group">
-						<input type="text" class="form-control" id="tio-tourney-name" value="5">
-						<span class="input-group-addon" id="basic-addon">min.</span>
-					</div>
-				</div>
-				
-				<div class="col-xs-4">
-					<label for="tio-tourney-name">Update Until</label>
-					<div class="input-group">
-						<span class="input-group-addon" id="basic-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-						<input type="text" class="form-control" id="tio-update-until">
-					</div>
-				</div>
-			</div>
-			
-			<hr>
-			
-			<button type="button" class="btn btn-primary btn-block" aria-haspopup="true" aria-expanded="true">Update Settings</button>
-		</form>
-		<?php } else { ?>
-		<form action="" method="post" class="form-horizontal" role="form" id="add_bracket">
-			<div class="page-header"><h1>Add a New Bracket</h1></div>
-			
-			<label for="basic-url">Input bracket download URL</label>
-			<div class="input-group">
-				<input type="text" class="form-control" id="basic-url">
-				<span class="input-group-btn">
-					<button class="btn btn-default" type="button">Check bracket link</button>
-				</span>
-			</div>
-			
-			<div class="page-header"><h3>Check Information</h3></div>
-			<div class="input-group">
-				<span class="input-group-addon" id="basic-addon2">tio ID</span>
-				<input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon2" readonly>
-			</div>
-			
-			<br>
-			
-			<div class="form-group">
-				<div class="col-xs-5">
-					<label for="tio-tourney-name">Tournament Name</label>
-					<input type="text" class="form-control" id="tio-tourney-name">
-				</div>
-				
-				<div class="col-xs-3">
-					<label for="tio-tourney-name">Check Interval</label>
-					<div class="input-group">
-						<input type="text" class="form-control" id="tio-tourney-name" value="5">
-						<span class="input-group-addon" id="basic-addon">min.</span>
-					</div>
-				</div>
-				
-				<div class="col-xs-4">
-					<label for="tio-tourney-name">Update Until</label>
-					<div class="input-group">
-						<span class="input-group-addon" id="basic-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-						<input type="text" class="form-control" id="tio-update-until">
-					</div>
-				</div>
-			</div>
-			
-			<hr>
-			
-			<button type="button" class="btn btn-primary btn-block" aria-haspopup="true" aria-expanded="true">Add Bracket</button>
-				
-			</div>
-		</form>
-		<?php } ?>
+		
+		<?php
+		switch ($page) {
+			case 'manage':
+				require_once('tioconverter.admin.manage.php');
+				break;
+			case 'add':
+				require_once('tioconverter.admin.add.php');
+				break;
+		} ?>
 	</body>
 </html>

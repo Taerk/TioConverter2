@@ -1,0 +1,34 @@
+#add_bracket_progress {
+	display: flex;
+	flex-direction: row;
+	margin-top: 20px;
+	width: 100%;
+	border: 1px solid #ccc;
+	text-align: center;
+	background-color: #eee;
+}
+#add_bracket_progress .check {
+	flex-grow: 1;
+	color: #fff;
+	opacity: 0;
+}
+#add_bracket_progress .sep {
+	border-right: 1px solid #ccc;
+}
+#add_bracket_error {
+	margin-top: 10px;
+	color: red;
+	text-align: center;
+	opacity: 0;
+}
+#add_bracket_error_result { display: none }
+#add_bracket {
+	opacity: 0;
+	display: none;
+}
+h1.result {
+	color: green;
+	font-weight: bold;
+	text-align: center;
+	opacity: 0;
+}
