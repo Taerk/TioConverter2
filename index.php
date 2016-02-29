@@ -16,26 +16,26 @@ switch (true) {
 					// Check for password_has function. If it doesn't exist, get it from bcrypt
 					if (!function_exists('password_hash')) {
 						try {
-							require_once(PATH . THIRDPARTY . '/bcrypt.class.php');
+							require_once(BCRYPT);
 						} catch (Exception $e) {
 							die('bcrypt encryption missing');
 						}
 					}
 					
-					require_once(PATH . CONVERTER . '/tioconverter.debug.php');
+					require_once(CONVERTER . '/tioconverter.debug.php');
 					break;
 					
 				case "encrypt":
-					require_once(PATH . CONVERTER . '/encrypt.php');
+					require_once(CONVERTER . '/encrypt.php');
 					break;
 					
 				case "download":
-					require_once(PATH . CONVERTER . '/tioconverter.download.php');
+					require_once(CONVERTER . '/tioconverter.download.php');
 					break;
 					
 				default:
 					// Allow shortcuts to syles and js files					
-					if (isset($_SESSION['admin']) && file_exists(PATH . CONVERTER . '/' . $_GET['tiogame']) && !is_dir(PATH . CONVERTER . '/' . $_GET['tiogame'])) {
+					if (isset($_SESSION['admin']) && file_exists(CONVERTER . '/' . $_GET['tiogame']) && !is_dir(CONVERTER . '/' . $_GET['tiogame'])) {
 						
 						// Correct file type
 						$fileext = explode(".", $_GET['tiogame'])[count(explode(".", $_GET['tiogame'])) - 1];
@@ -51,12 +51,12 @@ switch (true) {
 								header("HTTP/1.1 404 Not Found");
 								break;
 						}
-						echo file_get_contents(PATH . CONVERTER . '/' . $_GET['tiogame']);
+						echo file_get_contents(CONVERTER . '/' . $_GET['tiogame']);
 						
 						die;
 					} else {
 						if (trim($_GET['tiogame']) == "" || !isset($_SESSION['admin'])) {
-							require_once(PATH . CONVERTER . '/tioconverter.admin.php');
+							require_once(CONVERTER . '/tioconverter.admin.php');
 						} else {
 							header("HTTP/1.1 404 Not Found");
 							echo "404 Not Found";
@@ -67,12 +67,12 @@ switch (true) {
 			}
 			break;
 		} else {
-			require_once(PATH . CONVERTER . '/tioconverter.admin.php');
+			require_once(CONVERTER . '/tioconverter.admin.php');
 		}
 		
 	// Front Page
 	default:
-		require_once(PATH . CONVERTER . '/tioconverter.front.php');
+		require_once(CONVERTER . '/tioconverter.front.php');
 		break;
 }
 

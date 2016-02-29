@@ -1,60 +1,77 @@
-<form action="" method="post" class="form-horizontal form-group" role="form" id="manage_bracket">
+<form action="?action=update" method="post" class="form-horizontal form-group" role="form" id="update_bracket">
 	<div class="page-header"><h1>Manage Bracket</h1></div>
 	
 	<label for="basic-url">Select Bracket</label>
-	<select size="5" class="form-control"><?php
+	<select size="8" class="form-control"><?php
 	foreach ($tio->getEvents() as $id=>$event) {
 		echo '<option value="'.$id.'">'.$event.'</option>';
 	}
 	?></select>
+	<?php var_dump($tio->getEvents()); ?>
+	<?php var_dump($tio->getArchive()); ?>
 	<h5><a href="#" class="text-danger pull-right">Delete Bracket</a></h5>
 	
-	<div class="page-header"><h3>Update Information</h3></div>
-	
-	<label for="basic-url">Bracket URL</label>
-	<div class="input-group">
-		<span class="input-group-btn">
-			<button class="btn btn-success" type="button">Enabled</button>
-		</span>
-		<input type="text" class="form-control" id="basic-url">
-		<span class="input-group-btn">
-			<button class="btn btn-default" type="button">Check bracket link</button>
-		</span>
-	</div>
-	
-	<br>
-	
-	<div class="input-group">
-		<span class="input-group-addon" id="basic-addon2">tio ID</span>
-		<input type="text" class="form-control" id="basic-url" aria-describedby="basic-addon2" readonly>
-	</div>
-	
-	<br>
-	
-	<div class="form-group">
-		<div class="col-xs-5">
-			<label for="tio-tourney-name">Tournament Name</label>
-			<input type="text" class="form-control" id="tio-tourney-name">
+	<div id="update_bracket_confirm">
+		<div class="page-header"><h3>Update Information</h3></div>
+		<div class="input-group">
+			<span class="input-group-addon" id="tio-tourney-id-tip" name="tio-tourney-id-tip">Tio ID</span>
+			<input type="text" class="form-control" id="tio-tourney-id" name="tio-tourney-id" aria-describedby="tio-tourney-id-tip" readonly>
 		</div>
 		
-		<div class="col-xs-3">
-			<label for="tio-tourney-name">Check Interval</label>
-			<div class="input-group">
-				<input type="text" class="form-control" id="tio-tourney-name" value="5">
-				<span class="input-group-addon" id="basic-addon">min.</span>
+		<input type="hidden" id="tio-tourney-download" name="tio-tourney-download" readonly>
+		
+		<br>
+	
+		<div class="form-group">
+			<div class="col-xs-6">
+				<label for="tio-tourney-name">Display Name</label>
+				<div class="input-group">
+					<input type="text" class="form-control" id="tio-tourney-name" name="tio-tourney-name">
+					<span class="input-group-btn">
+						<input id="tio-tourney-featured" name="tio-tourney-featured" type="hidden" value="0">
+						<button class="btn btn-default" id="tio-tourney-featured-switch" name="tio-tourney-featured-switch" type="button" value="0" title="Featured Bracket"><span class="fa fa-star-o"></span></button>
+					</span>
+				</div>
+			</div>
+			
+			<div class="col-xs-6">
+				<label for="tio-tourney-permalink">Permalink</label>
+				<div class="input-group">
+					<input type="text" class="form-control" id="tio-tourney-permalink" name="tio-tourney-permalink">
+					<span class="input-group-btn">
+						<button class="btn btn-success" id="tio-tourney-permalink-auto" name="tio-tourney-permalink-auto" type="button" value="1">Auto</button>
+					</span>
+				</div>
+			</div>
+		</div>
+			
+		<div class="form-group">
+			<div class="col-xs-5">
+				<label for="tio-tourney-default">Default Event</label>
+				<select class="form-control" id="tio-tourney-default" name="tio-tourney-default"></select>
+			</div>
+			
+			<div class="col-xs-3">
+				<label for="tio-update-interval">Check Interval</label>
+				<div class="input-group">
+					<input type="text" class="form-control" id="tio-update-interval" name="tio-update-interval" value="60">
+					<span class="input-group-addon" id="tio-update-interval-addon" name="tio-update-interval-addon">sec.</span>
+				</div>
+			</div>
+			
+			<div class="col-xs-4">
+				<label for="tio-update-until">Update Until</label>
+				<div class="input-group">
+					<span class="input-group-addon" id="tio-update-until-addon" name="tio-update-until-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+					<input type="text" class="form-control" id="tio-update-until" name="tio-update-until" value="<?php echo date('m/d/Y H:00', strtotime('+1 hour')); ?>">
+				</div>
 			</div>
 		</div>
 		
-		<div class="col-xs-4">
-			<label for="tio-tourney-name">Update Until</label>
-			<div class="input-group">
-				<span class="input-group-addon" id="basic-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-				<input type="text" class="form-control" id="tio-update-until">
-			</div>
-		</div>
+		<hr>
+		
+		<button type="button" class="btn btn-primary btn-block" aria-haspopup="true" aria-expanded="true">Update Settings</button>
+			
 	</div>
 	
-	<hr>
-	
-	<button type="button" class="btn btn-primary btn-block" aria-haspopup="true" aria-expanded="true">Update Settings</button>
 </form>

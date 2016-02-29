@@ -8,43 +8,32 @@
     },
     "tournaments": [
         {
-            "id": "44d4e478-fd7c-442b-bc39-24fbd8f5c36f",
-            "name": "CFL Sept Sm4sh",
-            "added": "01/01/2000 00:00",
-            "added_by": "unknown",
-            "permalink": "cfl-sept-sm4sh",
-            "download": "https://www.dropbox.com/s/77ipmawsta9mp5k/CFL%20Sept.%20Sm4sh.tio?dl=1",
-            "enabled": false,
-            "hidden": false,
-            "default": 0,
-            "update_interval": 60,
-            "update_until": "01/01/2000 00:00"
-        },
-        {
-            "id": "309a68d3-43aa-4f46-9605-e517f332ac06",
-            "name": "CFL Smackdown Monthly Melee September",
-            "added": "01/01/2000 00:00",
-            "added_by": "unknown",
-            "permalink": "cfl-smackdown-monthly-melee-september",
-            "download": "https://www.dropbox.com/s/xqdqe3f8djfxi1i/CFL%20Smackdown%20Monthly%20Melee%20September.tio?dl=1",
-            "enabled": false,
-            "hidden": false,
-            "default": 0,
-            "update_interval": 60,
-            "update_until": "01/01/2000 00:00"
-        },
-        {
-            "id": "f901b22f-58fd-4c2a-bbd8-d46963306fff",
-            "name": "CFL Smackdown 39",
-            "added": "02/13/2016 12:18",
-            "added_by": "taerk",
-            "permalink": "cfl-smackdown-39",
-            "download": "http://getjohns.com/brackets/archive2/%5Bf901b22f-58fd-4c2a-bbd8-d46963306fff%5D_CFL_Smackdown_39.tio",
+            "id": "72924776-9268-49f8-a178-24aee5c57dce",
+            "name": "CFL Smackdown February Monthly Smash 4",
+            "added": "02/21/2016 06:15",
+            "added_by": "admin",
+            "permalink": "cfl-smackdown-february-monthly-smash-4",
+            "download": "https://polarity.gg/t/uploads/CFL%20Smackdown%20February%20Monthly%20Smash%204.tio",
             "enabled": true,
             "hidden": false,
-            "default_event": "0daf8d88-b24c-4e87-b6f1-da47586e9327",
+            "featured": true,
+            "default_event": "1410df16-2549-4fad-9456-f5af2ae8f15e",
             "update_interval": "60",
-            "update_until": "02/13/2016 13:00"
+            "update_until": "02/21/2016 07:00"
+        },
+        {
+            "id": "72e62701-1327-4ecf-82ee-43f79511597a",
+            "name": "CFL Smackdown 64 Melee",
+            "added": "02/21/2016 06:15",
+            "added_by": "admin",
+            "permalink": "cfl-smackdown-64-melee",
+            "download": "https://polarity.gg/t/uploads/CFL%20Smackdown%2064%20Melee.tio",
+            "enabled": true,
+            "hidden": false,
+            "featured": true,
+            "default_event": "95331a4c-12b1-4521-8489-98e7db85c07d",
+            "update_interval": "60",
+            "update_until": "02/21/2016 07:00"
         }
     ]
 }

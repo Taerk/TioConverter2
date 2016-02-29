@@ -50,38 +50,9 @@ if (isset($_GET['login'])) {
 }
 
 if (!isset($_SESSION['admin'])) {
-	require_once(PATH . CONVERTER . '/tioconverter.admin.login.php');
+	require_once(CONVERTER . '/tioconverter.admin.login.php');
 	die;
 }
-
-// if (isset($_POST['update'])) {
-	// var_dump($_POST);
-	
-	// $text = "";
-	// $text .= str_replace("\r", "", str_replace("\n", "|", $_POST['bracket_url']))."\n";
-	// $text .= $_POST['default_event']."\n";
-	// $text .= $_POST['default_game']."\n";
-	// if (isset($_POST['enable_download'])) { $text .= "true"; } else { $text .= "false"; }
-	// $text .= "\n";
-	// if (isset($_POST['enable_results'])) { $text .= "true"; } else { $text .= "false"; }
-	// $text .= "\n";
-	
-	// $handle = fopen('defaults.txt', 'w+');
-	// fwrite($handle, $text);
-	// fclose($handle);
-// }
-
-// $get_defaults = file_get_contents('defaults.txt');
-// $get_defaults_split = explode("\n", str_replace("\r", "", $get_defaults));
-// $all_dropbox_links = explode("|", trim(str_replace("dl=0", "dl=1", $get_defaults_split[0])));
-// $dropbox_link = '';
-// foreach ($all_dropbox_links as $drop_link) {
-	// $dropbox_link .= $drop_link."\n";
-// }
-// $default_event = (isset($get_defaults_split[1])) ? (int)$get_defaults_split[1] : 0;
-// $default_game  = (isset($get_defaults_split[2])) ? (int)$get_defaults_split[2] : 0;
-// $download_from_dropbox = ($get_defaults_split[3] == "true") ? true : false;
-// $enable_results = ($get_defaults_split[4] == "true") ? true : false;
 
 require_once('tioconverter.admin.library.php');
 

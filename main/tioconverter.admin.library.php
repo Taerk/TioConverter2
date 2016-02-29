@@ -15,10 +15,11 @@ class tioConverterLibrary {
 		$new_tourney_download	= (isset($options['tio-tourney-download']) ? $options['tio-tourney-download'] : '-1');
 		$new_tourney_enabled	= (isset($options['tio-tourney-enabled']) ? $options['tio-tourney-enabled'] : true);
 		$new_tourney_hidden		= (isset($options['tio-tourney-hidden']) ? $options['tio-tourney-hidden'] : false);
-		$new_tourney_default = (isset($options['tio-tourney-default']) ? $options['tio-tourney-default'] : 0);
+		$new_tourney_featured	= (isset($options['tio-tourney-featured']) && $options['tio-tourney-featured'] == 1 ? true : false);
+		$new_tourney_default 	= (isset($options['tio-tourney-default']) ? $options['tio-tourney-default'] : 0);
 		$new_tourney_update_int	= (isset($options['tio-update-interval']) ? $options['tio-update-interval'] : 60);
 		$new_tourney_update_til	= (isset($options['tio-update-until']) ? $options['tio-update-until'] : date('m/d/Y H:00', strtotime('+1 day')));
-				
+		
 		for ($i = 0, $exists = false, $exist_type = -1; $i < count($this->library['tournaments']) && $exists === false; $i++) {
 			if ($this->library['tournaments'][$i]['id'] == $new_tourney_id) {
 				$exist_type = 0;
@@ -38,19 +39,26 @@ class tioConverterLibrary {
 			'download' 			=> $new_tourney_download,
 			'enabled' 			=> $new_tourney_enabled,
 			'hidden' 			=> $new_tourney_hidden,
+			'featured' 			=> $new_tourney_featured,
 			'default_event'		=> $new_tourney_default,
 			'update_interval'	=> $new_tourney_update_int,
 			'update_until'		=> $new_tourney_update_til
 		]);
 		
-		if (!file_exists(PATH . ARCHIVE . '/' . $new_tourney_id)) {
-			mkdir(PATH . ARCHIVE . '/' . $new_tourney_id);
+		// Initial upload
+		if (!file_exists(ARCHIVE . '/' . $new_tourney_id)) {
+			mkdir(ARCHIVE . '/' . $new_tourney_id);
 		}
 		
 		if ($exists === false) {
+			file_put_contents(ARCHIVE . '/' . $new_tourney_id . '/' . $new_tourney_id . '.tio', file_get_contents($new_tourney_download));
+			
+			$meta = ['id' => $new_tourney_id, 'md5' => md5_file(ARCHIVE . '/' . $new_tourney_id . '/' . $new_tourney_id . '.tio'), 'timer' => strtotime($new_tourney_update_til)];
+			file_put_contents(ARCHIVE . '/' . $new_tourney_id . '/meta', json_encode($meta, JSON_PRETTY_PRINT));
+			
 			$prev_reporting = ini_get('error_reporting');
 			error_reporting(0);
-			$write = file_put_contents(CONFIG, stripslashes(json_encode($this->library, JSON_PRETTY_PRINT)));
+			$write = file_put_contents(LIBRARY, stripslashes(json_encode($this->library, JSON_PRETTY_PRINT)));
 			if ($write) {
 				echo json_encode(['result' => true, 'message' => 'Successfully updated']);
 			} else {
@@ -70,7 +78,7 @@ class tioConverterLibrary {
 
 if (isset($_GET['action'])) {	
 	// Make thing
-	$lib = new tioConverterLibrary(CONFIG);
+	$lib = new tioConverterLibrary(LIBRARY);
 	header("Content-type: application/json; charset=utf-8");
 	
 	if (!isset($_POST['data'])) {

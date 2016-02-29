@@ -216,6 +216,11 @@ $(document).ready(function() {
 		$('#tio-tourney-permalink').val(original.toLowerCase().replace().replace(/\W+/g, " ").replace(/\s+/g, '-'));
 	});
 	
+	// Disable auto-permalink by default on update page
+	$('#update_bracket #tio-tourney-permalink-auto').val(0);
+	$('#update_bracket #tio-tourney-permalink-auto').removeClass('btn-primary');
+	$('#update_bracket #tio-tourney-permalink-auto').addClass('btn-danger');
+	
 	// Toggle auto-permalink
 	$('#tio-tourney-permalink-auto').click(function() {
 		if ($('#tio-tourney-permalink-auto').val() == 0) {
@@ -226,6 +231,21 @@ $(document).ready(function() {
 			$('#tio-tourney-permalink-auto').val(0);
 			$('#tio-tourney-permalink-auto').removeClass('btn-primary');
 			$('#tio-tourney-permalink-auto').addClass('btn-danger');
+		}
+	});
+	
+	// Toggle Featured
+	$('#tio-tourney-featured-switch').click(function() {
+		if ($('#tio-tourney-featured').val() == 0) {
+			$('#tio-tourney-featured').val(1);
+			$('#tio-tourney-featured-switch').addClass('btn-warning');
+			$('#tio-tourney-featured-switch .fa').removeClass('fa-star-o');
+			$('#tio-tourney-featured-switch .fa').addClass('fa-star');
+		} else {
+			$('#tio-tourney-featured').val(0);
+			$('#tio-tourney-featured-switch').removeClass('btn-warning');
+			$('#tio-tourney-featured-switch .fa').removeClass('fa-star');
+			$('#tio-tourney-featured-switch .fa').addClass('fa-star-o');
 		}
 	});
 });

@@ -40,7 +40,13 @@
 		<div class="form-group">
 			<div class="col-xs-6">
 				<label for="tio-tourney-name">Display Name</label>
-				<input type="text" class="form-control" id="tio-tourney-name" name="tio-tourney-name">
+				<div class="input-group">
+					<input type="text" class="form-control" id="tio-tourney-name" name="tio-tourney-name">
+					<span class="input-group-btn">
+						<input id="tio-tourney-featured" name="tio-tourney-featured" type="hidden" value="0">
+						<button class="btn btn-default" id="tio-tourney-featured-switch" name="tio-tourney-featured-switch" type="button" value="0" title="Featured Bracket"><span class="fa fa-star-o"></span></button>
+					</span>
+				</div>
 			</div>
 			
 			<div class="col-xs-6">

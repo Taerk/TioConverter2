@@ -1,4 +1,9 @@
 <?php
+
+if (strpos($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME']) !== false) {
+	require_once('../settings.php');
+}
+
 class tioParser {
 	public 	$archive_directory = "archive";
 	public 	$cache_directory = "cache";
@@ -8,6 +13,7 @@ class tioParser {
 	public 	$tio_file;
 	public 	$events = [];
 	public 	$files = [];
+	public	$library = [];
 	
 	private $debug_mode = false;
 	private $logging = true;
@@ -17,13 +23,24 @@ class tioParser {
 	private $error_reporting_save = null;
 	private $error_reporting_set = E_ALL;
 	
-	function __construct() {
+	function __construct($options) {
 		// Give a random session ID
 		$this->session_id = uniqid('');
 		
 		// Set custom level of error reporting
 		$this->error_reporting_save = ini_get("error_reporting");
 		error_reporting($this->error_reporting_set);
+		
+		// Set up file locations
+		if (isset($options['settings'])) {
+			$this->settings_file = $options['settings'];
+		}
+		if (isset($options['archive'])) {
+			$this->archive_directory = $options['archive'];
+		}
+		if (isset($options['cache'])) {
+			$this->cache_directory = $options['cache'];
+		}
 		
 		// Set up file structure
 		$this->setup();
@@ -102,22 +119,44 @@ class tioParser {
 		// Reset db
 		$this->files = [];
 		
+		// Get information from library
+		$this->library = json_decode(file_get_contents($this->settings_file), true);
+		
 		// Get files from Archive
 		$archives = scandir($this->archive_directory);
 		foreach ($archives as $archive) {
-			if (strpos($archive, "]_") > -1) { // Check that the format is correct
-				$t = explode("]_", $archive); // Split
-				$cleanedFileName = trim(str_replace(".tio", "", str_replace("_", " ", $t[1])));
+			if (is_dir($this->archive_directory . '/' . $archive) && $archive != "." && $archive != "..") {
+				$this->events[$archive] = [];
+					
+				// Default archive formatting
+				$this->files[$archive] = [
+					'bracket' => NULL,
+					'info' => NULL,
+					'other' => []
+				];
 				
-				if ($cleanedFileName != "") { // Check for empty filenames
-					$this->events[str_replace("[", "", $t[0])] = $cleanedFileName;
-					array_push($this->files, $archive);
+				foreach (scandir($this->archive_directory . '/' . $archive) as $archived_file) {
+					
+					// Input file into array
+					switch (true) {
+						case ($archived_file == "."):
+						case ($archived_file == ".."):
+							// Skip . and .. file
+							break;
+						case (strpos($archived_file, ".tio") !== false):
+							$this->files[$archive]['bracket'] = $this->archive_directory . '/' . $archive . '/' . $archived_file;
+							break;
+						case ($archived_file == 'meta'):
+							$this->files[$archive]['info'] =  $this->archive_directory . '/' . $archive . '/' . $archived_file;
+							break;
+						default:
+							array_push($this->files[$archive]['other'], $this->archive_directory . '/' . $archive . '/' . $archived_file);
+							break;
+					}
 				}
 			}
 		}
-		asort($this->events);
-		
-		// Get files from cache directory
+		asort($this->files);
 	}
 	
 	/**
@@ -521,98 +560,9 @@ class tioParser {
 	}
 }
 
-$tio = new tioParser;
-// var_dump($tio->parseBracket());
-// die;
+$tio = new tioParser(['settings' => LIBRARY, 'archive' => ARCHIVE, 'cache' => CACHE]);
 
-/**
-
-$i = 1;
-$default_event = "";
-foreach ($event_list as $key=>$event) {
-	// echo $i." vs ".$default."\n";
-	if ($i == $default) {
-		$default_event = $key;
-	}
-	$i++;
-}
-
-if (isset($_GET['events'])) {
-	echo json_encode($event_list);
-	die;
-}
-
-if ((!file_exists($cache_file)) && ($download_from_dropbox)) {
-	$dropbox_tio_file = file_get_contents($dropbox_link);
-	file_put_contents($cache_dir.$cache_file, $dropbox_tio_file);
-	chmod($cache_dir.$cache_file, 0644);
-	
-	$tio_cache = simplexml_load_file($cache_dir.$cache_file);
-	$archive_id = trim((string)$tio_cache->EventList->Event->ID);
-	$archive_name = trim((string)$tio_cache->EventList->Event->Name);
-	
-	// Save as archive when md5 is different
-	$archive_path = str_replace(" ", "_", "archive/[$archive_id]_$archive_name.tio");
-	if ((trim($archive_id) != "") && (!file_exists($archive_path)) || (md5_file($archive_path) != md5_file($cache_dir.$cache_file))) {
-		if (file_exists($archive_path)) {
-			unlink($archive_path);
-		}
-		file_put_contents($archive_path, $dropbox_tio_file);
-		chmod($archive_path, 0644);
-	}
-	
-	// Clear cache
-	$deleted = 0;
-	$cache = scandir('cache/');
-	foreach ($cache as $scan_cached_file) {
-		if (($scan_cached_file != ".") && ($scan_cached_file != "..") && ($scan_cached_file != $cache_file)) {
-			$deleted++;
-			unlink($cache_dir.$scan_cached_file);
-		}
-	}
-}
-
-if (isset($_GET['get']) || isset($_GET['agna']) || $debug) {	
-	$archived_files = scandir("archive/");
-	$selected_file = "";
-	foreach ($archived_files as $file) {
-		if (isset($_GET['get'])) {
-			if (strpos($file, $_GET['get']) > -1) {
-				$selected_file = $file;
-			}
-		} else {
-			if (strpos($file, $default_event) > -1) {
-				$selected_file = $file;
-			}
-		}
-	}
-	
-	if (isset($_GET['md5'])) {
-		header('Content-Type: text/plain');
-		if ($selected_file == "") {
-			echo "-1";
-		} else {
-			echo md5_file("archive/".$selected_file);
-		}
-		die;
-	}
-	
-	if ($selected_file == "") {
-		$empty = [];
-		echo json_encode($empty);
-		die;
-	}
-	
-	if (isset($_GET['agna'])) {
-		require('agna-parse.php');
-		die;
-	}
-	
-	if (!$debug) {
-		header('Content-Type: application/json');
-		echo json_encode($events);
-		die;
-	}
-} */
-
+// $tio_cache = simplexml_load_file($cache_dir.$cache_file); 
+// $archive_id = trim((string)$tio_cache->EventList->Event->ID);
+// $archive_name = trim((string)$tio_cache->EventList->Event->Name);
 ?>
