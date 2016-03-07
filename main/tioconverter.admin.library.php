@@ -53,7 +53,13 @@ class tioConverterLibrary {
 		if ($exists === false) {
 			file_put_contents(ARCHIVE . '/' . $new_tourney_id . '/' . $new_tourney_id . '.tio', file_get_contents($new_tourney_download));
 			
-			$meta = ['id' => $new_tourney_id, 'md5' => md5_file(ARCHIVE . '/' . $new_tourney_id . '/' . $new_tourney_id . '.tio'), 'timer' => strtotime($new_tourney_update_til)];
+			$meta = [
+				'id' => $new_tourney_id,
+				'md5' => md5_file(ARCHIVE . '/' . $new_tourney_id . '/' . $new_tourney_id . '.tio'),
+				'last' => strtotime($new_tourney_update_til),
+				'next' => strtotime($new_tourney_update_til),
+				'players' => []
+			];
 			file_put_contents(ARCHIVE . '/' . $new_tourney_id . '/meta', json_encode($meta, JSON_PRETTY_PRINT));
 			
 			$prev_reporting = ini_get('error_reporting');

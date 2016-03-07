@@ -15,9 +15,8 @@
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 		
 		<!-- In-house -->
-		<link rel="stylesheet" href="/polaritytest.css" type="text/css">
 		<!-- <script type="text/javascript" src="bracket.js"></script> -->
-		<link rel="stylesheet" type="text/css" href="main/tioconverter.bracket.front.css">
+		<link rel="stylesheet" type="text/css" href="/main/tioconverter.bracket.front.css">
 	</head>
 	<body>
 		<nav class="navbar navbar-default navbar-fixed-top">
@@ -30,7 +29,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				  </button>
-				  <a class="navbar-brand" href="#">Polarity Brackets</a>
+				  <a class="navbar-brand" href="/">Polarity Brackets</a>
 				</div>
 
 				<!-- Collect the nav links, forms, and other content for toggling -->
@@ -53,15 +52,15 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">View <span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a href="#">Bracket</a></li>
-								<!-- <li><a href="#">Results</a></li> -->
+								<li><a href="#">Results</a></li>
 							</ul>
 						</li>
 						
 						<!-- Search for Player -->
 						<li>
-							<form class="navbar-form" role="search">
+							<form class="navbar-form" role="search" id="search-player">
 								<div class="input-group">
-									<input class="form-control" placeholder="Search for Player">
+									<input class="form-control" placeholder="Search for Player" type="search">
 									<div class="input-group-btn">
 										<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
 									</div>

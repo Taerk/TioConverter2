@@ -6,6 +6,10 @@ $validate_session = true;
 ini_set('xdebug.var_display_max_children', 256);
 ini_set('xdebug.var_display_max_depth', 12);
 
+// URLs
+define('HTTP',			'polarity.test'); // Unused
+define('HTTPS',			'polarity.test'); // Unused
+
 // Directories
 define('PATH', 			dirname(__FILE__) . '/');
 define('CACHE', 		PATH . 'cache');
@@ -18,7 +22,7 @@ define('VARIABLE',		PATH . 'etc');
 define('LIBRARY', 		VARIABLE . '/library.json');
 define('LOGFILE',	 	VARIABLE . '/tioconverter.log');
 define('PASSWD', 		VARIABLE . '/passwd');
-define('BCRYPT', 		THIRDPARTY . '/bcrypt/bcrypt.php');
+define('BCRYPT', 		THIRDPARTY . '/bcrypt/class.bcrypt.php');
 
 // Authentication
 define('SALT', 'XOuKbA6EcdJ2f5dde0X7Xq3yK@PamFs4f*GO');
@@ -29,9 +33,13 @@ define('MAINTENANCE_MODE', false);
 // Enable downloading of .tio files
 define('ALLOW_DOWNLOAD', true);
 
-// Requires
+// Requires & Includes
 require_once(CONVERTER . '/tioconverter.class.php');
 require_once(CONVERTER . '/tioconverter.functions.php');
+
+if (file_exists(BCRYPT) && !function_exists('password_hash')) {
+	include_once(BCRYPT);
+}
 
 // Expire session if invalid
 session_start();

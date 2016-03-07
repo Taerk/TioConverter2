@@ -1,3 +1,6 @@
+body {
+	padding-top: 50px;
+}
 #add_bracket_progress {
 	display: flex;
 	flex-direction: row;
