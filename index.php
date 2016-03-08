@@ -4,7 +4,7 @@
  * 
  * By Gabriel Nieves (Taerk)
  */
-
+ 
 require_once('settings.php');
 
 switch (true) {

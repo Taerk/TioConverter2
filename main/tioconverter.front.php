@@ -15,7 +15,7 @@
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 		
 		<!-- In-house -->
-		<!-- <script type="text/javascript" src="bracket.js"></script> -->
+		<script type="text/javascript" src="/main/tioconverter.bracket.js"></script>
 		<link rel="stylesheet" type="text/css" href="/main/tioconverter.bracket.front.css">
 	</head>
 	<body>
@@ -35,14 +35,28 @@
 				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
+						<?php if (isset($_SESSION['admin'])) { ?>
+						<!-- Admin -->
+						<li class="dropdown admin">
+							<a href="/admin" role="button">Admin Panel</a>
+						</li>
+						
+						<?php } ?>
+						<!-- Featured Brackets -->
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Featured Brackets<span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a href="#"></a></li>
 							</ul>
 						</li>
+						
+						<!-- View All Brackets -->
 						<li><a href="archive">View All Brackets</a></li>
+						
+						<!-- Download -->
 						<li><a href="#"><span class="glyphicon glyphicon-download-alt"></span></a></li>
+						
+						<!-- Refresh -->
 						<li><a href="#"><span class="glyphicon glyphicon-refresh"></a></li>
 					</ul>
 					
@@ -79,12 +93,56 @@
 						<div id="winners" class="big-section">
 							<div class="round-head"><div id="winner_rounds"></div></div>
 							<canvas id="winner_lines"></canvas>
-							<div id="winner_matches"></div>
+							<div id="winner_matches">
+							
+								<div class="match" match-id="0" winner-id="6a466465-7798-4d1f-b537-e4e84518f679" in-progress="false">
+									<div class="match-info">
+										<div class="tio-match-id">AE</div>
+										<a class="setup">TV #1</a>
+									</div>
+									<div class="players">
+										<div class="player player1 winner" player-seed="1">
+											<div class="player-seed">1</div><div class="player-tag" player-id="6a466465-7798-4d1f-b537-e4e84518f679">Plup + Pengie</div>
+											<div class="player-id">6a466465-7798-4d1f-b537-e4e84518f679</div>
+											<div class="player-score">2</div>
+										</div>
+										<div class="sep"></div>
+										<div class="player player2 loser" player-seed="16">
+											<div class="player-seed">16</div>
+											<div class="player-tag" player-id="892205bb-3948-43a4-ae27-94c5cfe7611a">CandyMan + Lvl9Cpu</div>
+											<div class="player-id">892205bb-3948-43a4-ae27-94c5cfe7611a</div><div class="player-score">0</div>
+										</div>
+									</div>
+								</div>
+								
+							</div>
 						</div>
 						<div id="losers" class="big-section">
 							<div class="round-head"><div id="loser_rounds"></div></div>
 							<canvas id="loser_lines"></canvas>
-							<div id="loser_matches"></div>
+							<div id="loser_matches">
+							
+								<div class="match" match-id="0" winner-id="6a466465-7798-4d1f-b537-e4e84518f679" in-progress="false">
+									<div class="match-info">
+										<div class="tio-match-id">AE</div>
+										<a class="setup stream">PolarityGG Stream</a>
+									</div>
+									<div class="players">
+										<div class="player player1 winner" player-seed="1">
+											<div class="player-seed">1</div><div class="player-tag" player-id="6a466465-7798-4d1f-b537-e4e84518f679">Plup + Pengie</div>
+											<div class="player-id">6a466465-7798-4d1f-b537-e4e84518f679</div>
+											<div class="player-score">2</div>
+										</div>
+										<div class="sep"></div>
+										<div class="player player2 loser" player-seed="16">
+											<div class="player-seed">16</div>
+											<div class="player-tag" player-id="892205bb-3948-43a4-ae27-94c5cfe7611a">CandyMan + Lvl9Cpu</div>
+											<div class="player-id">892205bb-3948-43a4-ae27-94c5cfe7611a</div><div class="player-score">0</div>
+										</div>
+									</div>
+								</div>
+								
+							</div>
 						</div>
 					</div>
 				</div>

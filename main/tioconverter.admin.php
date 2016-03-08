@@ -114,7 +114,7 @@ if (isset($_GET['page'])) {
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				  </button>
-				  <span class="navbar-brand">Bracket Manager</span>
+				  <a href="/" class="navbar-brand">Bracket Manager</a>
 				</div>
 
 				<!-- Collect the nav links, forms, and other content for toggling -->

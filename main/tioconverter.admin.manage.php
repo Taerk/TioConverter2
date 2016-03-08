@@ -71,7 +71,10 @@
 		<hr>
 		
 		<button type="button" class="btn btn-primary btn-block" aria-haspopup="true" aria-expanded="true">Update Settings</button>
-			
+	</div>
+	
+	<div id="update_bracket_confirm">
+		<div class="page-header"><h3>Manage Players</h3></div>
 	</div>
 	
 </form>

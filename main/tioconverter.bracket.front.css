@@ -9,10 +9,6 @@ body {
 	background-image: url(/main/images/grid.png);
 	background-size: cover;
 }
-.navbar {
-	height: 50px;
-	/* box-shadow: 0 2px 5px 0px rgba(20,20,20,0.5); */
-}
 .navbar-collapse {
 	background-color: #fafafa;
 }
@@ -50,4 +46,205 @@ body {
 	width: 98%;
 	margin-left: auto;
 	margin-right: auto;
+}
+.admin a { color: #900 !important}
+.admin:hover a { color: #caa !important}
+
+/*
+ * Matches
+ */
+.match {
+	margin: 3px;
+	border-radius: 5px;
+	font-size: 10pt;
+	position: relative;
+	z-index: 2;
+	margin-top: 5px;
+	-moz-user-select: text;
+	color: white;
+}
+.match .tio-match-id {
+	width: 50px;
+	margin: auto;
+	margin-left: 5px;
+	text-align: center;
+	border: 1px solid #aaa;
+	border-bottom: 0px;
+	background-color: #eee);
+	/* background-image: linear-gradient(to top, #aaa, #eee); */
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	font-weight: bold;
+	display: inline-block;
+}
+#winner_matches .tio-match-id {
+	border: 1px solid #070;
+	border-bottom: 0px;
+	background-color: #5b5;
+	/* background-image: linear-gradient(to top, #070, #5b5); */
+}
+#loser_matches .tio-match-id {
+	border: 1px solid #700;
+	border-bottom: 0px;
+	background-color: #b55;
+	/* background-image: linear-gradient(to top, #700, #b55); */
+}
+.match .setup {
+	width: 80%;
+	margin: auto;
+	text-align: center;
+	border: 1px solid #aaa;
+	border-bottom: 0px;
+	background-color: #eee;
+	/* background-image: linear-gradient(to top, #aaa, #eee); */
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	font-weight: bold;
+	display: inline-block;
+	color: #222;
+	text-decoration: none;
+}
+.match .setup.stream {
+	border: 1px solid #a0a;
+	border-bottom: 0px;
+	background-color: #eee;
+	color: #a0a;
+	/* background-image: linear-gradient(to top, #b40, #920); */
+}
+.match .setup.stream:hover { background-color: #fff }
+.match .setup.youtube {
+	border: 1px solid #900;
+	border-bottom: 0px;
+	background-color: #eee;
+	color: #900;
+	/* background-image: linear-gradient(to top, #b40, #920); */
+}
+.match .setup.youtube:hover { background-color: #fff }
+.match .setup.none { visibility: hidden; }
+.match .players { line-height: 1em }
+#winner_matches .match .players {
+	border: 1px solid #070;
+	background-color: #efe;
+	color: #030;
+}
+#loser_matches .match .players {
+	border: 1px solid #700;
+	background-color: #fee;
+	color: #300;
+}
+.match .player {
+	display: -webkit-flex;
+	-webkit-align-content: center;
+	-webkit-flex-direction: row;
+	-webkit-justify-content: space-between;
+	
+	display: flex;
+	align-content: center;
+	flex-direction: row;
+	justify-content: space-between;
+}
+.match .player-score { min-width: 30px }
+.match .sep { height: 1px }
+#winner_matches .match .sep { background-color: #070; }
+#loser_matches .match .sep { background-color: #700; }
+.match .player .player-tag, .match .player .player-id {
+	-webkit-flex-grow: 3;
+	flex-grow: 3;
+	padding: 5px 6px;
+}
+
+/* Matches - Highlights */
+.player.hover {
+	color: black;
+	background-color: #ccc;
+}
+.player.highlight {
+	color: black;
+	text-shadow: 1px 1px 2px rgba(51,51,51,0.5);
+}
+.player.highlight-0 {
+	background-color: #afa;
+	box-shadow: 0 0 5px #afa;
+}
+.player.highlight-1 {
+	background-color: #faa;
+	box-shadow: 0 0 5px #faa;
+}
+.player.highlight-2 {
+	background-color: #aaf;
+	box-shadow: 0 0 5px #aaf;
+}
+.player.highlight-3 {
+	background-color: #ffa;
+	box-shadow: 0 0 5px #ffa;
+}
+.player.highlight-4 {
+	background-color: #faf;
+	box-shadow: 0 0 5px #faf;
+}
+.player.highlight-5 {
+	background-color: #aff;
+	box-shadow: 0 0 5px #aff;
+}
+.match .player .player-id { display: none }
+.match .player .player-seed {
+	display: none;
+	width: 20px;
+	text-align: center;
+	padding: 3px;
+	padding-top: 5px;
+	background-color: #404040;
+	color: white;
+	border-right: 1px solid #222;
+}
+.match .player[player-seed=""] .player-seed {
+	visibility: hidden;
+}
+.match .player.player1 .player-seed {
+	border-top-left-radius: 3px;
+}
+.match .player.player2 .player-seed {
+	border-bottom-left-radius: 3px;
+}
+.match .player .player-score {
+	width: 20px;
+	text-align: center;
+	padding: 3px;
+	padding-top: 5px;
+}
+.match .player .player-score.check { padding-top: 3px }
+/* Matches - Player Scores - Winner */
+#winner_matches .match .player.winner .player-score {
+	background-color: #070;
+	color: #efe;
+	font-weight: bold;
+	/* border-left: 1px solid #222; */
+}
+#loser_matches .match .player.winner .player-score {
+	background-color: #700;
+	color: #fee;
+	font-weight: bold;
+	/* border-left: 1px solid #222; */
+}
+/* Matches - Player Scores - Loser */
+#winner_matches .player.loser .player-score {
+	background-color: #787;
+	color: #efe;
+	/* border-left: 1px solid #222; */
+}
+#loser_matches .player.loser .player-score {
+	background-color: #877;
+	color: #fee;
+	/* border-left: 1px solid #222; */
+}
+.player .win-circle {
+	background-image: linear-gradient(to bottom, #FA0, #B70);
+	border: 1px solid #FA0;
+	border-radius: 20px;
+	width: 12px;
+	height: 12px;
+	margin: auto;
+	position: relative;
+	top: 1px;
+	left: 1px;
 }
