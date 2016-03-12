@@ -16,10 +16,11 @@
 		
 		<!-- In-house -->
 		<script type="text/javascript" src="/main/tioconverter.bracket.js"></script>
+		<?php if (isset($_GET['tioevent'])) { ?><script type="text/javascript">tio('<?php echo $tio->getTournamentId($_GET['tioevent']); ?>');</script><?php echo "\n"; } ?>
 		<link rel="stylesheet" type="text/css" href="/main/tioconverter.bracket.front.css">
 	</head>
 	<body>
-		<nav class="navbar navbar-default navbar-fixed-top">
+		<nav class="navbar navbar-default navbar-fixed-top" id="header">
 			<div class="container-fluid">
 				<!-- Brand and toggle get grouped for better mobile display -->
 				<div class="navbar-header">
@@ -29,7 +30,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				  </button>
-				  <a class="navbar-brand" href="/">Polarity Brackets</a>
+				  <a class="navbar-brand pull-left" href="/">Polarity Brackets</a>
 				</div>
 
 				<!-- Collect the nav links, forms, and other content for toggling -->
@@ -54,21 +55,21 @@
 						<li><a href="archive">View All Brackets</a></li>
 						
 						<!-- Download -->
-						<li><a href="#"><span class="glyphicon glyphicon-download-alt"></span></a></li>
+						<li><a href="#" id="download-bracket"><span class="glyphicon glyphicon-download-alt"></span></a></li>
 						
 						<!-- Refresh -->
-						<li><a href="#"><span class="glyphicon glyphicon-refresh"></a></li>
+						<li><a href="#" id="refresh-bracket"><span class="glyphicon glyphicon-refresh"></a></li>
 					</ul>
 					
 					<ul class="nav navbar-nav navbar-right">
 						<!-- View -->
-						<li class="dropdown">
+						<!-- <li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">View <span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a href="#">Bracket</a></li>
 								<li><a href="#">Results</a></li>
 							</ul>
-						</li>
+						</li> -->
 						
 						<!-- Search for Player -->
 						<li>
@@ -95,22 +96,24 @@
 							<canvas id="winner_lines"></canvas>
 							<div id="winner_matches">
 							
-								<div class="match" match-id="0" winner-id="6a466465-7798-4d1f-b537-e4e84518f679" in-progress="false">
-									<div class="match-info">
-										<div class="tio-match-id">AE</div>
-										<a class="setup">TV #1</a>
-									</div>
-									<div class="players">
-										<div class="player player1 winner" player-seed="1">
-											<div class="player-seed">1</div><div class="player-tag" player-id="6a466465-7798-4d1f-b537-e4e84518f679">Plup + Pengie</div>
-											<div class="player-id">6a466465-7798-4d1f-b537-e4e84518f679</div>
-											<div class="player-score">2</div>
+								<div class="column match-column round-1" round="1">
+									<div class="match" match-id="0" winner-id="6a466465-7798-4d1f-b537-e4e84518f679" in-progress="false">
+										<div class="match-info">
+											<div class="tio-match-id">AE</div>
+											<a class="setup">TV #1</a>
 										</div>
-										<div class="sep"></div>
-										<div class="player player2 loser" player-seed="16">
-											<div class="player-seed">16</div>
-											<div class="player-tag" player-id="892205bb-3948-43a4-ae27-94c5cfe7611a">CandyMan + Lvl9Cpu</div>
-											<div class="player-id">892205bb-3948-43a4-ae27-94c5cfe7611a</div><div class="player-score">0</div>
+										<div class="players">
+											<div class="player player1 winner" player-seed="1">
+												<div class="player-seed">1</div><div class="player-tag" player-id="6a466465-7798-4d1f-b537-e4e84518f679">Plup + Pengie</div>
+												<div class="player-id">6a466465-7798-4d1f-b537-e4e84518f679</div>
+												<div class="player-score">2</div>
+											</div>
+											<div class="sep"></div>
+											<div class="player player2 loser" player-seed="16">
+												<div class="player-seed">16</div>
+												<div class="player-tag" player-id="892205bb-3948-43a4-ae27-94c5cfe7611a">CandyMan + Lvl9Cpu</div>
+												<div class="player-id">892205bb-3948-43a4-ae27-94c5cfe7611a</div><div class="player-score">0</div>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -122,22 +125,24 @@
 							<canvas id="loser_lines"></canvas>
 							<div id="loser_matches">
 							
-								<div class="match" match-id="0" winner-id="6a466465-7798-4d1f-b537-e4e84518f679" in-progress="false">
-									<div class="match-info">
-										<div class="tio-match-id">AE</div>
-										<a class="setup stream">PolarityGG Stream</a>
-									</div>
-									<div class="players">
-										<div class="player player1 winner" player-seed="1">
-											<div class="player-seed">1</div><div class="player-tag" player-id="6a466465-7798-4d1f-b537-e4e84518f679">Plup + Pengie</div>
-											<div class="player-id">6a466465-7798-4d1f-b537-e4e84518f679</div>
-											<div class="player-score">2</div>
+								<div class="column match-column round--1" round="-1">
+									<div class="match" match-id="0" winner-id="6a466465-7798-4d1f-b537-e4e84518f679" in-progress="false">
+										<div class="match-info">
+											<div class="tio-match-id">AE</div>
+											<a class="setup stream">PolarityGG Stream</a>
 										</div>
-										<div class="sep"></div>
-										<div class="player player2 loser" player-seed="16">
-											<div class="player-seed">16</div>
-											<div class="player-tag" player-id="892205bb-3948-43a4-ae27-94c5cfe7611a">CandyMan + Lvl9Cpu</div>
-											<div class="player-id">892205bb-3948-43a4-ae27-94c5cfe7611a</div><div class="player-score">0</div>
+										<div class="players">
+											<div class="player player1 winner" player-seed="1">
+												<div class="player-seed">1</div><div class="player-tag" player-id="6a466465-7798-4d1f-b537-e4e84518f679">Plup + Pengie</div>
+												<div class="player-id">6a466465-7798-4d1f-b537-e4e84518f679</div>
+												<div class="player-score">2</div>
+											</div>
+											<div class="sep"></div>
+											<div class="player player2 loser" player-seed="16">
+												<div class="player-seed">16</div>
+												<div class="player-tag" player-id="892205bb-3948-43a4-ae27-94c5cfe7611a">CandyMan + Lvl9Cpu</div>
+												<div class="player-id">892205bb-3948-43a4-ae27-94c5cfe7611a</div><div class="player-score">0</div>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -148,5 +153,11 @@
 				</div>
 			</div>
 		</div>
+		
+		<nav class="navbar navbar-default navbar-fixed-bottom" id="footer">
+			<div class="container-fluid">
+				Powered by <a href="https://github.com/Taerk/TioConverter2" target="_blank">TioConverter 2.0</a>
+			</div>
+		</nav>
 	</body>
 </html>

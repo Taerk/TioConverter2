@@ -6,29 +6,14 @@ html, body, #container {
 }
 body {
 	padding-top: 50px;
-	background-image: url(/main/images/grid.png);
-	background-size: cover;
+	background-image: url('/etc/images/grid.png');
+	background-position: top left;
+	font-family: arial, consolas, calibri, sans-serif;
 }
-.navbar-collapse {
-	background-color: #fafafa;
-}
-.h-split, .v-split {
-	display: flex;
-	height: 100%;
-	flex-grow: 1;
-}
-.h-split { flex-direction: row }
-.v-split { flex-direction: column }
-#bracket { flex-grow: 1; }
-#rankings {
-	background-color: #464e59;
-	width: 220px;
-	box-shadow: -2px 0px 10px 0px rgba(20,20,20,0.5);
-}
-@media (max-width: 760px) {
-	#rankings {
-		display: none;
-	}
+#footer {
+	min-height: auto;
+	text-align: center;
+	color: #555;
 }
 #matches {
 	height: 200px;
@@ -51,6 +36,50 @@ body {
 .admin:hover a { color: #caa !important}
 
 /*
+ * Rounds
+ */
+.column {
+	width: 250px;
+	min-width: 250px;
+	max-width: 250px;
+	margin: 0;
+}
+.round-column {
+	text-align: center;
+	text-shadow: 0 1px #000;
+	background-color: #252525;
+	border-left: 1px solid #333;
+	border-right: 1px solid #333;
+	padding: 3px 20px;
+	position: relative;
+	z-index: 4;
+	font-size: 12pt;
+}
+.round-column:hover {
+	background-color: #101010;
+}
+.match-column {
+	display: -webkit-flex;
+	-webkit-flex-direction: column;
+	-webkit-justify-content: space-around;
+	
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	
+	padding: 10px;
+}
+.match-column.hover {
+	background-color: #202020;
+}
+#winner_lines, #loser_lines {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 1;
+}
+
+/*
  * Matches
  */
 .match {
@@ -64,7 +93,7 @@ body {
 	color: white;
 }
 .match .tio-match-id {
-	width: 50px;
+	width: 35px;
 	margin: auto;
 	margin-left: 5px;
 	text-align: center;
@@ -90,7 +119,7 @@ body {
 	/* background-image: linear-gradient(to top, #700, #b55); */
 }
 .match .setup {
-	width: 80%;
+	width: 150px;
 	margin: auto;
 	text-align: center;
 	border: 1px solid #aaa;
@@ -200,18 +229,14 @@ body {
 .match .player[player-seed=""] .player-seed {
 	visibility: hidden;
 }
-.match .player.player1 .player-seed {
-	border-top-left-radius: 3px;
-}
-.match .player.player2 .player-seed {
-	border-bottom-left-radius: 3px;
-}
 .match .player .player-score {
 	width: 20px;
 	text-align: center;
 	padding: 3px;
-	padding-top: 5px;
+	padding-top: 4px;
 }
+#winner_matches .match .player.winner .player-score { padding-top: 5px }
+#loser_matches .match .player.winner .player-score { padding-top: 6px }
 .match .player .player-score.check { padding-top: 3px }
 /* Matches - Player Scores - Winner */
 #winner_matches .match .player.winner .player-score {

@@ -8,9 +8,43 @@
 require_once('settings.php');
 
 switch (true) {
+	// GET data
+	case (isset($_GET['get'])):
+		require_once(CONVERTER . '/tioconverter.class.php'); // Should already be included in settings.php
+		
+		// Output JSON
+		if (!$tio->debug_mode) {
+			header("Content-type: application/json; charset=utf-8");
+		}
+		
+		switch (strtolower($_GET['get'])) {
+			case "bracket":
+				if (isset($_GET['tioevent'])) {
+					$tournamentId = $tio->getTournamentId($_GET['tioevent']);
+					$tio->active_file = $tournamentId . '/' . $tournamentId . '.tio';
+				}
+				$output = json_encode($tio->parseBracket(), JSON_PRETTY_PRINT);
+				break;
+				
+			case "events":
+				$output = json_encode($tio->getEvents(), JSON_PRETTY_PRINT);
+				break;
+				
+			default:
+				$output = json_encode([]);
+				break;
+		}
+		
+		/* Output Result */
+		echo $output;
+		die;
+		
+		break;
+	
 	// Admin Panel
 	case (isset($_GET['tioevent']) && $_GET['tioevent'] == 'admin'):
 		if (isset($_GET['tiogame'])) {
+			
 			switch ($_GET['tiogame']) {
 				case "debug":
 					// Check for password_has function. If it doesn't exist, get it from bcrypt
@@ -34,7 +68,7 @@ switch (true) {
 					break;
 					
 				default:
-					// Allow shortcuts to syles and js files					
+					// Allow shortcuts to syles and js files
 					if (isset($_SESSION['admin']) && file_exists(CONVERTER . '/' . $_GET['tiogame']) && !is_dir(CONVERTER . '/' . $_GET['tiogame'])) {
 						
 						// Correct file type
