@@ -6,9 +6,10 @@ html, body, #container {
 }
 body {
 	padding-top: 50px;
+	font-family: arial, consolas, calibri, sans-serif;
 	background-image: url('/etc/images/grid.png');
 	background-position: top left;
-	font-family: arial, consolas, calibri, sans-serif;
+	background-attachment: fixed;
 }
 #footer {
 	min-height: auto;
@@ -38,6 +39,22 @@ body {
 /*
  * Rounds
  */
+#bracket { margin-bottom: 20px; }
+#winners, #losers {
+	position: relative;
+	width: inherit;
+}
+#winner_rounds, #loser_rounds, #winner_matches, #loser_matches {
+	display: -webkit-flex;
+	-webkit-flex-direction: row;
+	-webkit-justify-content: flex-start;
+	
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	
+	width: inherit;
+}
 .column {
 	width: 250px;
 	min-width: 250px;
@@ -54,6 +71,7 @@ body {
 	position: relative;
 	z-index: 4;
 	font-size: 12pt;
+	color: #eee;
 }
 .round-column:hover {
 	background-color: #101010;
@@ -228,6 +246,10 @@ body {
 }
 .match .player[player-seed=""] .player-seed {
 	visibility: hidden;
+}
+.match .player.no-result .player-tag {
+	color: rgba(0,0,0,0.5);
+	font-style: italic;
 }
 .match .player .player-score {
 	width: 20px;

@@ -18,20 +18,16 @@ switch (true) {
 		}
 		
 		switch (strtolower($_GET['get'])) {
-			case "bracket":
-				if (isset($_GET['tioevent'])) {
-					$tournamentId = $tio->getTournamentId($_GET['tioevent']);
-					$tio->active_file = $tournamentId . '/' . $tournamentId . '.tio';
-				}
-				$output = json_encode($tio->parseBracket(), JSON_PRETTY_PRINT);
-				break;
-				
 			case "events":
 				$output = json_encode($tio->getEvents(), JSON_PRETTY_PRINT);
 				break;
 				
 			default:
-				$output = json_encode([]);
+				if (isset($_GET['tioevent'])) {
+					$tournamentId = $tio->getTournamentId($_GET['tioevent']);
+					$tio->active_file = $tournamentId . '/' . $tournamentId . '.tio';
+				}
+				$output = json_encode($tio->parseBracket(), JSON_PRETTY_PRINT);
 				break;
 		}
 		

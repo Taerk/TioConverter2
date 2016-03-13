@@ -9,14 +9,19 @@
 		<!-- Libraries -->
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-		<script type="text/javascript" src="3rdparty/jscolor/jquery.color.plus-names-2.1.2.min.js"></script>
+		<script type="text/javascript" src="/3rdparty/jquery/jscolor/jquery.color.plus-names-2.1.2.min.js"></script>
 		<script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 		
 		<!-- In-house -->
 		<script type="text/javascript" src="/main/tioconverter.bracket.js"></script>
-		<?php if (isset($_GET['tioevent'])) { ?><script type="text/javascript">tio('<?php echo $tio->getTournamentId($_GET['tioevent']); ?>');</script><?php echo "\n"; } ?>
+		<?php if (isset($_GET['tioevent'])) { ?><script type="text/javascript">
+		$(document).ready(function() {
+			tioJS = new tioConverterJS();
+			tioJS.autoTio('<?php echo $tio->getTournamentId($_GET['tioevent']); ?>', '<?php echo $tio->getDefaultEvent($_GET['tioevent']); ?>');
+		});
+		</script><?php echo "\n"; } ?>
 		<link rel="stylesheet" type="text/css" href="/main/tioconverter.bracket.front.css">
 	</head>
 	<body>
@@ -94,31 +99,7 @@
 						<div id="winners" class="big-section">
 							<div class="round-head"><div id="winner_rounds"></div></div>
 							<canvas id="winner_lines"></canvas>
-							<div id="winner_matches">
-							
-								<div class="column match-column round-1" round="1">
-									<div class="match" match-id="0" winner-id="6a466465-7798-4d1f-b537-e4e84518f679" in-progress="false">
-										<div class="match-info">
-											<div class="tio-match-id">AE</div>
-											<a class="setup">TV #1</a>
-										</div>
-										<div class="players">
-											<div class="player player1 winner" player-seed="1">
-												<div class="player-seed">1</div><div class="player-tag" player-id="6a466465-7798-4d1f-b537-e4e84518f679">Plup + Pengie</div>
-												<div class="player-id">6a466465-7798-4d1f-b537-e4e84518f679</div>
-												<div class="player-score">2</div>
-											</div>
-											<div class="sep"></div>
-											<div class="player player2 loser" player-seed="16">
-												<div class="player-seed">16</div>
-												<div class="player-tag" player-id="892205bb-3948-43a4-ae27-94c5cfe7611a">CandyMan + Lvl9Cpu</div>
-												<div class="player-id">892205bb-3948-43a4-ae27-94c5cfe7611a</div><div class="player-score">0</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								
-							</div>
+							<div id="winner_matches"></div>
 						</div>
 						<div id="losers" class="big-section">
 							<div class="round-head"><div id="loser_rounds"></div></div>
