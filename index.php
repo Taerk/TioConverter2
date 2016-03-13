@@ -36,7 +36,11 @@ switch (true) {
 		}
 		
 		/* Output Result */
-		echo $output;
+		if ($tio->debug_mode) {
+			echo "<pre style=\"border: 1px solid #aaa; background-color: #eee; padding: 10px\">$output</pre>";
+		} else {
+			echo $output;
+		}
 		die;
 		
 		break;

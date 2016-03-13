@@ -446,7 +446,7 @@ class tioParser {
 					$max_rounds_loser = -1; // The total number of winner rounds
 					$max_rounds_winner = -1; // The total number of loser rounds
 					$player_count = $events[$event_id]['games'][$game_id]['entrants'];
-					$placing = ($player_count - 1); // Base to start with (this is the number of players)
+					$placing = ($player_count + 1); // Base to start with (this is the number of players)
 					$prev_round = 0; // Placeholder variable for previous round number
 					$used_player = ['00000000-0000-0000-0000-000000000000', '00000001-0001-0001-0101-010101010101']; // Stores IDs of players that have already been given a placing
 					
@@ -462,17 +462,15 @@ class tioParser {
 					// foreach ($game->Bracket->Matches->Match as $key=>$match) {
 					foreach ($events[$event_id]['games'][$game_id]['matches'] as $key=>$match) {
 						$this_matches_round = $match['round'];
-						if (!isset($all_matches[$round])) {
-							$all_matches[$round] = [];
-						}
 						
 						// Add tags for convenience
 						$all_matches[$this_matches_round][$match['id']] = $match;
 						
-						// The highest number will be the max_rounds variable
+						// Get the number of rounds
 						if ($this_matches_round > 0 && abs($this_matches_round) > $max_rounds_winner) {
 							$max_rounds_winner = abs($this_matches_round);
-						} else if ($this_matches_round < 0 && abs($this_matches_round) > $max_rounds_loser) {
+						}
+						if ($this_matches_round < 0 && abs($this_matches_round) > $max_rounds_loser) {
 							$max_rounds_loser = abs($this_matches_round);
 						}
 					}
@@ -491,7 +489,7 @@ class tioParser {
 						echo "<h3>Loser Rounds: $max_rounds_loser</h3>";
 					}
 					
-					if ($this->debug_mode) { echo "<div style='color: #fbf'>-- start auto --</div>"; }
+					if ($this->debug_mode) { echo "<div style='color: #aaa'>-- start auto --</div>"; }
 					
 					// Cycle through losers
 					$prev_round = $max_rounds_loser * -1;
@@ -499,64 +497,88 @@ class tioParser {
 					$current_loser_placing = [];
 					$matches_in_this_round = -1;
 					
-					for ($i = 1; $i < $max_rounds_loser; $i++) {
-						$mi = $i * -1;
-						$matches_in_this_round = count($all_matches[$mi]);
-						if ($this->debug_mode) { echo "<div style='color: #fbf'>-- $matches_in_this_round match(es) in this round --</div>"; }
-						if (isset($all_matches[$mi])) {
-							$checked_matches = 0;
-							foreach ($all_matches[$mi] as $match) {
-								$checked_matches++;
+					$search_multiplier = -1; // Set to go through either losers or winners (losers first)
+					$scan_complete = false; // Set to true to end scan
+					$i = 1;
+					
+					while ($scan_complete == false) {
+						
+						// If it's done going through losers, send it back through winners
+						if (abs($i) >= $max_rounds_loser && $search_multiplier == -1) {
+							$search_multiplier = 1;
+							$i = 1;
+						}
+						
+						// If it's done going through winners, finish
+						if ($i >= ($max_rounds_winner - 1) && !isset($all_matches[$i]) && $search_multiplier == 1) {
+							$scan_complete = true;
+						}
+						
+						if (!$scan_complete) {
+							// Check whether to go from losers side or winners -- this will allow it to grab matches from WF and GF
+							$mi = $i * $search_multiplier;
+							if ($this->debug_mode) { echo "<div style='color: #8aa'>-- Checking round $mi --</div>"; }
+							
+							if (isset($all_matches[$mi])) {
+								// Count number of matches in this round
+								$matches_in_this_round = count($all_matches[$mi]);
+								if ($this->debug_mode) { echo "<div style='color: #d6d'>-- $matches_in_this_round match(es) in this round --</div>"; }
 								
-								if ($match['winner'] != "00000000-0000-0000-0000-000000000000") {								
-									// Add winner to array of players who have already been assigned a placing
-									/* if (!in_array(trim($match->Winner), $used_player) == -1) {
-										if ($this->debug_mode) { echo "<div style='color: #bfb'>&raquo; ".trim($match->Winner)." -- ".$this->getPlayerById(trim($match->Winner))['tag']."</div>"; }
-										array_push($used_player, trim($match->Winner));
-										array_push($current_winner_placing, trim($match->Winner));
-									} */
+								$checked_matches = 0;
+								foreach ($all_matches[$mi] as $match) {
+									$checked_matches++;
 									
-									// Add loser to array of players who have already been assigned a placing
-									if (trim($match['winner']) == trim($match['p1']['id'])) {
-										$loser = trim($match['p2']['id']);
-									} else {
-										$loser = trim($match['p1']['id']);
+									if ($match['winner'] != "00000000-0000-0000-0000-000000000000" && isset($all_matches[$i + 1]) && $placing != 2) {
+										
+										// Add loser to array of players who have already been assigned a placing
+										if (trim($match['winner']) == trim($match['p1']['id'])) {
+											$loser = trim($match['p2']['id']);
+											$winner = trim($match['p1']['id']);
+										} else {
+											$loser = trim($match['p1']['id']);
+											$winner = trim($match['p2']['id']);
+										}
+										if (!in_array($loser, $used_player) == -1) {
+											if ($this->debug_mode) { echo "<div style='color: #d66'>&raquo; ".$loser." -- ".$this->getPlayerById($loser)['tag']." (eliminated by ".$this->getPlayerById(trim($match['winner']))['tag']." in round $mi)</div>"; }
+											array_push($used_player, $loser);
+											array_push($current_loser_placing, $loser);
+										}
+										
+										// Output results once all matches have been checked
+										if ($checked_matches == $matches_in_this_round) {
+											// Subtract placing from number of losses there were
+											$placing -= count($current_loser_placing);
+											
+											// Create placing array if it doesn't exist
+											if (!isset($events[$event_id]['games'][$game_id]['results'][$placing])) {
+												$events[$event_id]['games'][$game_id]['results'][$placing] = [];
+											}
+											
+											// Set placing for each player
+											foreach ($current_loser_placing as $key=>$cur) {
+												if ($this->debug_mode) { echo "<div>$cur &rarr; ".$this->getPlayerById($cur)['tag']." &rarr; $placing</div>"; }
+												$events[$event_id]['games'][$game_id]['results'][$placing][$this->getPlayerById($cur)['tag']] = $this->getPlayerById($cur);
+											}
+											
+											$prev_round = $mi;
+											$current_winner_placing = [];
+											$current_loser_placing = [];
+										}
 									}
-									if (!in_array($loser, $used_player) == -1) {
-										if ($this->debug_mode) { echo "<div style='color: #fbb'>&raquo; ".$loser." -- ".$this->getPlayerById($loser)['tag']." (eliminated by ".$this->getPlayerById(trim($match['winner']))['tag']." in round $mi)</div>"; }
-										array_push($used_player, $loser);
-										array_push($current_loser_placing, $loser);
+											
+									// Set placing for winner if it's Grand Finals
+									if ($mi == ($max_rounds_winner - 1) && !isset($events[$event_id]['games'][$game_id]['results'][1])) {
+										$placing = 1;
+										if ($this->debug_mode) { echo "<div style='color: #6d6'>&raquo; ".$winner." -- ".$this->getPlayerById($winner)['tag']." (won the tournament in round $mi)</div>"; }
+										if ($this->debug_mode) { echo "<div>$cur &rarr; ".$this->getPlayerById($winner)['tag']." &rarr; $placing</div>"; }
+										$events[$event_id]['games'][$game_id]['results'][$placing][$this->getPlayerById($winner)['tag']] = $this->getPlayerById($winner);
 									}
 									
-									if ($checked_matches == $matches_in_this_round) {
-										// Add winners
-										if (!isset($events[$event_id]['games'][$game_id]['results'][$placing])) {
-											$events[$event_id]['games'][$game_id]['results'][$placing] = [];
-										}
-										foreach ($current_winner_placing as $key=>$cur) {
-											if ($this->debug_mode) { echo "<div>$cur &rarr; ".$this->getPlayerById($cur)['tag']." &rarr; $placing</div>"; }
-											$events[$event_id]['games'][$game_id]['results'][$placing][$this->getPlayerById($cur)['tag']] = $this->getPlayerById($cur);
-										}
-										$placing -= count($current_winner_placing);
-										
-										// Add Losers
-										if (!isset($events[$event_id]['games'][$game_id]['results'][$placing])) {
-											$events[$event_id]['games'][$game_id]['results'][$placing] = [];
-										}
-										foreach ($current_loser_placing as $key=>$cur) {
-											if ($this->debug_mode) { echo "<div>$cur &rarr; ".$this->getPlayerById($cur)['tag']." &rarr; $placing</div>"; }
-											$events[$event_id]['games'][$game_id]['results'][$placing][$this->getPlayerById($cur)['tag']] = $this->getPlayerById($cur);
-										}
-										$placing -= count($current_loser_placing);
-										
-										$prev_round = $mi;
-										$current_winner_placing = [];
-										$current_loser_placing = [];
-									}
 								}
-								
 							}
 						}
+						
+						$i++;
 					}
 					
 					/* // Check GF Set 1
