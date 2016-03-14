@@ -23,8 +23,9 @@ switch (true) {
 				break;
 				
 			default:
-				if (isset($_GET['tioevent'])) {
-					$tio->setTournament($tio->getTournamentId($_GET['tioevent']));
+				if (isset($_GET['tiotournament'])) {
+					$tio->setTournament($tio->getTournamentId($_GET['tiotournament']));
+					$tio->parseBracket();
 				}
 				$output = json_encode($tio->parseBracket(), JSON_PRETTY_PRINT);
 				break;
@@ -41,10 +42,10 @@ switch (true) {
 		break;
 	
 	// Admin Panel
-	case (isset($_GET['tioevent']) && $_GET['tioevent'] == 'admin'):
-		if (isset($_GET['tiogame'])) {
+	case (isset($_GET['tiotournament']) && $_GET['tiotournament'] == 'admin'):
+		if (isset($_GET['tioevent'])) {
 			
-			switch ($_GET['tiogame']) {
+			switch ($_GET['tioevent']) {
 				case "debug":
 					// Check for password_has function. If it doesn't exist, get it from bcrypt
 					if (!function_exists('password_hash')) {
@@ -68,10 +69,10 @@ switch (true) {
 					
 				default:
 					// Allow shortcuts to syles and js files
-					if (isset($_SESSION['admin']) && file_exists(CONVERTER . '/' . $_GET['tiogame']) && !is_dir(CONVERTER . '/' . $_GET['tiogame'])) {
+					if (isset($_SESSION['admin']) && file_exists(CONVERTER . '/' . $_GET['tioevent']) && !is_dir(CONVERTER . '/' . $_GET['tioevent'])) {
 						
 						// Correct file type
-						$fileext = explode(".", $_GET['tiogame'])[count(explode(".", $_GET['tiogame'])) - 1];
+						$fileext = explode(".", $_GET['tioevent'])[count(explode(".", $_GET['tioevent'])) - 1];
 						
 						switch ($fileext) {
 							case 'js':
@@ -84,11 +85,11 @@ switch (true) {
 								header("HTTP/1.1 404 Not Found");
 								break;
 						}
-						echo file_get_contents(CONVERTER . '/' . $_GET['tiogame']);
+						echo file_get_contents(CONVERTER . '/' . $_GET['tioevent']);
 						
 						die;
 					} else {
-						if (trim($_GET['tiogame']) == "" || !isset($_SESSION['admin'])) {
+						if (trim($_GET['tioevent']) == "" || !isset($_SESSION['admin'])) {
 							require_once(CONVERTER . '/tioconverter.admin.php');
 						} else {
 							header("HTTP/1.1 404 Not Found");
@@ -104,7 +105,11 @@ switch (true) {
 		}
 		
 	// Front Page
-	default:
+	default:		
+		if (isset($_GET['tiotournament'])) {
+			$tio->setTournament($tio->getTournamentId($_GET['tiotournament']));
+			$tio->parseBracket();
+		}
 		require_once(CONVERTER . '/tioconverter.front.php');
 		break;
 }

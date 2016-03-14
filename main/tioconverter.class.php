@@ -61,7 +61,7 @@ class tioParser {
 				'name' => NULL,
 				'permalink' => NULL
 			],
-			'events' => [
+			'event' => [
 				'id' => NULL,
 				'name' => NULL,
 				'permalink' => NULL
@@ -289,6 +289,18 @@ class tioParser {
 	}
 	
 	/**
+	 * Gets info regarding current tournament
+	 */
+	public function getActiveEvent() {
+		if ($this->info['event']['id'] != NULL) {
+			return $this->info['event'];
+		} else {
+			$this->info['event']['id'] = $this->getDefaultEvent($this->getActiveTournament()['id']);
+		}
+		return $this->info['event'];
+	}
+	
+	/**
 	 * Returns an array of events
 	 *
 	 * Array (
@@ -370,7 +382,10 @@ class tioParser {
 	 */
 	public function getLoadedEvent($search = "") {
 		if ($this->loaded) {
-			return array_merge($this->parseBracket()[$this->info['event']['id']]['events'][$this->info['game']['id']], ['id' => $this->info['game']['id']]);
+			return array_merge(
+				$this->parseBracket()[$this->info['tournament']['id']]['tournaments'][$this->info['event']['id']],
+				['id' => $this->info['event']['id']]
+			);
 		}
 		
 		return [];

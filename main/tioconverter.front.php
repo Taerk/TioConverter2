@@ -1,14 +1,5 @@
 <?php
-$title_extension = "";
-
-// Parse bracket
-if (isset($_GET['tioevent'])) {
-	$tio->parseBracket();
-	
-	if ($tio->loaded) {
-		$title_extension = (" - " . $tio->getLoadedEvent()['id'] . ' - ' . $tio->getLoadedEvent()['id']);
-	}
-}
+$title_extension = ($tio->loaded ? " - " . $tio->getLoadedEvent()['id'] . ' - ' . $tio->getLoadedEvent()['id'] : "");
 ?><!DOCTYPE html>
 <html>
 	<head>
@@ -31,8 +22,8 @@ if (isset($_GET['tioevent'])) {
 		$(document).ready(function() {
 			tioJS = new tioConverterJS();
 			tioJS.autoTio(
-				'<?php echo $tio->info['event']['id']; ?>',
-				'<?php echo $tio->info['game']['id']; ?>'
+				'<?php echo $tio->getActiveTournament()['id']; ?>',
+				'<?php echo $tio->getActiveEvent()['id']; ?>'
 			);
 		});
 		</script><?php echo "\n"; } ?>

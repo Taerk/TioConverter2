@@ -35,4 +35,4 @@ RewriteRule	^admin$		/admin/  [L,R=301,NC]
 # Admin page
 RewriteCond	%{REQUEST_FILENAME} !-f
 RewriteCond	%{REQUEST_FILENAME} !-d
-RewriteRule	^([^/.]*)?/?([^\/]*)?/?([^\/]*)?/?(.*)?$			index.php?tioevent=$1&tiogame=$2&tiomatch=$3&other=$4  [L,QSA,NC]
+RewriteRule	^([^/.]*)?/?([^\/]*)?/?([^\/]*)?/?(.*)?$			index.php?tiotournament=$1&tioevent=$2&tiomatch=$3&other=$4  [L,QSA,NC]
