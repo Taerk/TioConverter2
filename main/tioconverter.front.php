@@ -3,17 +3,6 @@ $title_extension = "";
 
 // Parse bracket
 if (isset($_GET['tioevent'])) {
-	$tio->info = [
-		'event' => [
-			'id' => $tio->getTournamentId($_GET['tioevent']),
-			'permalink' => $tio->getTournamentPermalink($_GET['tioevent'])
-		],
-		'game' => [
-			'id' => $tio->getDefaultEvent($tio->getTournamentId($_GET['tioevent'])),
-			'permalink' => NULL
-		]
-	];
-	$tio->active_file = $tio->info['event']['id'] . '/' . $tio->info['event']['id'] . '.tio';
 	$tio->parseBracket();
 	
 	if ($tio->loaded) {
