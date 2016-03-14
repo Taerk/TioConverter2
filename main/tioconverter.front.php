@@ -1,10 +1,17 @@
-<!DOCTYPE html>
+<?php
+// Parse bracket
+if (isset($_GET['tioevent'])) {
+	$tournamentId = $tio->getTournamentId($_GET['tioevent']);
+	$tio->active_file = $tournamentId . '/' . $tournamentId . '.tio';
+	$tio->parseBracket();
+}
+?><!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		
-		<title>Polarity - Bracket</title>
+		<title>Polarity - Bracket<?php if (isset($_GET['tioevent'])) { echo " - " . $tio->parseBracket()[$tio->getTournamentId($_GET['tioevent'])]['name']; } ?></title>
 		
 		<!-- Libraries -->
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -16,7 +23,7 @@
 		
 		<!-- In-house -->
 		<script type="text/javascript" src="/main/tioconverter.bracket.js"></script>
-		<?php if (isset($_GET['tioevent'])) { ?><script type="text/javascript">
+		<?php if (isset($_GET['tioevent'])) {?><script type="text/javascript">
 		$(document).ready(function() {
 			tioJS = new tioConverterJS();
 			tioJS.autoTio('<?php echo $tio->getTournamentId($_GET['tioevent']); ?>', '<?php echo $tio->getDefaultEvent($_GET['tioevent']); ?>');
@@ -67,6 +74,18 @@
 					</ul>
 					
 					<ul class="nav navbar-nav navbar-right">
+						<!-- Game -->
+						<?php if (isset($_GET['tioevent'])) { ?>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Events <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<?php foreach($tio->parseBracket()[$tio->getTournamentId($_GET['tioevent'])]['games'] as $key=>$event) { ?>
+								<li><a href="/<?php echo urlencode($_GET['tioevent']); ?>/<?php echo urlencode(strtolower(str_replace(' ', '-', $event['name']))); ?>"><?php echo $event['name']; ?></a></li>
+								<?php } ?>
+							</ul>
+						</li>
+						<?php } ?>
+						
 						<!-- View -->
 						<!-- <li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">View <span class="caret"></span></a>
