@@ -6,8 +6,8 @@ function tioConverterJS() {
 	this.autoload = true;
 	this.loading = false;
 	this.tio_data = {};
+	this.selected_tournament = "";
 	this.selected_event = "";
-	this.selected_game = "";
 	this.selected_display = "";
 	this.md5 = "";
 	this.first_load = true;
@@ -23,7 +23,7 @@ function tioConverterJS() {
 	this.start_mouse_y = 0;
 	
 	this.highlight = {};
-	this.games = [];
+	this.events = [];
 	
 	this.win_lines = document.getElementById('winner_lines');
 	this.los_lines = document.getElementById('loser_lines');
@@ -69,11 +69,11 @@ function tioConverterJS() {
 	 * = BRACKET this.loading
 	 * ======================
 	 */
-	this.autoTio = function(file, event) {
+	this.autoTio = function(file, tournament) {
 		_js = this;
 		
-		_js.selected_event = file;
-		_js.selected_game = event;
+		_js.selected_tournament = file;
+		_js.selected_event = tournament;
 		_js.loadTioFile(false);
 	}
 	
@@ -108,7 +108,7 @@ function tioConverterJS() {
 				_js.winners_round_count = 0;
 				_js.losers_round_count = 0;
 				
-				$.each(data[_js.selected_event]['games'][_js.selected_game]['matches'], function(key,_match) {
+				$.each(data[_js.selected_tournament]['events'][_js.selected_event]['matches'], function(key,_match) {
 					if ($.inArray(_match['round'], used_rounds) == -1) {
 						if (parseInt(_match['round']) > 0) {
 							_js.winners_round_count++;
@@ -161,21 +161,21 @@ function tioConverterJS() {
 		}
 	}
 	
-	this.getWinKey = function(_game, _match, player_port) {
+	this.getWinKey = function(_event, _match, player_port) {
 		var wl;
 		
 		
 		if (_match['p' + player_port + '_prev'] != -1) {
 			switch (true) {
 				// If it's a player that's going into losers from winners
-				case (_match['round'] < 0 && _game['matches'][_match['p' + player_port + '_prev']]['round'] > 0):
+				case (_match['round'] < 0 && _event['matches'][_match['p' + player_port + '_prev']]['round'] > 0):
 					wl = 'Loser';
 					break;
 				default:
 					wl = 'Winner';
 					break;
 			}
-			return (wl + " of " + _game['matches'][_match['p' + player_port + '_prev']]['key']);
+			return (wl + " of " + _event['matches'][_match['p' + player_port + '_prev']]['key']);
 		} else {
 			return "";
 		}
@@ -187,7 +187,7 @@ function tioConverterJS() {
 		var blanks = ['00000000-0000-0000-0000-000000000000', '00000001-0001-0001-0101-010101010101'];
 		
 		// $('#bracket, #results').css('display', 'none');
-		if (_js.selected_event == "" || _js.selected_game == -"") {
+		if (_js.selected_tournament == "" || _js.selected_event == -"") {
 			return false;
 		}
 		
@@ -196,18 +196,18 @@ function tioConverterJS() {
 		$('#winner_rounds').html('');
 		$('#winner_matches').html('');
 		
-		if (typeof _data[_js.selected_event] != 'undefined') {
-			var _event = _data[_js.selected_event];
+		if (typeof _data[_js.selected_tournament] != 'undefined') {
+			var _tournament = _data[_js.selected_tournament];
 			
-			$('#to_title').html($('#event option:selected').text() + " - " + _data[_js.selected_event]['games'][_js.selected_game]['name']);
-			$('#to_game').html(_data[_js.selected_event]['games'][_js.selected_game]['game']);
-			$('#to_game').append(' - ' + _data[_js.selected_event]['games'][_js.selected_game]['entrants'] + ' entrants'); // Number of Players
+			$('#to_title').html($('#tournament option:selected').text() + " - " + _data[_js.selected_tournament]['events'][_js.selected_event]['name']);
+			$('#to_event').html(_data[_js.selected_tournament]['events'][_js.selected_event]['event']);
+			$('#to_event').append(' - ' + _data[_js.selected_tournament]['events'][_js.selected_event]['entrants'] + ' entrants'); // Number of Players
 			
-			if (typeof _data[_js.selected_event]['games'][_js.selected_game] != 'undefined') {
-				var _game = _data[_js.selected_event]['games'][_js.selected_game];
+			if (typeof _data[_js.selected_tournament]['events'][_js.selected_event] != 'undefined') {
+				var _event = _data[_js.selected_tournament]['events'][_js.selected_event];
 				
 				// Go through each match
-				$.each(_game['matches'], function(key,_match) {
+				$.each(_event['matches'], function(key,_match) {
 					// Check if it's grand finals set 2 before outputting
 					if (_match['round'] < _js.winners_round_count || (_match['round'] == _js.winners_round_count && blanks.indexOf(_match.winner) == -1)) {
 						// Score correction for cancelled matches
@@ -245,11 +245,11 @@ function tioConverterJS() {
 						// Set up "Winner of $key" and "loser of $key"
 						if (blanks.indexOf(_match['winner']) > -1) {
 							if (blanks.indexOf(_match['p1']['id']) > -1) {
-								_match['p1']['tag'] = _js.getWinKey(_game, _match, 1);
+								_match['p1']['tag'] = _js.getWinKey(_event, _match, 1);
 							}
 							
 							if (blanks.indexOf(_match['p2']['id']) > -1) {
-								_match['p2']['tag'] = _js.getWinKey(_game, _match, 2);
+								_match['p2']['tag'] = _js.getWinKey(_event, _match, 2);
 							}
 						}
 						
@@ -257,7 +257,7 @@ function tioConverterJS() {
 						 * SET UP MATCH INFORMATION TO PRINT OUT
 						 */					
 						// Setup
-						var m_setup = (typeof _event['stations_ez'][_match['id']] != 'undefined' ? _event['stations_ez'][_match['id']] : '');
+						var m_setup = (typeof _tournament['stations_ez'][_match['id']] != 'undefined' ? _tournament['stations_ez'][_match['id']] : '');
 						var m_setup_is = (m_setup == '' ? ' none' : '');
 						
 						/**

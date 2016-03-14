@@ -1,9 +1,24 @@
 <?php
+$title_extension = "";
+
 // Parse bracket
 if (isset($_GET['tioevent'])) {
-	$tournamentId = $tio->getTournamentId($_GET['tioevent']);
-	$tio->active_file = $tournamentId . '/' . $tournamentId . '.tio';
+	$tio->info = [
+		'event' => [
+			'id' => $tio->getTournamentId($_GET['tioevent']),
+			'permalink' => $tio->getTournamentPermalink($_GET['tioevent'])
+		],
+		'game' => [
+			'id' => $tio->getDefaultEvent($tio->getTournamentId($_GET['tioevent'])),
+			'permalink' => NULL
+		]
+	];
+	$tio->active_file = $tio->info['event']['id'] . '/' . $tio->info['event']['id'] . '.tio';
 	$tio->parseBracket();
+	
+	if ($tio->loaded) {
+		$title_extension = (" - " . $tio->getLoadedEvent()['id'] . ' - ' . $tio->getLoadedEvent()['id']);
+	}
 }
 ?><!DOCTYPE html>
 <html>
@@ -11,7 +26,7 @@ if (isset($_GET['tioevent'])) {
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		
-		<title>Polarity - Bracket<?php if (isset($_GET['tioevent'])) { echo " - " . $tio->parseBracket()[$tio->getTournamentId($_GET['tioevent'])]['name']; } ?></title>
+		<title>Polarity - Bracket<?php echo $title_extension; ?></title>
 		
 		<!-- Libraries -->
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -26,7 +41,10 @@ if (isset($_GET['tioevent'])) {
 		<?php if (isset($_GET['tioevent'])) {?><script type="text/javascript">
 		$(document).ready(function() {
 			tioJS = new tioConverterJS();
-			tioJS.autoTio('<?php echo $tio->getTournamentId($_GET['tioevent']); ?>', '<?php echo $tio->getDefaultEvent($_GET['tioevent']); ?>');
+			tioJS.autoTio(
+				'<?php echo $tio->info['event']['id']; ?>',
+				'<?php echo $tio->info['game']['id']; ?>'
+			);
 		});
 		</script><?php echo "\n"; } ?>
 		<link rel="stylesheet" type="text/css" href="/main/tioconverter.bracket.front.css">
@@ -48,7 +66,7 @@ if (isset($_GET['tioevent'])) {
 				<!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
-						<?php if (isset($_SESSION['admin'])) { ?>
+						<?php if (isset($_SESSION['admin'])) {?>
 						<!-- Admin -->
 						<li class="dropdown admin">
 							<a href="/admin" role="button">Admin Panel</a>
@@ -59,18 +77,28 @@ if (isset($_GET['tioevent'])) {
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Featured Brackets<span class="caret"></span></a>
 							<ul class="dropdown-menu">
-								<li><a href="#"></a></li>
+								<?php
+								foreach ($tio->getTournaments() as $key=>$to) {
+									if ($to['featured']) {
+								?>
+								<li><a href="<?php echo "/" . $to['permalink']; ?>"><?php echo $to['name']; ?></a></li>
+								<?php
+									}
+								}
+								?>
 							</ul>
 						</li>
 						
 						<!-- View All Brackets -->
-						<li><a href="archive">View All Brackets</a></li>
+						<li><a href="/archive">View All Brackets</a></li>
 						
+						<?php if ($tio->loaded) { ?>
 						<!-- Download -->
 						<li><a href="#" id="download-bracket"><span class="glyphicon glyphicon-download-alt"></span></a></li>
 						
 						<!-- Refresh -->
 						<li><a href="#" id="refresh-bracket"><span class="glyphicon glyphicon-refresh"></a></li>
+						<?php } ?>
 					</ul>
 					
 					<ul class="nav navbar-nav navbar-right">
@@ -80,7 +108,7 @@ if (isset($_GET['tioevent'])) {
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Events <span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<?php foreach($tio->parseBracket()[$tio->getTournamentId($_GET['tioevent'])]['games'] as $key=>$event) { ?>
-								<li><a href="/<?php echo urlencode($_GET['tioevent']); ?>/<?php echo urlencode(strtolower(str_replace(' ', '-', $event['name']))); ?>"><?php echo $event['name']; ?></a></li>
+								<li><a href="/<?php echo $_GET['tioevent']; ?>/<?php echo $tio->url_encode($tio->info['event']['name']); ?>"><?php echo $event['name']; ?></a></li>
 								<?php } ?>
 							</ul>
 						</li>
@@ -123,31 +151,7 @@ if (isset($_GET['tioevent'])) {
 						<div id="losers" class="big-section">
 							<div class="round-head"><div id="loser_rounds"></div></div>
 							<canvas id="loser_lines"></canvas>
-							<div id="loser_matches">
-							
-								<div class="column match-column round--1" round="-1">
-									<div class="match" match-id="0" winner-id="6a466465-7798-4d1f-b537-e4e84518f679" in-progress="false">
-										<div class="match-info">
-											<div class="tio-match-id">AE</div>
-											<a class="setup stream">PolarityGG Stream</a>
-										</div>
-										<div class="players">
-											<div class="player player1 winner" player-seed="1">
-												<div class="player-seed">1</div><div class="player-tag" player-id="6a466465-7798-4d1f-b537-e4e84518f679">Plup + Pengie</div>
-												<div class="player-id">6a466465-7798-4d1f-b537-e4e84518f679</div>
-												<div class="player-score">2</div>
-											</div>
-											<div class="sep"></div>
-											<div class="player player2 loser" player-seed="16">
-												<div class="player-seed">16</div>
-												<div class="player-tag" player-id="892205bb-3948-43a4-ae27-94c5cfe7611a">CandyMan + Lvl9Cpu</div>
-												<div class="player-id">892205bb-3948-43a4-ae27-94c5cfe7611a</div><div class="player-score">0</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								
-							</div>
+							<div id="loser_matches"></div>
 						</div>
 					</div>
 				</div>

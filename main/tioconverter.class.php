@@ -1,39 +1,47 @@
 <?php
-
-if (strpos($_SERVER['REQUEST_URI'], $_SERVER['SCRIPT_NAME']) !== false) {
-	require_once('../library.php');
-}
-
 class tioParser {
+	/* Options */
 	public	$debug_mode = false;
+	public	$enable_results = true;
+	public	$logging = true;
+	private	$error_level = E_ALL;
 	
+	/* Directories */
 	public 	$archive_directory = "archive";
 	public 	$cache_directory = "cache";
 	public 	$library_file = "library.json";
+
+	/* Active Information */
 	public 	$active_file = "";
 	public 	$cache_file = "";
 	public 	$tio_file = "";
 	public 	$tio_hash = "";
-	public 	$events = [];
-	public 	$files = [];
-	public	$library = [];
-	public	$players = [];
-	public	$teams = [];
-	public	$enable_results = true;
-	
-	public	$logging = true;
+	public	$loaded = false;
 	private	$library_file_md5 = "";
 	private	$session_id = null;
-	private	$error_reporting_save = null;
-	private	$error_reporting_set = E_ALL;
+	private	$error_level_save = null;
 	
+	/* Content Storage */
+	private $tournaments = [];
+	private $events = [];
+	private $files = [];
+	private $library = [];
+	private $players = [];
+	private $teams = [];
+	private $info = [];
+	
+	/**
+	 * =====================
+	 * == Tio Converter 2 ==
+	 * =====================
+	 */
 	function __construct($options) {
 		// Give a random session ID
 		$this->session_id = uniqid('');
 		
 		// Set custom level of error reporting
-		$this->error_reporting_save = ini_get("error_reporting");
-		error_reporting($this->error_reporting_set);
+		$this->error_level_save = ini_get("error_reporting");
+		error_reporting($this->error_level);
 		
 		// Set up file locations
 		if (isset($options['library'])) {
@@ -45,6 +53,20 @@ class tioParser {
 		if (isset($options['cache'])) {
 			$this->cache_directory = $options['cache'];
 		}
+		
+		// Set up currently loaded information
+		$this->info = [
+			'tournament' => [
+				'id' => NULL,
+				'name' => NULL,
+				'permalink' => NULL
+			],
+			'events' => [
+				'id' => NULL,
+				'name' => NULL,
+				'permalink' => NULL
+			]
+		];
 		
 		// Set up file structure
 		$this->setup();
@@ -58,7 +80,7 @@ class tioParser {
 	
 	function __destruct() {
 		// Reset error reporting to previous level
-		error_reporting($this->error_reporting_save);
+		error_reporting($this->error_level_save);
 	}
 	
 	/**
@@ -67,9 +89,9 @@ class tioParser {
 	public function log($input = null) {
 		if ($this->logging) {
 			if (function_exists('custom_log')) {
-				custom_log($this->session_id, $input);
+				custom_log($input, $this->session_id);
 			} else {
-				error_log($input);
+				// error_log($input);
 			}
 		}
 	}
@@ -77,7 +99,7 @@ class tioParser {
 	/**
 	 * Used to generate a filename from the current date
 	 */
-	public function getDate() {
+	public function today() {
 		return date('mdy-Hi');
 	}
 	
@@ -167,46 +189,6 @@ class tioParser {
 	}
 	
 	/**
-	 * Returns an array of events
-	 *
-	 * Array (
-	 * 	'$tournamentId' => '$tournamentName'
-	 * )
-	 */
-	public function getEvents() {
-		return $this->events;
-	}
-	
-	/**
-	 * Returns an array of archived tournament files
-	 *
-	 * Array (
-	 * 	$id => '$fileName'
-	 * )
-	 */
-	public function getArchive() {
-		return $this->files;
-	}
-	
-	/**
-	 * Alias for getArchive()
-	 */
-	public function getArchives() {
-		return $this->getArchive();
-	}
-	
-	/**
-	 * Returns an array of cached tournament files
-	 *
-	 * Array (
-	 * 	$id => '$fileName'
-	 * )
-	 */
-	public function getCache() {
-		return false;
-	}
-	
-	/**
 	 * Checks to see if there are any additional updates to the
 	 * library file.
 	 * 
@@ -244,9 +226,26 @@ class tioParser {
 	}
 	
 	/**
+	 * Returns an array of all tournaments
+	 */
+	public function getTournaments() {
+		return $this->library['tournaments'];
+	}
+	
+	/**
 	 * Get tournament id from library using a permalink or id
 	 */
-	public function getTournamentId($search = "") {		
+	public function setTournament($set = "") {
+		$this->info['tournament']['id'] = $this->getTournamentId($set);
+		$this->info['tournament']['name'] = $this->getTournamentName($set);
+		$this->info['tournament']['permalink'] = $this->getTournamentPermalink($set);
+		return true;
+	}
+	
+	/**
+	 * Get tournament id from library using a permalink or id
+	 */
+	public function getTournamentId($search = "") {
 		foreach ($this->library['tournaments'] as $key=>$entry) {
 			if ($search == $entry['id'] || $search == $entry['permalink']) {
 				return $entry['id'];
@@ -259,6 +258,66 @@ class tioParser {
 	/**
 	 * Get tournament id from library using a permalink or id
 	 */
+	public function getTournamentPermalink($search = "") {		
+		foreach ($this->library['tournaments'] as $key=>$entry) {
+			if ($search == $entry['id'] || $search == $entry['permalink']) {
+				return $entry['permalink'];
+			}
+		}
+		
+		return "";
+	}
+	
+	/**
+	 * Get tournament id from library using a permalink or id
+	 */
+	public function getTournamentName($search = "") {		
+		foreach ($this->library['tournaments'] as $key=>$entry) {
+			if ($search == $entry['id'] || $search == $entry['permalink']) {
+				return $entry['name'];
+			}
+		}
+		
+		return "";
+	}
+	
+	/**
+	 * Gets info regarding current tournament
+	 */
+	public function getActiveTournament() {
+		return $this->info['tournament'];
+	}
+	
+	/**
+	 * Returns an array of events
+	 *
+	 * Array (
+	 * 	'$tournamentId' => '$tournamentName'
+	 * )
+	 */
+	public function getEvents() {
+		if ($this->loaded) {
+			$this->log('No bracket has been parsed');
+			return $this->events;
+		} else {
+			return [];
+		}
+	}
+	
+	/**
+	 * Returns an array of archived tournament files
+	 *
+	 * Array (
+	 * 	$id => '$fileName'
+	 * )
+	 */
+	public function getFiles() {
+		return $this->files;
+	}
+	
+	/**
+	 * Get default event
+	 */
 	public function getDefaultEvent($search = "") {		
 		foreach ($this->library['tournaments'] as $key=>$entry) {
 			if ($search == $entry['id'] || $search == $entry['permalink']) {
@@ -267,6 +326,61 @@ class tioParser {
 		}
 		
 		return "";
+	}
+	
+	/**
+	 * Get event id from library using a permalink or id
+	 */
+	public function getEventId($search = "") {		
+		foreach ($this->library['tournaments'] as $key=>$entry) {
+			if ($search == $entry['id'] || $search == $entry['permalink']) {
+				return $entry['permalink'];
+			}
+		}
+		
+		return "";
+	}
+	
+	/**
+	 * Get event permalink from library using a permalink or id
+	 */
+	public function getEventPermalink($search = "") {		
+		foreach ($this->library['tournaments'] as $key=>$entry) {
+			if ($search == $entry['id'] || $search == $entry['permalink']) {
+				return $entry['default_event'];
+			}
+		}
+		
+		return "";
+	}
+	
+	/**
+	 * Get a particular event section from the bracket conversion
+	 */
+	public function getLoadedTournament() {
+		if ($this->loaded) {
+			return array_merge($this->parseBracket()[$this->info['event']['id']], ['id' => $this->info['event']['id']]);
+		}
+		
+		return [];
+	}
+	
+	/**
+	 * Get a particular game section from the bracket conversion
+	 */
+	public function getLoadedEvent($search = "") {
+		if ($this->loaded) {
+			return array_merge($this->parseBracket()[$this->info['event']['id']]['events'][$this->info['game']['id']], ['id' => $this->info['game']['id']]);
+		}
+		
+		return [];
+	}
+	
+	/**
+	 * Encode site for URL use
+	 */
+	public function url_encode($text) {
+		return urlencode(strtolower(str_replace(' ', '-', $text)));
 	}
 	
 	/**
@@ -300,6 +414,21 @@ class tioParser {
 	}
 	
 	public function parseBracket() {
+		if ($this->getActiveTournament()['id'] !== NULL && $this->active_file != ($this->getActiveTournament()['id'] . '.tio')) {
+			$check_file = $this->archive_directory . '/' . $this->getActiveTournament()['id'] . '/' . $this->getActiveTournament()['id'] . '.tio';
+			if (file_exists($check_file)) {
+				$this->log($check_file . " is now active file");
+				$this->active_file = ($this->getActiveTournament()['id'] . '/' .$this->getActiveTournament()['id'] . '.tio');
+			} else  {
+				foreach ($this->getTournaments() as $key=>$to) {
+					if ($to['id'] == $this->getActiveTournament()['id']) {
+						$this->log($check_file . " tried to be set but the file was missing");
+						return json_encode([]);
+					}
+				}
+			}
+		}
+		
 		if (!isset($this->active_file) || $this->active_file == "") {
 			$this->log("No active file set");
 			return json_encode([]);
@@ -319,8 +448,13 @@ class tioParser {
 			$this->tio_hash = md5_file($this->archive_directory."/".$this->active_file);
 		}
 		
+		// Set loaded to true, so you can confirm that a file was set
+		$this->loaded = true;
+		
 		$tio = simplexml_load_file($this->archive_directory."/".$this->active_file);
-		$this->events = [];
+		
+		// Reset tournaments
+		$this->tournaments = [];
 		
 		$this->players = [
 			'00000000-0000-0000-0000-000000000000' => ['id' => '00000000-0000-0000-0000-000000000000', 'name' => NULL, 'tag' => '&nbsp;', 'location' => NULL, 'skill' => 0, 'seed' => 0],
@@ -361,68 +495,72 @@ class tioParser {
 		}
 		
 		// Events
-		foreach ($tio->EventList->Event as $key=>$event) {
-			$event_id = trim((string)$event->ID);
-			$event_name = trim((string)$event->Name);
+		foreach ($tio->EventList->Event as $key=>$tournament) {
+			$tournament_id = trim((string)$tournament->ID);
+			$tournament_name = trim((string)$tournament->Name);
 			
-			$this->events[$event_id] = [];
-			$this->events[$event_id]['name'] = $event_name;
-			$this->events[$event_id]['stations'] = [];
-			$this->events[$event_id]['stations_ez'] = [];
-			$this->events[$event_id]['games'] = [];
+			$this->tournaments[$tournament_id] = [];
+			$this->tournaments[$tournament_id]['name'] = $tournament_name;
+			$this->tournaments[$tournament_id]['stations'] = [];
+			$this->tournaments[$tournament_id]['stations_ez'] = [];
+			$this->tournaments[$tournament_id]['events'] = [];
 			
 			// Stations
-			foreach ($event->Stations->Station as $key=>$station) {
-				array_push($this->events[$event_id]['stations'], [
+			foreach ($tournament->Stations->Station as $key=>$station) {
+				array_push($this->tournaments[$tournament_id]['stations'], [
 					'number' =>trim((int)$station->Number),
 					'name' =>trim((string)$station->Name),
-					'match_event' => trim((string)$station->Queue->Match->EventID),
+					'match_tournament' => trim((string)$station->Queue->Match->tournamentID),
 					'match_id' => trim((string)$station->Queue->Match->Number)
 				]);
 			}
 			
 			// Stations EZ (Uses match ID as key to match stream name)
-			foreach ($event->Stations->Station as $key=>$station) {
-				$station_event_id = trim((string)$station->Queue->Match->EventID);
+			foreach ($tournament->Stations->Station as $key=>$station) {
+				$station_tournament_id = trim((string)$station->Queue->Match->tournamentID);
 				$station_match_num = trim((string)$station->Queue->Match->Number);
 				
-				if (($station_event_id != "") && ($station_match_num != "")) {
-					$this->events[$event_id]['stations_ez'][$station_event_id.":".$station_match_num] = trim((string)$station->Name);
+				if (($station_tournament_id != "") && ($station_match_num != "")) {
+					$this->tournaments[$tournament_id]['stations_ez'][$station_tournament_id.":".$station_match_num] = trim((string)$station->Name);
 				}
 			}
 			
 			// Events -> Games
-			foreach ($event->Games->Game as $key=>$game) {
-				$game_id = trim((string)$game->ID);
-				$game_event_name = trim((string)$game->Name);
-				$game_name = trim((string)$game->GameName);
-				$this->events[$event_id]['games'][$game_id] = [];
-				$this->events[$event_id]['games'][$game_id]['name'] = $game_event_name;
-				$this->events[$event_id]['games'][$game_id]['game'] = $game_name;
-				$this->events[$event_id]['games'][$game_id]['entrants'] = count($game->Entrants->Entrant);
-				$this->events[$event_id]['games'][$game_id]['seeds'] = [];
-				$this->events[$event_id]['games'][$game_id]['matches'] = [];
-				$this->events[$event_id]['games'][$game_id]['results'] = [];
+			foreach ($tournament->Games->Game as $key=>$event) {
+				// Generic variables
+				$event_id = trim((string)$event->ID);
+				$event_tournament_name = trim((string)$event->Name);
+				$event_name = trim((string)$event->eventName);
 				
-				// Give seed to a player
-				foreach ($game->Entrants->Entrant as $key=>$seed) {
-					$this->events[$event_id]['games'][$game_id]['seeds'][trim((string)$seed->PlayerID)] = (int)$seed->Seed;
+				/**
+				 * START SETTING UP THE BULK
+				 */
+				$this->tournaments[$tournament_id]['events'][$event_id] = [
+					'id' => $event_id,
+					'name' => $event_tournament_name,
+					'event' => $event_name,
+					'entrants' => count($event->Entrants->Entrant),
+					'seeds' => [],
+					'matches' => [],
+					'results' => []
+				];
+				
+				// Assign players their seeds
+				foreach ($event->Entrants->Entrant as $key=>$seed) {
+					$this->tournaments[$tournament_id]['events'][$tournament_id]['seeds'][trim((string)$seed->PlayerID)] = (int)$seed->Seed;
 				}
-				asort($this->events[$event_id]['games'][$game_id]['seeds']);
+				asort($this->tournaments[$tournament_id]['events'][$tournament_id]['seeds']);
 				
-				// Events -> Games -> Bracket
-				foreach ($game->Bracket->Matches->Match as $key=>$match) {
+				// tournaments -> events -> Bracket
+				foreach ($event->Bracket->Matches->Match as $key=>$match) {
 					$match_number = (int)$match->Number;
-					$this->events[$event_id]['games'][$game_id]['matches'][$match_number] = [
+					$this->tournaments[$tournament_id]['events'][$tournament_id]['matches'][$match_number] = [
 						'id' => (int)$match->Number,
 						'key' => $this->numToLetters($match->Number),
-						
-						'p1' => $this->getPlayerById(trim((string)$match->Player1), (isset($this->events[$event_id]['games'][$game_id]['seeds'][trim((string)$match->Player1)]) ? (int)$this->events[$event_id]['games'][$game_id]['seeds'][trim((string)$match->Player1)] : -1)),
+						'p1' => $this->getPlayerById(trim((string)$match->Player1), (isset($this->tournaments[$tournament_id]['events'][$tournament_id]['seeds'][trim((string)$match->Player1)]) ? (int)$this->tournaments[$tournament_id]['events'][$tournament_id]['seeds'][trim((string)$match->Player1)] : -1)),
 						's1' => trim((string)$match->Score->Player1Wins),
-						
-						'p2' => $this->getPlayerById(trim((string)$match->Player2), (isset($this->events[$event_id]['games'][$game_id]['seeds'][trim((string)$match->Player2)]) ? (int)$this->events[$event_id]['games'][$game_id]['seeds'][trim((string)$match->Player2)] : -1)),
+						'p2' => $this->getPlayerById(trim((string)$match->Player2), (isset($this->tournaments[$tournament_id]['events'][$tournament_id]['seeds'][trim((string)$match->Player2)]) ? (int)$this->tournaments[$tournament_id]['events'][$tournament_id]['seeds'][trim((string)$match->Player2)] : -1)),
 						's2' => trim($match->Score->Player2Wins),
-						
 						'winner' => trim(($match->Winner)),
 						'p1_prev' => intval(trim($match->Player1PrevMatch)),
 						'p2_prev' => intval(trim($match->Player2PrevMatch)),
@@ -439,7 +577,6 @@ class tioParser {
 					];
 				}
 				
-				
 				// Events -> Results
 				if ($this->enable_results) {
 					/* ======================
@@ -448,14 +585,14 @@ class tioParser {
 					 * - Losers round 1 starts at -1
 					 * - Winners round 1 starts at 1
 					 */
-					if ($this->debug_mode) { echo "<h1>".$this->events[$event_id]['name']."</h1>"; }
+					if ($this->debug_mode) { echo "<h1>".$this->events[$tournament_id]['name']."</h1>"; }
 					
 					// Declare variables to be used later
 					$all_matches = [];
 					$round = -1; // Current round to check through
 					$max_rounds_loser = -1; // The total number of winner rounds
 					$max_rounds_winner = -1; // The total number of loser rounds
-					$player_count = $this->events[$event_id]['games'][$game_id]['entrants'];
+					$player_count = $this->tournaments[$tournament_id]['events'][$event_id]['entrants'];
 					$placing = ($player_count + 1); // Base to start with (this is the number of players)
 					$prev_round = 0; // Placeholder variable for previous round number
 					$used_player = ['00000000-0000-0000-0000-000000000000', '00000001-0001-0001-0101-010101010101']; // Stores IDs of players that have already been given a placing
@@ -470,7 +607,7 @@ class tioParser {
 					 * ];
 					 */
 					// foreach ($game->Bracket->Matches->Match as $key=>$match) {
-					foreach ($this->events[$event_id]['games'][$game_id]['matches'] as $key=>$match) {
+					foreach ($this->tournaments[$tournament_id]['events'][$tournament_id]['matches'] as $key=>$match) {
 						$this_matches_round = $match['round'];
 						
 						// Add tags for convenience
@@ -493,7 +630,7 @@ class tioParser {
 						h2 { border-left: 5px solid black; padding-left: 5px }
 						h3 { border-left: 3px solid black; padding-left: 5px; margin-left: 8px }
 						</style>";
-						echo "<h2>".$this->events[$event_id]['games'][$game_id]['name']."</h2>";
+						echo "<h2>".$this->tournaments[$tournament_id]['events'][$tournament_id]['name']."</h2>";
 						echo "<h3>Number of Players: $player_count</h3>";
 						echo "<h3>Winner Rounds: $max_rounds_winner</h3>";
 						echo "<h3>Loser Rounds: $max_rounds_loser</h3>";
@@ -560,14 +697,14 @@ class tioParser {
 											$placing -= count($current_loser_placing);
 											
 											// Create placing array if it doesn't exist
-											if (!isset($this->events[$event_id]['games'][$game_id]['results'][$placing])) {
-												$this->events[$event_id]['games'][$game_id]['results'][$placing] = [];
+											if (!isset($this->tournaments[$tournament_id]['events'][$event_id]['results'][$placing])) {
+												$this->tournaments[$tournament_id]['events'][$event_id]['results'][$placing] = [];
 											}
 											
 											// Set placing for each player
 											foreach ($current_loser_placing as $key=>$cur) {
 												if ($this->debug_mode) { echo "<div>$cur &rarr; ".$this->getPlayerById($cur)['tag']." &rarr; $placing</div>"; }
-												$this->events[$event_id]['games'][$game_id]['results'][$placing][$this->getPlayerById($cur)['tag']] = $this->getPlayerById($cur);
+												$this->tournaments[$tournament_id]['events'][$event_id]['results'][$placing][$this->getPlayerById($cur)['tag']] = $this->getPlayerById($cur);
 											}
 											
 											$prev_round = $mi;
@@ -581,7 +718,7 @@ class tioParser {
 										$placing = 1;
 										if ($this->debug_mode) { echo "<div style='color: #6d6'>&raquo; ".$winner." -- ".$this->getPlayerById($winner)['tag']." (won the tournament in round $mi)</div>"; }
 										if ($this->debug_mode) { echo "<div>$cur &rarr; ".$this->getPlayerById($winner)['tag']." &rarr; $placing</div>"; }
-										$this->events[$event_id]['games'][$game_id]['results'][$placing][$this->getPlayerById($winner)['tag']] = $this->getPlayerById($winner);
+										$this->tournaments[$tournament_id]['events'][$event_id]['results'][$placing][$this->getPlayerById($winner)['tag']] = $this->getPlayerById($winner);
 									}
 									
 								}
@@ -591,14 +728,14 @@ class tioParser {
 						$i++;
 					}
 					
-					foreach ($this->events[$event_id]['games'][$game_id]['results'] as $key=>$placing) {
-						ksort($this->events[$event_id]['games'][$game_id]['results'][$key]);
+					foreach ($this->tournaments[$tournament_id]['events'][$event_id]['results'] as $key=>$placing) {
+						ksort($this->tournaments[$tournament_id]['events'][$event_id]['results'][$key]);
 					}
 				}
 			}
 		}
 		
-		return $this->events;
+		return $this->tournaments;
 	}
 
 	/**
@@ -612,10 +749,6 @@ class tioParser {
 	}
 	
 	public function saveToArchive() {
-	}
-	
-	public function cmp($a, $b) {
-		return strcmp($a["tag"], $b["tag"]);
 	}
 
 	public function getPlayerById($id = '00000000-0000-0000-0000-000000000000', $seed = 0) {
@@ -631,8 +764,4 @@ class tioParser {
 }
 
 $tio = new tioParser(['library' => LIBRARY, 'archive' => ARCHIVE, 'cache' => CACHE]);
-
-// $tio_cache = simplexml_load_file($cache_dir.$cache_file); 
-// $archive_id = trim((string)$tio_cache->EventList->Event->ID);
-// $archive_name = trim((string)$tio_cache->EventList->Event->Name);
 ?>

@@ -1,6 +1,29 @@
+########################
+# Enable indexing
+########################
 Options -Indexes
 
+########################
+# FORCE HTTPS ON SITE
+########################
+RewriteEngine on
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+########################
+# Redirect subdomains to t
+########################
+RewriteCond %{HTTP_HOST} ^brackets\.polarity\.gg$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.brackets\.polarity\.gg$
+RewriteRule ^(.*)$ "https\:\/\/t\.polarity\.gg\/$1" [R=301,L]
+
+RewriteCond %{HTTP_HOST} ^bracket\.polarity\.gg$ [OR]
+RewriteCond %{HTTP_HOST} ^www\.bracket\.polarity\.gg$
+RewriteRule ^(.*)$ "https\:\/\/t\.polarity\.gg\/$1" [R=301,L]
+
+########################
 # Everything Else
+########################
 RewriteEngine on
 RewriteBase	/
 
@@ -12,5 +35,4 @@ RewriteRule	^admin$		/admin/  [L,R=301,NC]
 # Admin page
 RewriteCond	%{REQUEST_FILENAME} !-f
 RewriteCond	%{REQUEST_FILENAME} !-d
-# RewriteRule	^([^/.]*)?/?([^\/]*)?/?(.*)?$			index.php?tioevent=$1&tiogame=$2&tiomatch=$3&other=$4  [L,QSA,NC]
 RewriteRule	^([^/.]*)?/?([^\/]*)?/?([^\/]*)?/?(.*)?$			index.php?tioevent=$1&tiogame=$2&tiomatch=$3&other=$4  [L,QSA,NC]
