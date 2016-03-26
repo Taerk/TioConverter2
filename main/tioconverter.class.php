@@ -118,7 +118,7 @@ class tioParser {
 	
 	/**
 	 * Enables debug mode and runs through
-	 */	
+	 */
 	public function debug() {
 		ini_set('xdebug.var_display_max_children', 5000);
 		ini_set('xdebug.var_display_max_depth', 7);
@@ -191,7 +191,7 @@ class tioParser {
 	/**
 	 * Checks to see if there are any additional updates to the
 	 * library file.
-	 * 
+	 *
 	 * Will return true if there is, false if there
 	 * isn't or the file doesn't exit.
 	 */
@@ -239,6 +239,7 @@ class tioParser {
 		$this->info['tournament']['id'] = $this->getTournamentId($set);
 		$this->info['tournament']['name'] = $this->getTournamentName($set);
 		$this->info['tournament']['permalink'] = $this->getTournamentPermalink($set);
+		
 		return true;
 	}
 	
@@ -246,9 +247,13 @@ class tioParser {
 	 * Get tournament id from library using a permalink or id
 	 */
 	public function getTournamentId($search = "") {
-		foreach ($this->library['tournaments'] as $key=>$entry) {
-			if ($search == $entry['id'] || $search == $entry['permalink']) {
-				return $entry['id'];
+		if ($search === false) {
+			return $this->info['tournament']['id'];
+		} else {
+			foreach ($this->library['tournaments'] as $key=>$entry) {
+				if ($search == $entry['id'] || $search == $entry['permalink']) {
+					return $entry['id'];
+				}
 			}
 		}
 		
@@ -258,10 +263,14 @@ class tioParser {
 	/**
 	 * Get tournament id from library using a permalink or id
 	 */
-	public function getTournamentPermalink($search = "") {		
-		foreach ($this->library['tournaments'] as $key=>$entry) {
-			if ($search == $entry['id'] || $search == $entry['permalink']) {
-				return $entry['permalink'];
+	public function getTournamentPermalink($search = "") {
+		if ($search === false) {
+			return $this->info['tournament']['permalink'];
+		} else {
+			foreach ($this->library['tournaments'] as $key=>$entry) {
+				if ($search == $entry['id'] || $search == $entry['permalink']) {
+					return $entry['permalink'];
+				}
 			}
 		}
 		
@@ -271,10 +280,14 @@ class tioParser {
 	/**
 	 * Get tournament id from library using a permalink or id
 	 */
-	public function getTournamentName($search = "") {		
-		foreach ($this->library['tournaments'] as $key=>$entry) {
-			if ($search == $entry['id'] || $search == $entry['permalink']) {
-				return $entry['name'];
+	public function getTournamentName($search = "") {
+		if ($search === false) {
+			return $this->info['tournament']['name'];
+		} else {
+			foreach ($this->library['tournaments'] as $key=>$entry) {
+				if ($search == $entry['id'] || $search == $entry['permalink']) {
+					return $entry['name'];
+				}
 			}
 		}
 		
@@ -295,7 +308,7 @@ class tioParser {
 		if ($this->info['event']['id'] != NULL) {
 			return $this->info['event'];
 		} else {
-			$this->info['event']['id'] = $this->getDefaultEvent($this->getActiveTournament()['id']);
+			$this->info['event']['id'] = $this->getDefaultEvent($this->getTournamentId(false));
 		}
 		return $this->info['event'];
 	}
@@ -330,10 +343,18 @@ class tioParser {
 	/**
 	 * Get default event
 	 */
-	public function getDefaultEvent($search = "") {		
-		foreach ($this->library['tournaments'] as $key=>$entry) {
-			if ($search == $entry['id'] || $search == $entry['permalink']) {
-				return $entry['default_event'];
+	public function getDefaultEvent($search = "") {
+		if (!$this->loaded) {
+			foreach ($this->library['tournaments'] as $key=>$entry) {
+				if ($search == $entry['id'] || $search == $entry['permalink']) {
+					return $entry['default_event'];
+				}
+			}
+		} else {
+			foreach ($this->library['tournaments'] as $key=>$entry) {
+				if ($search == $entry['id'] || $search == $entry['permalink']) {
+					return $entry['default_event'];
+				}
 			}
 		}
 		
@@ -343,10 +364,18 @@ class tioParser {
 	/**
 	 * Get event id from library using a permalink or id
 	 */
-	public function getEventId($search = "") {		
-		foreach ($this->library['tournaments'] as $key=>$entry) {
-			if ($search == $entry['id'] || $search == $entry['permalink']) {
-				return $entry['permalink'];
+	public function getEventId($search = "") {
+		if ($search === false) {
+			if ($this->info['event']['id'] == NULL) {
+				return $this->getDefaultEvent($this->getTournamentId(false));
+			} else {
+				return $this->info['event']['id'];
+			}
+		} else {
+			foreach ($this->library['tournaments'] as $key=>$entry) {
+				if ($search == $entry['id'] || $search == $entry['permalink']) {
+					return $entry['permalink'];
+				}
 			}
 		}
 		
@@ -356,7 +385,7 @@ class tioParser {
 	/**
 	 * Get event permalink from library using a permalink or id
 	 */
-	public function getEventPermalink($search = "") {		
+	public function getEventPermalink($search = "") {
 		foreach ($this->library['tournaments'] as $key=>$entry) {
 			if ($search == $entry['id'] || $search == $entry['permalink']) {
 				return $entry['default_event'];
@@ -383,8 +412,8 @@ class tioParser {
 	public function getLoadedEvent($search = "") {
 		if ($this->loaded) {
 			return array_merge(
-				$this->parseBracket()[$this->info['tournament']['id']]['tournaments'][$this->info['event']['id']],
-				['id' => $this->info['event']['id']]
+				$this->parseBracket()[$this->getTournamentId(false)]['events'][$this->getEventId(false)],
+				['id' => $this->getEventId(false)]
 			);
 		}
 		
@@ -428,17 +457,22 @@ class tioParser {
 		return $text_return;
 	}
 	
+	/**
+	 * - Parses a bracket once and returns outpout
+	 *
+	 * - Returns previous output if the bracket has already been parsed
+	 */
 	public function parseBracket() {
-		if ($this->getActiveTournament()['id'] !== NULL && $this->active_file != ($this->getActiveTournament()['id'] . '.tio')) {
-			$check_file = $this->archive_directory . '/' . $this->getActiveTournament()['id'] . '/' . $this->getActiveTournament()['id'] . '.tio';
+		if ($this->getTournamentId(false) !== NULL && $this->active_file != ($this->getTournamentId(false) . '.tio')) {
+			$check_file = $this->archive_directory . '/' . $this->getTournamentId(false) . '/' . $this->getTournamentId(false) . '.tio';
 			if (file_exists($check_file)) {
 				$this->log($check_file . " is now active file");
-				$this->active_file = ($this->getActiveTournament()['id'] . '/' .$this->getActiveTournament()['id'] . '.tio');
+				$this->active_file = ($this->getTournamentId(false) . '/' .$this->getTournamentId(false) . '.tio');
 			} else  {
 				foreach ($this->getTournaments() as $key=>$to) {
-					if ($to['id'] == $this->getActiveTournament()['id']) {
+					if ($to['id'] == $this->getTournamentId(false)) {
 						$this->log($check_file . " tried to be set but the file was missing");
-						return json_encode([]);
+						return [];
 					}
 				}
 			}
@@ -446,19 +480,19 @@ class tioParser {
 		
 		if (!isset($this->active_file) || $this->active_file == "") {
 			$this->log("No active file set");
-			return json_encode([]);
+			return [];
 			die;
 		}
 		
 		if (!file_exists($this->archive_directory."/".$this->active_file)) {
 			$this->log("File not found: " . $this->archive_directory."/".$this->active_file);
-			return json_encode([]);
+			return [];
 			die;
 		}
 		
 		// Check file hash; if it's different, then return cached bracket
 		if (md5_file($this->archive_directory."/".$this->active_file) == $this->tio_hash) {
-			return $this->events;
+			return $this->tournaments;
 		} else {
 			$this->tio_hash = md5_file($this->archive_directory."/".$this->active_file);
 		}
@@ -542,6 +576,7 @@ class tioParser {
 			
 			// Events -> Games
 			foreach ($tournament->Games->Game as $key=>$event) {
+				
 				// Generic variables
 				$event_id = trim((string)$event->ID);
 				$event_tournament_name = trim((string)$event->Name);
@@ -562,19 +597,19 @@ class tioParser {
 				
 				// Assign players their seeds
 				foreach ($event->Entrants->Entrant as $key=>$seed) {
-					$this->tournaments[$tournament_id]['events'][$tournament_id]['seeds'][trim((string)$seed->PlayerID)] = (int)$seed->Seed;
+					$this->tournaments[$tournament_id]['events'][$event_id]['seeds'][trim((string)$seed->PlayerID)] = (int)$seed->Seed;
 				}
-				asort($this->tournaments[$tournament_id]['events'][$tournament_id]['seeds']);
+				asort($this->tournaments[$tournament_id]['events'][$event_id]['seeds']);
 				
 				// tournaments -> events -> Bracket
 				foreach ($event->Bracket->Matches->Match as $key=>$match) {
 					$match_number = (int)$match->Number;
-					$this->tournaments[$tournament_id]['events'][$tournament_id]['matches'][$match_number] = [
+					$this->tournaments[$tournament_id]['events'][$event_id]['matches'][$match_number] = [
 						'id' => (int)$match->Number,
 						'key' => $this->numToLetters($match->Number),
-						'p1' => $this->getPlayerById(trim((string)$match->Player1), (isset($this->tournaments[$tournament_id]['events'][$tournament_id]['seeds'][trim((string)$match->Player1)]) ? (int)$this->tournaments[$tournament_id]['events'][$tournament_id]['seeds'][trim((string)$match->Player1)] : -1)),
+						'p1' => $this->getPlayerById(trim((string)$match->Player1), (isset($this->tournaments[$tournament_id]['events'][$event_id]['seeds'][trim((string)$match->Player1)]) ? (int)$this->tournaments[$tournament_id]['events'][$event_id]['seeds'][trim((string)$match->Player1)] : -1)),
 						's1' => trim((string)$match->Score->Player1Wins),
-						'p2' => $this->getPlayerById(trim((string)$match->Player2), (isset($this->tournaments[$tournament_id]['events'][$tournament_id]['seeds'][trim((string)$match->Player2)]) ? (int)$this->tournaments[$tournament_id]['events'][$tournament_id]['seeds'][trim((string)$match->Player2)] : -1)),
+						'p2' => $this->getPlayerById(trim((string)$match->Player2), (isset($this->tournaments[$tournament_id]['events'][$event_id]['seeds'][trim((string)$match->Player2)]) ? (int)$this->tournaments[$tournament_id]['events'][$event_id]['seeds'][trim((string)$match->Player2)] : -1)),
 						's2' => trim($match->Score->Player2Wins),
 						'winner' => trim(($match->Winner)),
 						'p1_prev' => intval(trim($match->Player1PrevMatch)),
@@ -622,7 +657,7 @@ class tioParser {
 					 * ];
 					 */
 					// foreach ($game->Bracket->Matches->Match as $key=>$match) {
-					foreach ($this->tournaments[$tournament_id]['events'][$tournament_id]['matches'] as $key=>$match) {
+					foreach ($this->tournaments[$tournament_id]['events'][$event_id]['matches'] as $key=>$match) {
 						$this_matches_round = $match['round'];
 						
 						// Add tags for convenience
@@ -645,7 +680,7 @@ class tioParser {
 						h2 { border-left: 5px solid black; padding-left: 5px }
 						h3 { border-left: 3px solid black; padding-left: 5px; margin-left: 8px }
 						</style>";
-						echo "<h2>".$this->tournaments[$tournament_id]['events'][$tournament_id]['name']."</h2>";
+						echo "<h2>".$this->tournaments[$tournament_id]['events'][$event_id]['name']."</h2>";
 						echo "<h3>Number of Players: $player_count</h3>";
 						echo "<h3>Winner Rounds: $max_rounds_winner</h3>";
 						echo "<h3>Loser Rounds: $max_rounds_loser</h3>";

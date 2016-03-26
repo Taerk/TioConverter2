@@ -1,5 +1,5 @@
 <?php
-$title_extension = ($tio->loaded ? " - " . $tio->getLoadedEvent()['id'] . ' - ' . $tio->getLoadedEvent()['id'] : "");
+$title_extension = ($tio->loaded ? " - " . $tio->getTournamentName(false) . ' - ' . $tio->getLoadedEvent()['name'] : "");
 ?><!DOCTYPE html>
 <html>
 	<head>
@@ -82,29 +82,29 @@ $title_extension = ($tio->loaded ? " - " . $tio->getLoadedEvent()['id'] . ' - ' 
 					</ul>
 					
 					<ul class="nav navbar-nav navbar-right">
-						<!-- Game -->
-						<?php if (isset($_GET['tioevent'])) { ?>
+						<?php if ($tio->loaded) { ?>
+						<!-- Events -->
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Events <span class="caret"></span></a>
 							<ul class="dropdown-menu">
-								<?php foreach($tio->parseBracket()[$tio->getTournamentId($_GET['tioevent'])]['games'] as $key=>$event) { ?>
-								<li><a href="/<?php echo $_GET['tioevent']; ?>/<?php echo $tio->url_encode($tio->info['event']['name']); ?>"><?php echo $event['name']; ?></a></li>
+								<?php foreach($tio->parseBracket()[$tio->getTournamentId(false)]['events'] as $key=>$event) { ?>
+								<li><a href="/<?php echo $tio->url_encode($tio->getTournamentName(false)); ?>/<?php echo $tio->url_encode($event['name']); ?>"><?php echo $event['name']; ?></a></li>
 								<?php } ?>
 							</ul>
 						</li>
-						<?php } ?>
 						
 						<!-- View -->
-						<!-- <li class="dropdown">
+						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">View <span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a href="#">Bracket</a></li>
 								<li><a href="#">Results</a></li>
 							</ul>
-						</li> -->
+						</li>
+						<?php } ?>
 						
 						<!-- Search for Player -->
-						<li>
+						<!-- <li>
 							<form class="navbar-form" role="search" id="search-player">
 								<div class="input-group">
 									<input class="form-control" placeholder="Search for Player" type="search">
@@ -113,7 +113,7 @@ $title_extension = ($tio->loaded ? " - " . $tio->getLoadedEvent()['id'] . ' - ' 
 									</div>
 								</div>
 							</form>
-						</li>
+						</li> -->
 					</ul>
 				</div><!-- /.navbar-collapse -->
 			</div><!-- /.container-fluid -->
