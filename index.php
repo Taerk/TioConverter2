@@ -28,7 +28,7 @@ switch (true) {
 					$tio->parseBracket();
 					
 					if ($tio->loaded) {
-						$tio->setEvent((isset($_GET['tioevent']) ? $_GET['tioevent'] : $tio->getDefaultEvent()));
+						$tio->setEvent((isset($_GET['tioevent']) && trim($_GET['tioevent']) != "" ? $_GET['tioevent'] : $tio->getDefaultEvent()));
 					}
 				}
 				$output = json_encode($tio->parseBracket(), JSON_PRETTY_PRINT);
@@ -113,6 +113,10 @@ switch (true) {
 		if (isset($_GET['tiotournament'])) {
 			$tio->setTournament($tio->getTournamentId($_GET['tiotournament']));
 			$tio->parseBracket();
+					
+			if ($tio->loaded) {
+				$tio->setEvent((isset($_GET['tioevent']) && trim($_GET['tioevent']) != "" ? $_GET['tioevent'] : $tio->getDefaultEvent()));
+			}
 		}
 		require_once(CONVERTER . '/tioconverter.front.php');
 		break;

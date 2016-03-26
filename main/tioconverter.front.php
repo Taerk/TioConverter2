@@ -22,8 +22,8 @@ $title_extension = ($tio->loaded ? " - " . $tio->getTournamentName(false) . ' - 
 		$(document).ready(function() {
 			tioJS = new tioConverterJS();
 			tioJS.autoTio(
-				'<?php echo $tio->getActiveTournament()['id']; ?>',
-				'<?php echo $tio->getActiveEvent()['id']; ?>'
+				'<?php echo $tio->getTournamentId(false); ?>',
+				'<?php echo $tio->getEventId(false); ?>'
 			);
 		});
 		</script><?php echo "\n"; } ?>

@@ -55,6 +55,10 @@ body {
 	
 	width: inherit;
 }
+.round-head {
+	background-color: #444;
+	z-index: 20;
+}
 .column {
 	width: 250px;
 	min-width: 250px;
@@ -87,14 +91,23 @@ body {
 	
 	padding: 10px;
 }
-.match-column.hover {
-	background-color: #202020;
-}
+#winner_matches .match-column.hover { background-color: rgba(0,0,0,0.2) }
+#loser_matches .match-column.hover { background-color: rgba(0,0,0,0.2) }
 #winner_lines, #loser_lines {
 	position: absolute;
 	top: 0;
 	left: 0;
 	z-index: 1;
+	width: 100%;
+	height: 100%;
+}
+#winner_matches, #loser_matches, #winner_lines, #loser_lines {
+	cursor: -webkit-grab;
+	cursor: -moz-grab;
+}
+#winner_matches:active, #loser_matches:active, #winner_lines:active, #loser_lines:active {
+	cursor: -webkit-grabbing;
+	cursor: -moz-grabbing;
 }
 
 /*
@@ -167,16 +180,19 @@ body {
 	/* background-image: linear-gradient(to top, #b40, #920); */
 }
 .match .setup.youtube:hover { background-color: #fff }
-.match .setup.none { visibility: hidden; }
-.match .players { line-height: 1em }
+.match .setup.none { display: none; }
+.match .players {
+	line-height: 0.9em;
+	cursor: default;
+}
 #winner_matches .match .players {
 	border: 1px solid #070;
-	background-color: #efe;
+	background-color: #fafffa;
 	color: #030;
 }
 #loser_matches .match .players {
 	border: 1px solid #700;
-	background-color: #fee;
+	background-color: #fffafa;
 	color: #300;
 }
 .match .player {
@@ -201,10 +217,11 @@ body {
 }
 
 /* Matches - Highlights */
-.player.hover {
-	color: black;
-	background-color: #ccc;
+.player.hover, .player.selected {
+	color: #fff;
 }
+#winner_matches .player.hover, #winner_matches .player.selected { background-color: #0a0 }
+#loser_matches .player.hover, #loser_matches .player.selected { background-color: #a00 }
 .player.highlight {
 	color: black;
 	text-shadow: 1px 1px 2px rgba(51,51,51,0.5);
@@ -263,25 +280,27 @@ body {
 /* Matches - Player Scores - Winner */
 #winner_matches .match .player.winner .player-score {
 	background-color: #070;
-	color: #efe;
+	color: #fff;
 	font-weight: bold;
 	/* border-left: 1px solid #222; */
 }
 #loser_matches .match .player.winner .player-score {
 	background-color: #700;
-	color: #fee;
+	color: #fff;
 	font-weight: bold;
 	/* border-left: 1px solid #222; */
 }
 /* Matches - Player Scores - Loser */
 #winner_matches .player.loser .player-score {
-	background-color: #787;
-	color: #efe;
+	/* background-color: #787;
+	color: #efe; */
+	color: #070;
 	/* border-left: 1px solid #222; */
 }
 #loser_matches .player.loser .player-score {
-	background-color: #877;
-	color: #fee;
+	/* background-color: #877;
+	color: #fee; */
+	color: #700;
 	/* border-left: 1px solid #222; */
 }
 .player .win-circle {

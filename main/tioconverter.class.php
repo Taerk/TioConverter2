@@ -233,7 +233,7 @@ class tioParser {
 	}
 	
 	/**
-	 * Get tournament id from library using a permalink or id
+	 * Set tournament based on id/name
 	 */
 	public function setTournament($set = "") {
 		$this->info['tournament']['id'] = $this->getTournamentId($set);
@@ -356,13 +356,40 @@ class tioParser {
 					return $entry['default_event'];
 				}
 			}
+			
+			// Returns first event in tournament
+			return array_keys($this->parseBracket())[0];
 		}
 		
 		return "";
 	}
 	
 	/**
-	 * Get event id from library using a permalink or id
+	 * Set event based on id/name
+	 */
+	public function setEvent($set = "") {
+		$event_id = NULL;
+		$event_name = NULL;
+		$event_permalink = NULL;
+		
+		// Get event id from bracket
+		foreach ($this->parseBracket()[$this->getTournamentId(false)]['events'] as $key=>$entry) {
+			if ($set == $entry['id'] || $set == $this->url_encode($entry['name'])) {
+				$event_id = $entry['id'];
+				$event_name = $entry['name'];
+				$event_permalink = $this->url_encode($entry['name']);
+			}
+		}
+		
+		$this->info['event']['id'] = $event_id;
+		$this->info['event']['name'] = $event_name;
+		$this->info['event']['permalink'] = $event_permalink;
+		
+		return true;
+	}
+	
+	/**
+	 * Get event id from bracket using a permalink or id
 	 */
 	public function getEventId($search = "") {
 		if ($search === false) {
@@ -370,12 +397,6 @@ class tioParser {
 				return $this->getDefaultEvent($this->getTournamentId(false));
 			} else {
 				return $this->info['event']['id'];
-			}
-		} else {
-			foreach ($this->library['tournaments'] as $key=>$entry) {
-				if ($search == $entry['id'] || $search == $entry['permalink']) {
-					return $entry['permalink'];
-				}
 			}
 		}
 		

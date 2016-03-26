@@ -1,4 +1,6 @@
 function tioConverterJS() {		
+	_js = this;
+	
 	/* ======================
 	 * = SET VARIABLE DEFAULTS
 	 * ======================
@@ -25,10 +27,10 @@ function tioConverterJS() {
 	this.highlight = {};
 	this.events = [];
 	
-	this.win_lines = document.getElementById('winner_lines');
-	this.los_lines = document.getElementById('loser_lines');
-	this.win_ctx = this.win_lines.getContext("2d");
-	this.los_ctx = this.los_lines.getContext("2d");
+	this.win_lines;
+	this.lose_lines;
+	this.win_ctx;
+	this.lose_ctx;
 	
 	/* ======================
 	 * = PAGE CONTROLS
@@ -69,17 +71,13 @@ function tioConverterJS() {
 	 * = BRACKET this.loading
 	 * ======================
 	 */
-	this.autoTio = function(file, tournament) {
-		_js = this;
-		
+	this.autoTio = function(file, tournament) {		
 		_js.selected_tournament = file;
 		_js.selected_event = tournament;
 		_js.loadTioFile(false);
 	}
 	
-	this.loadTioFile = function(reload) {
-		_js = this;
-		
+	this.loadTioFile = function(reload) {		
 		if ((typeof reload != 'undefined') && (reload == true)) {
 			_js.loading = true;
 		} else {
@@ -99,7 +97,7 @@ function tioConverterJS() {
 		var succeeded = false;
 		_js.loading = true;
 		
-		$.getJSON("?get", 
+		$.getJSON("?get",
 			function(data) {
 				_js.tio_data = data;
 				
@@ -182,7 +180,6 @@ function tioConverterJS() {
 	}
 	
 	this.drawBracket = function() {
-		var _js = this;
 		var _data = _js.tio_data;
 		var blanks = ['00000000-0000-0000-0000-000000000000', '00000001-0001-0001-0101-010101010101'];
 		
@@ -210,19 +207,19 @@ function tioConverterJS() {
 				$.each(_event['matches'], function(key,_match) {
 					// Check if it's grand finals set 2 before outputting
 					if (_match['round'] < _js.winners_round_count || (_match['round'] == _js.winners_round_count && blanks.indexOf(_match.winner) == -1)) {
-						// Score correction for cancelled matches
-						if (_match['in_progress'] == true || _match['winner'] == "00000000-0000-0000-0000-000000000000") {
-							_match['s1'] = "";
-							_match['s2'] = "";
-						}
-						
-						// Score corrections for byes
-						if (_match['p1']['id'] == "00000001-0001-0001-0101-010101010101") {
+						// Score corrections for byes and brackets that use checkmarks
+						if (_match['p1']['id'] == "00000001-0001-0001-0101-010101010101" || ((_match['s1'] == "" && _match['s2'] == "") && (_match['winner'] == _match['p2']['id']))) {
 							_match['s1'] = "";
 							_match['s2'] = "&check;";
 						}
-						if (_match['p2']['id'] == "00000001-0001-0001-0101-010101010101") {
+						if (_match['p2']['id'] == "00000001-0001-0001-0101-010101010101" || ((_match['s1'] == "" && _match['s2'] == "") && (_match['winner'] == _match['p1']['id']))) {
 							_match['s1'] = "&check;";
+							_match['s2'] = "";
+						}
+						
+						// Score correction for cancelled matches and unfinished matches
+						if (_match['in_progress'] == true || _match['winner'] == "00000000-0000-0000-0000-000000000000" || _match['winner'] == "00000001-0001-0001-0101-010101010101") {
+							_match['s1'] = "";
 							_match['s2'] = "";
 						}
 						
@@ -244,11 +241,11 @@ function tioConverterJS() {
 						
 						// Set up "Winner of $key" and "loser of $key"
 						if (blanks.indexOf(_match['winner']) > -1) {
-							if (blanks.indexOf(_match['p1']['id']) > -1) {
+							if (blanks.indexOf(_match['p1']['id']) > -1 && _match['p1']['id'] != "00000001-0001-0001-0101-010101010101") {
 								_match['p1']['tag'] = _js.getWinKey(_event, _match, 1);
 							}
 							
-							if (blanks.indexOf(_match['p2']['id']) > -1) {
+							if (blanks.indexOf(_match['p2']['id']) > -1 && _match['p2']['id'] != "00000001-0001-0001-0101-010101010101") {
 								_match['p2']['tag'] = _js.getWinKey(_event, _match, 2);
 							}
 						}
@@ -264,7 +261,7 @@ function tioConverterJS() {
 						 * OUTPUT TEXT
 						 */
 						$('#' + m_side + '_matches .match-column.round-' + _match['round']).append(`
-							<div class="match" match-id="0" winner-id="6a466465-7798-4d1f-b537-e4e84518f679" in-progress="false">
+							<div class="match" match-id="0" winner-id="` + _match['winner'] + `" in-progress="false">
 								<div class="match-info">
 									<div class="tio-match-id">` + _match['key'] + `</div>
 									<a class="setup` + m_setup_is + `">` + m_setup + `</a>
@@ -286,23 +283,403 @@ function tioConverterJS() {
 						`);
 					}
 				});
+				
+				$('#bracket').css('width', (250 * $('#loser_rounds .round-column').length) + "px")
+				
+				_js.drawLines();
+				_js.setHeader();
+				_js.setHover();
 			}
 		}
 	}
 	
+	this.setHover = function() {
+		// Highlight color on mouseover
+		$('.player').not('.hover-set').mouseover(function() {
+			var get_pid = $(this).attr('player-id');
+			if (get_pid != "00000001-0001-0001-0101-010101010101" && get_pid != "00000000-0000-0000-0000-000000000000") {
+				$('[player-id="' + get_pid + '"]').addClass('hover');
+			}
+		});
+		
+		// Highlight color on click
+		$('.player').not('.hover-set').click(function() {
+			var get_pid = $(this).attr('player-id');
+			if (get_pid != "00000001-0001-0001-0101-010101010101" && get_pid != "00000000-0000-0000-0000-000000000000") {
+				if ($('[player-id="' + get_pid + '"]:eq(0)').hasClass('selected')) {
+					$('.player.selected').removeClass('selected');
+				} else {
+					$('.player.selected').removeClass('selected');
+					$('[player-id="' + get_pid + '"]').addClass('selected');
+				}
+			}
+			/* if ($(this).hasClass('hover')) {
+				get_pid = $(this).find('.player-tag').attr('player-id');
+				
+				if ((typeof highlight[get_pid] == 'undefined') || (highlight[get_pid] == -1)) {
+					if (get_pid.indexOf('0000000') != 0) {
+						highlight[get_pid] = 0;
+						$('[player-id="'+get_pid+'"]').closest('.player').addClass('highlight');
+						$('[player-id="'+get_pid+'"]').closest('.player').addClass('highlight-'+highlight[get_pid]);
+					}
+				} else if (highlight[get_pid] > -1) {
+					if (highlight[get_pid] < 5) { // Re-highlight
+						$('[player-id="'+get_pid+'"]').closest('.player').removeClass('highlight-'+highlight[get_pid]);
+						highlight[get_pid]++;
+						$('[player-id="'+get_pid+'"]').closest('.player').addClass('highlight-'+highlight[get_pid]);
+					} else { // Remove
+						$('[player-id="'+get_pid+'"]').closest('.player').removeClass('highlight');
+						$('[player-id="'+get_pid+'"]').closest('.player').removeClass('highlight-'+highlight[get_pid]);
+						highlight[get_pid] = -1;
+					}
+				}
+			} */
+		});
+		
+		$('.player').not('.hover-set').mouseout(function() {
+			$('.player.hover').removeClass('hover');
+		});
+		
+		// Highlight column by round
+		$('.round-column').not('.hover-set').mouseover(function() {
+			$('[round="'+ $(this).attr('round') + '"], [round="'+ -$(this).attr('round') + '"]').addClass('hover');
+		});
+		$('.round-column').not('.hover-set').mouseout(function() {			
+			$('.hover').not('.player').removeClass('hover');
+		});
+		
+		
+		$('.player, .round-column').addClass('hover-set');
+	}
+	
 	this.drawLines = function() {
-		$('#loser_lines, #winner_lines').css('display', 'none');
+		_js.win_lines = document.getElementById('winner_lines');
+		_js.lose_lines = document.getElementById('loser_lines');
+		_js.win_ctx = _js.win_lines.getContext("2d");
+		_js.lose_ctx = _js.lose_lines.getContext("2d");
 		
 		// Clear canvas
-		this.win_ctx.clearRect(0, this.win_lines.width, 0, this.win_lines.height);
-		this.los_ctx.clearRect(0, this.lose_lines.width, 0, this.lose_lines.height);
+		_js.win_ctx.clearRect(0, _js.win_lines.width, 0, _js.win_lines.height);
+		_js.lose_ctx.clearRect(0, _js.lose_lines.width, 0, _js.lose_lines.height);
+		
+		$.each($('canvas'), function(key,el) {
+			$(el).attr({
+				'width': $(el).css('width'),
+				'height': $(el).css('height')
+			});
+		});
+		
+		var s = 0;
+		var e = 0;
+		var ya1 = -1;
+		var ya2 = -1;
+		var adjust_yw = 0;
+		var adjust_yl = 0;
+		var debug_grid = false;
+		var x_split = 15; // Set how far out to merge the splits
+		var line_width = 2;
+		var line_color = {winner: '#040', loser: '#400'};
+		var winl = _js.win_ctx;
+		var losl = _js.lose_ctx;
+		var draw_gf2 = ($('.round-column:contains("Set 2")').length == 1);
+		
+		if (debug_grid) {
+			for (i = 0; i < 100; i++) {
+				if (i % 5 == 0) {
+					winl.strokeStyle = '#f00';
+					losl.strokeStyle = '#f00';
+				} else {
+					winl.strokeStyle = '#bdb';
+					losl.strokeStyle = '#dbb';
+				}
+				losl.beginPath();
+				losl.moveTo(100 * i, 0);
+				losl.lineTo(100 * i, 6000);
+				losl.stroke();
+				
+				losl.beginPath();
+				losl.moveTo(0, 100 * i);
+				losl.lineTo(6000, 100 * i);
+				losl.stroke();
+				
+				winl.beginPath();
+				winl.moveTo(100 * i, 0);
+				winl.lineTo(100 * i, 6000);
+				winl.stroke();
+				
+				winl.beginPath();
+				winl.moveTo(0, 100 * i);
+				winl.lineTo(6000, 100 * i);
+				winl.stroke();
+			}
+		}
+		
+		winl.strokeStyle = line_color.winner;
+		winl.lineWidth = line_width;
+		
+		$.each($('#winners .match-column'), function(key,el) {
+			s = $(el).find('.match .sep').length;
+			e = $('#winners .match-column:eq('+(key + 1)+')').find('.match .sep').length;
+			
+			if (((key + 2 == _js.winners_round_count) && (draw_gf2 == true)) || ((key + 2) < _js.winners_round_count)) {
+				if (e > 0) {
+					
+					// Single to single
+					if (s == e) {
+						$.each($(el).find('.match'), function(key2,el2) {
+							tx = parseInt($('#winners').position().left)
+								+ parseInt($(el2).position().left)
+								+ parseInt($(el2).width());
+							ty = parseInt($(el2).position().top)
+								+ parseInt($(el2).find('.player:eq(0)').outerHeight())
+								+ parseInt($('#winner_rounds').outerHeight())
+								+ adjust_yw;
+								
+							if (debug_grid) { winl.strokeStyle = '#55f'; }
+							winl.beginPath();
+							winl.moveTo(tx - 10, ty);
+							winl.lineTo(tx + 200, ty);
+							winl.stroke();
+						});
+					} else if (s > e) {
+						$.each($(el).find('.match'), function(key2,el2) {
+							if (key2 % 2 == 0) {
+								tx = parseInt($('#winners').position().left)
+									+ parseInt($(el2).position().left)
+									+ parseInt($(el2).width());
+								ty = parseInt($(el2).position().top)
+									+ parseInt($(el2).find('.player:eq(0)').outerHeight())
+									+ parseInt($('#winner_rounds').outerHeight())
+									+ adjust_yw;
+								ty2 = parseInt($(el).find('.match:eq('+(key2 + 1)+')').position().top)
+									+ parseInt($(el).find('.match:eq('+(key2 + 1)+')').find('.player:eq(0)').outerHeight())
+									+ parseInt($('#winner_rounds').outerHeight())
+									+ adjust_yw;
+								
+								
+								if (debug_grid) { winl.strokeStyle = '#5f5'; }
+								winl.beginPath();
+								winl.moveTo(tx - 10, ty);
+								winl.lineTo(tx + x_split + (line_width / 2), ty);
+								winl.stroke();
+								
+								if (debug_grid) { winl.strokeStyle = '#f55'; }
+								winl.beginPath();
+								winl.moveTo(tx - 10, ty2);
+								winl.lineTo(tx + x_split +  (line_width / 2), ty2);
+								winl.stroke();
+								
+								if (debug_grid) { winl.strokeStyle = '#ff5'; }
+								winl.beginPath();
+								winl.moveTo(tx + x_split, ty);
+								winl.lineTo(tx + x_split, ty2);
+								winl.stroke();
+								
+								if (debug_grid) { winl.strokeStyle = '#ff5'; }
+								winl.beginPath();
+								winl.moveTo(tx + x_split, (ty + ty2) / 2);
+								winl.lineTo(tx + 100, (ty + ty2) / 2);
+								winl.stroke();
+							}
+						});
+					}
+				}
+			}
+		});
+		
+		losl.strokeStyle = line_color.loser;
+		losl.lineWidth = line_width;
+		
+		$.each($('#losers .match-column'), function(key,el) {
+			s = $(el).find('.match').length;
+			e = $('#losers .match-column:eq('+(key + 1)+')').find('.match').length;
+			
+			// alert(key + "/" + (losers_round_count - 1) + " -- " + s + " => " + e);
+			if (e > 0) {
+				if (s == e) {
+					$.each($(el).find('.match'), function(key2,el2) {
+						tx = parseInt($('#losers').position().left)
+							+ parseInt($(el2).position().left)
+							+ parseInt($(el2).width());
+						ty = parseInt($(el2).position().top)
+							+ parseInt($(el2).find('.player:eq(0)').outerHeight())
+							+ parseInt($('#loser_rounds').outerHeight())
+							+ adjust_yw;
+							
+						if (debug_grid) { losl.strokeStyle = '#55f'; }
+						losl.beginPath();
+						losl.moveTo(tx - 10, ty);
+						losl.lineTo(tx + 200, ty);
+						losl.stroke();
+					});
+				} else if (s > e) {
+					$.each($(el).find('.match'), function(key2,el2) {
+						if (key2 % 2 == 0) {
+							tx = parseInt($('#losers').position().left)
+								+ parseInt($(el2).position().left)
+								+ parseInt($(el2).width());
+							ty = parseInt($(el2).position().top)
+								+ parseInt($(el2).find('.player:eq(0)').outerHeight())
+								+ parseInt($('#loser_rounds').outerHeight())
+								+ adjust_yw;
+							ty2 = parseInt($(el).find('.match:eq('+(key2 + 1)+')').position().top)
+								+ parseInt($(el).find('.match:eq('+(key2 + 1)+')').find('.player:eq(0)').outerHeight())
+								+ parseInt($('#loser_rounds').outerHeight())
+								+ adjust_yw;
+							
+							
+							if (debug_grid) { losl.strokeStyle = '#5f5'; }
+							losl.beginPath();
+							losl.moveTo(tx - 10, ty);
+							losl.lineTo(tx + x_split + (line_width / 2), ty);
+							losl.stroke();
+							
+							if (debug_grid) { losl.strokeStyle = '#f55'; }
+							losl.beginPath();
+							losl.moveTo(tx - 10, ty2);
+							losl.lineTo(tx + x_split + (line_width / 2), ty2);
+							losl.stroke();
+							
+							if (debug_grid) { losl.strokeStyle = '#ff5'; }
+							losl.beginPath();
+							losl.moveTo(tx + x_split, ty);
+							losl.lineTo(tx + x_split, ty2);
+							losl.stroke();
+							
+							if (debug_grid) { losl.strokeStyle = '#ff5'; }
+							losl.beginPath();
+							losl.moveTo(tx + x_split, (ty + ty2) / 2);
+							losl.lineTo(tx + 100, (ty + ty2) / 2);
+							losl.stroke();
+						}
+					});
+				}
+			}
+		});
+	}
+	
+	this.setHeader = function() {
+		$('#winners .round-head').attr('init-y', $('#header').outerHeight());
+		$('#losers .round-head').attr('init-y', $('#header').outerHeight() + $('#winners').outerHeight());
+		
+		_js.adjustHeader();
+	}
+	
+	this.adjustHeader = function() {
+		$('.round-clone').remove();
+		
+		if ($('.round-head').length > 0) {
+			// Use switch case so losers will be on top rather than winners
+			switch (true) {
+				case ($(window).scrollTop() > $('.round-head:eq(1)').attr('init-y')): // Losers
+					$('.round-head:eq(1)').clone().appendTo('body');
+					break;
+				case ($(window).scrollTop() > 0): // Winners
+					$('.round-head:eq(0)').clone().appendTo('body');
+					break;
+			}
+			
+			$('.round-head:eq(2)').addClass('round-clone');
+			$('.round-clone .round-column').removeClass('hover-set');
+			$('.round-clone').css({
+				'position': 'fixed',
+				'top': $('#header').height() + 'px',
+				'left': -$(window).scrollLeft(),
+				'width': $('#winner_matches').width()
+			});
+		}
+		
+		_js.setHover();
+	}
+	
+	this.adjustHeader_orig = function() {
+		// Reset position
+		$('.round-head').css({
+			'position': 'initial',
+			'top': '0px',
+			'width': 'auto'
+		});
+		$('#winner_matches, #loser_matches').css('padding-top', '0px');
+			
+		if ($('.round-head').length > 0) {			
+			// Use switch case so losers will be on top rather than winners
+			switch (true) {
+				case ($(window).scrollTop() > $('.round-head:eq(1)').attr('init-y')): // Losers
+					$('.round-head:eq(1)').css({
+						'position': 'fixed',
+						'top': $('#header').outerHeight() + 'px',
+						'left': -$(window).scrollLeft(),
+						'width': $('#loser_matches').width()
+					});
+					$('#loser_matches').css('padding-top', $('.round-head:eq(1)').outerHeight() + 'px');
+					break;
+				case ($(window).scrollTop() > $('.round-head:eq(0)').attr('init-y')): // Winners
+					$('.round-head:eq(0)').css({
+						'position': 'fixed',
+						'top': $('#header').outerHeight() + 'px',
+						'left': -$(window).scrollLeft(),
+						'width': $('#winner_matches').width()
+					});
+					$('#winner_matches').css('padding-top', $('.round-head:eq(0)').outerHeight() + 'px');
+					break;
+			}
+		}
+	}
+	
+	this.doDrag = function(e) {
+		_js.mouse_x = e.pageX;
+		_js.mouse_y = e.pageY;
+		_js.start_pos_x = $(document).scrollLeft();
+		_js.start_pos_y = $(document).scrollTop();
+		window.scrollTo(_js.start_pos_x + (_js.start_mouse_x - _js.mouse_x), _js.start_pos_y + (_js.start_mouse_y - _js.mouse_y));
 	}
 }
 
-var zoom = document.documentElement.clientWidth / window.innerWidth;
-$(window).resize(function() {
-	var zoomNew = document.documentElement.clientWidth / window.innerWidth;
-	if (zoom != zoomNew) {
-		drawBracket();
-	}
+/* Set up functions after page load */
+$(document).ready(function() {	
+	var zoom = document.documentElement.clientWidth / window.innerWidth;
+	$(window).resize(function() {
+		var zoomNew = document.documentElement.clientWidth / window.innerWidth;
+		if (zoom != zoomNew) {
+			if (typeof _js != 'undefined') {
+				_js.drawBracket();
+			}
+		}
+	});
+	
+	$('#winner_matches, #loser_matches, #winner_lines, #loser_lines').not('.players').mousedown(function(e) {
+		if (typeof _js != 'undefined') {
+			if (e.which == 1) {
+				_js.drag = true;
+				_js.mouse_x = e.pageX;
+				_js.mouse_y = e.pageY;
+				_js.start_pos_x = $(document).scrollLeft();
+				_js.start_pos_y = $(document).scrollTop();
+				_js.start_mouse_x = e.pageX;
+				_js.start_mouse_y = e.pageY;
+			}
+		}
+	});
+
+	$(window).mouseup(function(e) {
+		if (typeof _js != 'undefined') {
+			if (e.which == 1) {
+				_js.drag = false;
+			}
+		}
+	});
+
+	$(window).mousemove(function(e) {
+		if (typeof _js != 'undefined') {
+			if (_js.drag) {
+				_js.doDrag(e);
+			}
+		}
+	});
+	
+	$(window).on('resize scroll', function() {
+		if (typeof _js != 'undefined') {
+			_js.adjustHeader();
+		}
+	});
 });
