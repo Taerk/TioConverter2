@@ -40,21 +40,21 @@ function tioConverterJS() {
 		if (typeof status != 'undefined') {
 			$('#status').css('display', 'block');
 			switch (status) {
-				case 'this.loading':
+				case 'loading':
 					$('#status').css({
-						'background-image': 'none'
+						'background-image': 'url(' + (navigator.userAgent.toLowerCase().indexOf('mobile') > -1 ? '/main/images/load_tio_light.gif' : '/main/images/load_tio.png') + ')'
 					});
 					$('#status img').css('display', 'inline');
 					break;
 				case 'connect-failed':
 					$('#status').css({
-						'background-image': 'url(load_js_fail_connect.png)'
+						'background-image': 'url(/main/images/load_js_fail_connect.png)'
 					});
 					$('#status img').css('display', 'none');
 					break;
 				case 'parse-failed':
 					$('#status').css({
-						'background-image': 'url(load_js_fail_parse.png)'
+						'background-image': 'url(/main/images/load_js_fail_parse.png)'
 					});
 					$('#status img').css('display', 'none');
 					break;
@@ -75,6 +75,11 @@ function tioConverterJS() {
 		_js.selected_tournament = file;
 		_js.selected_event = tournament;
 		_js.loadTioFile(false);
+		
+		$('#refresh-bracket').click(function() {
+			_js.loadTioFile(true);
+		});
+		auto_load = setInterval(function() { _js.loadTioFile(true); }, 15000);
 	}
 	
 	this.loadTioFile = function(reload) {		
@@ -99,24 +104,28 @@ function tioConverterJS() {
 		
 		$.getJSON("?get",
 			function(data) {
-				_js.tio_data = data;
-				
-				// Count the number of rounds in the tournament
-				var used_rounds = [];
-				_js.winners_round_count = 0;
-				_js.losers_round_count = 0;
-				
-				$.each(data[_js.selected_tournament]['events'][_js.selected_event]['matches'], function(key,_match) {
-					if ($.inArray(_match['round'], used_rounds) == -1) {
-						if (parseInt(_match['round']) > 0) {
-							_js.winners_round_count++;
+				try {
+					_js.tio_data = data;
+					
+					// Count the number of rounds in the tournament
+					var used_rounds = [];
+					_js.winners_round_count = 0;
+					_js.losers_round_count = 0;
+					
+					$.each(data[_js.selected_tournament]['events'][_js.selected_event]['matches'], function(key,_match) {
+						if ($.inArray(_match['round'], used_rounds) == -1) {
+							if (parseInt(_match['round']) > 0) {
+								_js.winners_round_count++;
+							}
+							if (parseInt(_match['round']) < 0) {
+								_js.losers_round_count++;
+							}	
+							used_rounds.push(_match['round']);
 						}
-						if (parseInt(_match['round']) < 0) {
-							_js.losers_round_count++;
-						}	
-						used_rounds.push(_match['round']);
-					}
-				});
+					});
+				} catch(e) {
+					_js.changeStatus('parse-failed');
+				}
 			}
 		).always(function() {
 			_js.loading = false;
@@ -284,6 +293,7 @@ function tioConverterJS() {
 					}
 				});
 				
+				$('#bracket').css('min-width', $('#container').innerWidth());
 				$('#bracket').css('width', (250 * $('#loser_rounds .round-column').length) + "px")
 				
 				_js.drawLines();
@@ -303,7 +313,7 @@ function tioConverterJS() {
 		});
 		
 		// Highlight color on click
-		$('.player').not('.hover-set').click(function() {
+		$('.player').not('.hover-set').dblclick(function() {
 			var get_pid = $(this).attr('player-id');
 			if (get_pid != "00000001-0001-0001-0101-010101010101" && get_pid != "00000000-0000-0000-0000-000000000000") {
 				if ($('[player-id="' + get_pid + '"]:eq(0)').hasClass('selected')) {
@@ -373,8 +383,8 @@ function tioConverterJS() {
 		var e = 0;
 		var ya1 = -1;
 		var ya2 = -1;
-		var adjust_yw = 0;
-		var adjust_yl = 0;
+		var adjust_yw = -2;
+		var adjust_yl = -2;
 		var debug_grid = false;
 		var x_split = 15; // Set how far out to merge the splits
 		var line_width = 2;
@@ -571,11 +581,11 @@ function tioConverterJS() {
 		if ($('.round-head').length > 0) {
 			// Use switch case so losers will be on top rather than winners
 			switch (true) {
-				case ($(window).scrollTop() > $('.round-head:eq(1)').attr('init-y')): // Losers
-					$('.round-head:eq(1)').clone().appendTo('body');
+				case ($('#container').scrollTop() > $('.round-head:eq(1)').attr('init-y') - $('.round-head:eq(0)').height()): // Losers
+					$('.round-head:eq(1)').clone().appendTo('#container');
 					break;
-				case ($(window).scrollTop() > 0): // Winners
-					$('.round-head:eq(0)').clone().appendTo('body');
+				case ($('#container').scrollTop() > 0): // Winners
+					$('.round-head:eq(0)').clone().appendTo('#container');
 					break;
 			}
 			
@@ -584,20 +594,19 @@ function tioConverterJS() {
 			$('.round-clone').css({
 				'position': 'fixed',
 				'top': $('#header').height() + 'px',
-				'left': -$(window).scrollLeft(),
+				'left': -$('#container').scrollLeft(),
 				'width': $('#winner_matches').width()
 			});
+			
+			_js.setHover();
 		}
-		
-		_js.setHover();
 	}
 	
 	this.adjustHeader_orig = function() {
 		// Reset position
 		$('.round-head').css({
 			'position': 'initial',
-			'top': '0px',
-			'width': 'auto'
+			'top': '0px'
 		});
 		$('#winner_matches, #loser_matches').css('padding-top', '0px');
 			
@@ -608,8 +617,7 @@ function tioConverterJS() {
 					$('.round-head:eq(1)').css({
 						'position': 'fixed',
 						'top': $('#header').outerHeight() + 'px',
-						'left': -$(window).scrollLeft(),
-						'width': $('#loser_matches').width()
+						'left': -$(window).scrollLeft()
 					});
 					$('#loser_matches').css('padding-top', $('.round-head:eq(1)').outerHeight() + 'px');
 					break;
@@ -617,8 +625,7 @@ function tioConverterJS() {
 					$('.round-head:eq(0)').css({
 						'position': 'fixed',
 						'top': $('#header').outerHeight() + 'px',
-						'left': -$(window).scrollLeft(),
-						'width': $('#winner_matches').width()
+						'left': -$(window).scrollLeft()
 					});
 					$('#winner_matches').css('padding-top', $('.round-head:eq(0)').outerHeight() + 'px');
 					break;
@@ -629,23 +636,15 @@ function tioConverterJS() {
 	this.doDrag = function(e) {
 		_js.mouse_x = e.pageX;
 		_js.mouse_y = e.pageY;
-		_js.start_pos_x = $(document).scrollLeft();
-		_js.start_pos_y = $(document).scrollTop();
-		window.scrollTo(_js.start_pos_x + (_js.start_mouse_x - _js.mouse_x), _js.start_pos_y + (_js.start_mouse_y - _js.mouse_y));
+		// _js.start_pos_x = $('#container').scrollLeft(); // Only necessary for $(window)
+		// _js.start_pos_y = $('#container').scrollTop(); // Only necessary for $(window)
+		$('#container').scrollLeft(_js.start_pos_x + (_js.start_mouse_x - _js.mouse_x));
+		$('#container').scrollTop(_js.start_pos_y + (_js.start_mouse_y - _js.mouse_y));
 	}
 }
 
 /* Set up functions after page load */
 $(document).ready(function() {	
-	var zoom = document.documentElement.clientWidth / window.innerWidth;
-	$(window).resize(function() {
-		var zoomNew = document.documentElement.clientWidth / window.innerWidth;
-		if (zoom != zoomNew) {
-			if (typeof _js != 'undefined') {
-				_js.drawBracket();
-			}
-		}
-	});
 	
 	$('#winner_matches, #loser_matches, #winner_lines, #loser_lines').not('.players').mousedown(function(e) {
 		if (typeof _js != 'undefined') {
@@ -653,10 +652,10 @@ $(document).ready(function() {
 				_js.drag = true;
 				_js.mouse_x = e.pageX;
 				_js.mouse_y = e.pageY;
-				_js.start_pos_x = $(document).scrollLeft();
-				_js.start_pos_y = $(document).scrollTop();
 				_js.start_mouse_x = e.pageX;
 				_js.start_mouse_y = e.pageY;
+				_js.start_pos_x = $('#container').scrollLeft();
+				_js.start_pos_y = $('#container').scrollTop();
 			}
 		}
 	});
@@ -677,7 +676,20 @@ $(document).ready(function() {
 		}
 	});
 	
+	zoom = document.documentElement.clientWidth / window.innerWidth;
 	$(window).on('resize scroll', function() {
+		var zoomNew = document.documentElement.clientWidth / window.innerWidth;
+		
+		if (zoom != zoomNew) {	
+		
+			zoom = zoomNew;
+			if (typeof _js != 'undefined') {
+				_js.drawBracket();
+			}
+		}
+	});
+	
+	$('#container').scroll(function() {
 		if (typeof _js != 'undefined') {
 			_js.adjustHeader();
 		}

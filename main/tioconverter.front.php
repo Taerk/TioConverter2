@@ -4,13 +4,14 @@ $title_extension = ($tio->loaded ? " - " . $tio->getTournamentName(false) . ' - 
 <html>
 	<head>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		
 		<title>Polarity - Bracket<?php echo $title_extension; ?></title>
 		
 		<!-- Libraries -->
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+		<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mobile/1.4.1/jquery.mobile.min.js"></script> -->
 		<script type="text/javascript" src="/3rdparty/jquery/jscolor/jquery.color.plus-names-2.1.2.min.js"></script>
 		<script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -53,9 +54,9 @@ $title_extension = ($tio->loaded ? " - " . $tio->getTournamentName(false) . ' - 
 						</li>
 						
 						<?php } ?>
-						<!-- Featured Brackets -->
+						<!-- Featured Tournaments -->
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Featured Brackets<span class="caret"></span></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Featured Tournaments<span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<?php
 								foreach ($tio->getTournaments() as $key=>$to) {
@@ -69,19 +70,6 @@ $title_extension = ($tio->loaded ? " - " . $tio->getTournamentName(false) . ' - 
 							</ul>
 						</li>
 						
-						<!-- View All Brackets -->
-						<li><a href="/archive">View All Brackets</a></li>
-						
-						<?php if ($tio->loaded) { ?>
-						<!-- Download -->
-						<li><a href="#" id="download-bracket"><span class="glyphicon glyphicon-download-alt"></span></a></li>
-						
-						<!-- Refresh -->
-						<li><a href="#" id="refresh-bracket"><span class="glyphicon glyphicon-refresh"></a></li>
-						<?php } ?>
-					</ul>
-					
-					<ul class="nav navbar-nav navbar-right">
 						<?php if ($tio->loaded) { ?>
 						<!-- Events -->
 						<li class="dropdown">
@@ -93,6 +81,16 @@ $title_extension = ($tio->loaded ? " - " . $tio->getTournamentName(false) . ' - 
 							</ul>
 						</li>
 						
+						<!-- Download -->
+						<li><a href="/download/<?php echo $tio->url_encode($tio->getTournamentName(false)); ?>.tio" id="download-bracket"><span class="glyphicon glyphicon-download-alt"></span></a></li>
+						
+						<!-- Refresh -->
+						<li><a href="#" id="refresh-bracket"><span class="glyphicon glyphicon-refresh"></a></li>
+						<?php } ?>
+					</ul>
+					
+					<ul class="nav navbar-nav navbar-right">
+						<?php if ($tio->loaded) { ?>					
 						<!-- View -->
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">View <span class="caret"></span></a>
@@ -118,7 +116,8 @@ $title_extension = ($tio->loaded ? " - " . $tio->getTournamentName(false) . ' - 
 				</div><!-- /.navbar-collapse -->
 			</div><!-- /.container-fluid -->
 		</nav>
-			
+		
+		<?php if ($tio->loaded) { ?>
 		<div id="container">
 			<div class="h-split">
 				<div class="v-split">
@@ -137,6 +136,20 @@ $title_extension = ($tio->loaded ? " - " . $tio->getTournamentName(false) . ' - 
 				</div>
 			</div>
 		</div>
+		<?php } else { ?>
+		<div id="regular-container">
+			<h1>Select a bracket</h1>
+			<ul>
+			<?php
+			foreach ($tio->getLibrary()['tournaments'] as $key=>$library) {
+				echo '<li>' . ($library['featured'] ? '<span class="fa fa-star"></span> ' : '') . '<a href="/' . $library['permalink'] . '">' . $library['name'] . '</a></li>';
+			}
+			?>
+			</ul>
+		</div>
+		<?php } ?>
+		
+		<div id="status"></div>
 		
 		<nav class="navbar navbar-default navbar-fixed-bottom" id="footer">
 			<div class="container-fluid">

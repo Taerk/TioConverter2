@@ -45,6 +45,14 @@ switch (true) {
 		
 		break;
 	
+	// Download link
+	case (isset($_GET['tiotournament']) && $_GET['tiotournament'] == 'download' && isset($_GET['tioevent'])):
+		$this_event = str_replace('.tio', '', $_GET['tioevent']);
+		
+		header("Content-type: application/octet-stream");
+		echo file_get_contents(ARCHIVE . '/' . $tio->getTournamentId($this_event) . '/' . $tio->getTournamentId($this_event) . '.tio');
+		break;
+	
 	// Admin Panel
 	case (isset($_GET['tiotournament']) && $_GET['tiotournament'] == 'admin'):
 		if (isset($_GET['tioevent'])) {
