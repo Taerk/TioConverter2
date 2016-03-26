@@ -79,7 +79,7 @@ function tioConverterJS() {
 		$('#refresh-bracket').click(function() {
 			_js.loadTioFile(true);
 		});
-		auto_load = setInterval(function() { _js.loadTioFile(true); }, 15000);
+		auto_load = setInterval(function() { _js.loadTioFile(true); }, 30000);
 	}
 	
 	this.loadTioFile = function(reload) {		
@@ -134,7 +134,7 @@ function tioConverterJS() {
 			return false;
 		}).success(function() {
 			_js.changeStatus();
-			_js.drawBracket();
+			_js.drawBracket(reload);
 			return true;
 		});
 	}
@@ -188,7 +188,7 @@ function tioConverterJS() {
 		}
 	}
 	
-	this.drawBracket = function() {
+	this.drawBracket = function(reload) {
 		var _data = _js.tio_data;
 		var blanks = ['00000000-0000-0000-0000-000000000000', '00000001-0001-0001-0101-010101010101'];
 		
@@ -296,7 +296,7 @@ function tioConverterJS() {
 				$('#bracket').css('min-width', $('#container').innerWidth());
 				$('#bracket').css('width', (250 * $('#loser_rounds .round-column').length) + "px")
 				
-				_js.drawLines();
+				_js.drawLines(reload);
 				_js.setHeader();
 				_js.setHover();
 			}
@@ -362,98 +362,82 @@ function tioConverterJS() {
 		$('.player, .round-column').addClass('hover-set');
 	}
 	
-	this.drawLines = function() {
-		_js.win_lines = document.getElementById('winner_lines');
-		_js.lose_lines = document.getElementById('loser_lines');
-		_js.win_ctx = _js.win_lines.getContext("2d");
-		_js.lose_ctx = _js.lose_lines.getContext("2d");
-		
-		// Clear canvas
-		_js.win_ctx.clearRect(0, _js.win_lines.width, 0, _js.win_lines.height);
-		_js.lose_ctx.clearRect(0, _js.lose_lines.width, 0, _js.lose_lines.height);
-		
-		$.each($('canvas'), function(key,el) {
-			$(el).attr({
-				'width': $(el).css('width'),
-				'height': $(el).css('height')
-			});
-		});
-		
-		var s = 0;
-		var e = 0;
-		var ya1 = -1;
-		var ya2 = -1;
-		var adjust_yw = -2;
-		var adjust_yl = -2;
-		var debug_grid = false;
-		var x_split = 15; // Set how far out to merge the splits
-		var line_width = 2;
-		var line_color = {winner: '#040', loser: '#400'};
-		var winl = _js.win_ctx;
-		var losl = _js.lose_ctx;
-		var draw_gf2 = ($('.round-column:contains("Set 2")').length == 1);
-		
-		if (debug_grid) {
-			for (i = 0; i < 100; i++) {
-				if (i % 5 == 0) {
-					winl.strokeStyle = '#f00';
-					losl.strokeStyle = '#f00';
-				} else {
-					winl.strokeStyle = '#bdb';
-					losl.strokeStyle = '#dbb';
-				}
-				losl.beginPath();
-				losl.moveTo(100 * i, 0);
-				losl.lineTo(100 * i, 6000);
-				losl.stroke();
-				
-				losl.beginPath();
-				losl.moveTo(0, 100 * i);
-				losl.lineTo(6000, 100 * i);
-				losl.stroke();
-				
-				winl.beginPath();
-				winl.moveTo(100 * i, 0);
-				winl.lineTo(100 * i, 6000);
-				winl.stroke();
-				
-				winl.beginPath();
-				winl.moveTo(0, 100 * i);
-				winl.lineTo(6000, 100 * i);
-				winl.stroke();
-			}
-		}
-		
-		winl.strokeStyle = line_color.winner;
-		winl.lineWidth = line_width;
-		
-		$.each($('#winners .match-column'), function(key,el) {
-			s = $(el).find('.match .sep').length;
-			e = $('#winners .match-column:eq('+(key + 1)+')').find('.match .sep').length;
+	this.drawLines = function(reload) {
+		if (!reload) {
+			_js.win_lines = document.getElementById('winner_lines');
+			_js.lose_lines = document.getElementById('loser_lines');
+			_js.win_ctx = _js.win_lines.getContext("2d");
+			_js.lose_ctx = _js.lose_lines.getContext("2d");
 			
-			if (((key + 2 == _js.winners_round_count) && (draw_gf2 == true)) || ((key + 2) < _js.winners_round_count)) {
-				if (e > 0) {
+			// Clear canvas
+			_js.win_ctx.clearRect(0, _js.win_lines.width, 0, _js.win_lines.height);
+			_js.lose_ctx.clearRect(0, _js.lose_lines.width, 0, _js.lose_lines.height);
+			
+			$.each($('canvas'), function(key,el) {
+				$(el).attr({
+					'width': $(el).css('width'),
+					'height': $(el).css('height')
+				});
+			});
+			
+			var s = 0;
+			var e = 0;
+			var ya1 = -1;
+			var ya2 = -1;
+			var adjust_yw = -2;
+			var adjust_yl = -2;
+			var debug_grid = false;
+			var x_split = 15; // Set how far out to merge the splits
+			var line_width = 2;
+			var line_color = {winner: '#040', loser: '#400'};
+			var winl = _js.win_ctx;
+			var losl = _js.lose_ctx;
+			var draw_gf2 = ($('.round-column:contains("Set 2")').length == 1);
+			
+			if (debug_grid) {
+				for (i = 0; i < 100; i++) {
+					if (i % 5 == 0) {
+						winl.strokeStyle = '#f00';
+						losl.strokeStyle = '#f00';
+					} else {
+						winl.strokeStyle = '#bdb';
+						losl.strokeStyle = '#dbb';
+					}
+					losl.beginPath();
+					losl.moveTo(100 * i, 0);
+					losl.lineTo(100 * i, 6000);
+					losl.stroke();
 					
-					// Single to single
-					if (s == e) {
-						$.each($(el).find('.match'), function(key2,el2) {
-							tx = parseInt($('#winners').position().left)
-								+ parseInt($(el2).position().left)
-								+ parseInt($(el2).width());
-							ty = parseInt($(el2).position().top)
-								+ parseInt($(el2).find('.player:eq(0)').outerHeight())
-								+ parseInt($('#winner_rounds').outerHeight())
-								+ adjust_yw;
-								
-							if (debug_grid) { winl.strokeStyle = '#55f'; }
-							winl.beginPath();
-							winl.moveTo(tx - 10, ty);
-							winl.lineTo(tx + 200, ty);
-							winl.stroke();
-						});
-					} else if (s > e) {
-						$.each($(el).find('.match'), function(key2,el2) {
-							if (key2 % 2 == 0) {
+					losl.beginPath();
+					losl.moveTo(0, 100 * i);
+					losl.lineTo(6000, 100 * i);
+					losl.stroke();
+					
+					winl.beginPath();
+					winl.moveTo(100 * i, 0);
+					winl.lineTo(100 * i, 6000);
+					winl.stroke();
+					
+					winl.beginPath();
+					winl.moveTo(0, 100 * i);
+					winl.lineTo(6000, 100 * i);
+					winl.stroke();
+				}
+			}
+			
+			winl.strokeStyle = line_color.winner;
+			winl.lineWidth = line_width;
+			
+			$.each($('#winners .match-column'), function(key,el) {
+				s = $(el).find('.match .sep').length;
+				e = $('#winners .match-column:eq('+(key + 1)+')').find('.match .sep').length;
+				
+				if (((key + 2 == _js.winners_round_count) && (draw_gf2 == true)) || ((key + 2) < _js.winners_round_count)) {
+					if (e > 0) {
+						
+						// Single to single
+						if (s == e) {
+							$.each($(el).find('.match'), function(key2,el2) {
 								tx = parseInt($('#winners').position().left)
 									+ parseInt($(el2).position().left)
 									+ parseInt($(el2).width());
@@ -461,70 +445,70 @@ function tioConverterJS() {
 									+ parseInt($(el2).find('.player:eq(0)').outerHeight())
 									+ parseInt($('#winner_rounds').outerHeight())
 									+ adjust_yw;
-								ty2 = parseInt($(el).find('.match:eq('+(key2 + 1)+')').position().top)
-									+ parseInt($(el).find('.match:eq('+(key2 + 1)+')').find('.player:eq(0)').outerHeight())
-									+ parseInt($('#winner_rounds').outerHeight())
-									+ adjust_yw;
-								
-								
-								if (debug_grid) { winl.strokeStyle = '#5f5'; }
+									
+								if (debug_grid) { winl.strokeStyle = '#55f'; }
 								winl.beginPath();
 								winl.moveTo(tx - 10, ty);
-								winl.lineTo(tx + x_split + (line_width / 2), ty);
+								winl.lineTo(tx + 200, ty);
 								winl.stroke();
-								
-								if (debug_grid) { winl.strokeStyle = '#f55'; }
-								winl.beginPath();
-								winl.moveTo(tx - 10, ty2);
-								winl.lineTo(tx + x_split +  (line_width / 2), ty2);
-								winl.stroke();
-								
-								if (debug_grid) { winl.strokeStyle = '#ff5'; }
-								winl.beginPath();
-								winl.moveTo(tx + x_split, ty);
-								winl.lineTo(tx + x_split, ty2);
-								winl.stroke();
-								
-								if (debug_grid) { winl.strokeStyle = '#ff5'; }
-								winl.beginPath();
-								winl.moveTo(tx + x_split, (ty + ty2) / 2);
-								winl.lineTo(tx + 100, (ty + ty2) / 2);
-								winl.stroke();
-							}
-						});
+							});
+						} else if (s > e) {
+							$.each($(el).find('.match'), function(key2,el2) {
+								if (key2 % 2 == 0) {
+									tx = parseInt($('#winners').position().left)
+										+ parseInt($(el2).position().left)
+										+ parseInt($(el2).width());
+									ty = parseInt($(el2).position().top)
+										+ parseInt($(el2).find('.player:eq(0)').outerHeight())
+										+ parseInt($('#winner_rounds').outerHeight())
+										+ adjust_yw;
+									ty2 = parseInt($(el).find('.match:eq('+(key2 + 1)+')').position().top)
+										+ parseInt($(el).find('.match:eq('+(key2 + 1)+')').find('.player:eq(0)').outerHeight())
+										+ parseInt($('#winner_rounds').outerHeight())
+										+ adjust_yw;
+									
+									
+									if (debug_grid) { winl.strokeStyle = '#5f5'; }
+									winl.beginPath();
+									winl.moveTo(tx - 10, ty);
+									winl.lineTo(tx + x_split + (line_width / 2), ty);
+									winl.stroke();
+									
+									if (debug_grid) { winl.strokeStyle = '#f55'; }
+									winl.beginPath();
+									winl.moveTo(tx - 10, ty2);
+									winl.lineTo(tx + x_split +  (line_width / 2), ty2);
+									winl.stroke();
+									
+									if (debug_grid) { winl.strokeStyle = '#ff5'; }
+									winl.beginPath();
+									winl.moveTo(tx + x_split, ty);
+									winl.lineTo(tx + x_split, ty2);
+									winl.stroke();
+									
+									if (debug_grid) { winl.strokeStyle = '#ff5'; }
+									winl.beginPath();
+									winl.moveTo(tx + x_split, (ty + ty2) / 2);
+									winl.lineTo(tx + 100, (ty + ty2) / 2);
+									winl.stroke();
+								}
+							});
+						}
 					}
 				}
-			}
-		});
-		
-		losl.strokeStyle = line_color.loser;
-		losl.lineWidth = line_width;
-		
-		$.each($('#losers .match-column'), function(key,el) {
-			s = $(el).find('.match').length;
-			e = $('#losers .match-column:eq('+(key + 1)+')').find('.match').length;
+			});
 			
-			// alert(key + "/" + (losers_round_count - 1) + " -- " + s + " => " + e);
-			if (e > 0) {
-				if (s == e) {
-					$.each($(el).find('.match'), function(key2,el2) {
-						tx = parseInt($('#losers').position().left)
-							+ parseInt($(el2).position().left)
-							+ parseInt($(el2).width());
-						ty = parseInt($(el2).position().top)
-							+ parseInt($(el2).find('.player:eq(0)').outerHeight())
-							+ parseInt($('#loser_rounds').outerHeight())
-							+ adjust_yw;
-							
-						if (debug_grid) { losl.strokeStyle = '#55f'; }
-						losl.beginPath();
-						losl.moveTo(tx - 10, ty);
-						losl.lineTo(tx + 200, ty);
-						losl.stroke();
-					});
-				} else if (s > e) {
-					$.each($(el).find('.match'), function(key2,el2) {
-						if (key2 % 2 == 0) {
+			losl.strokeStyle = line_color.loser;
+			losl.lineWidth = line_width;
+			
+			$.each($('#losers .match-column'), function(key,el) {
+				s = $(el).find('.match').length;
+				e = $('#losers .match-column:eq('+(key + 1)+')').find('.match').length;
+				
+				// alert(key + "/" + (losers_round_count - 1) + " -- " + s + " => " + e);
+				if (e > 0) {
+					if (s == e) {
+						$.each($(el).find('.match'), function(key2,el2) {
 							tx = parseInt($('#losers').position().left)
 								+ parseInt($(el2).position().left)
 								+ parseInt($(el2).width());
@@ -532,40 +516,58 @@ function tioConverterJS() {
 								+ parseInt($(el2).find('.player:eq(0)').outerHeight())
 								+ parseInt($('#loser_rounds').outerHeight())
 								+ adjust_yw;
-							ty2 = parseInt($(el).find('.match:eq('+(key2 + 1)+')').position().top)
-								+ parseInt($(el).find('.match:eq('+(key2 + 1)+')').find('.player:eq(0)').outerHeight())
-								+ parseInt($('#loser_rounds').outerHeight())
-								+ adjust_yw;
-							
-							
-							if (debug_grid) { losl.strokeStyle = '#5f5'; }
+								
+							if (debug_grid) { losl.strokeStyle = '#55f'; }
 							losl.beginPath();
 							losl.moveTo(tx - 10, ty);
-							losl.lineTo(tx + x_split + (line_width / 2), ty);
+							losl.lineTo(tx + 200, ty);
 							losl.stroke();
-							
-							if (debug_grid) { losl.strokeStyle = '#f55'; }
-							losl.beginPath();
-							losl.moveTo(tx - 10, ty2);
-							losl.lineTo(tx + x_split + (line_width / 2), ty2);
-							losl.stroke();
-							
-							if (debug_grid) { losl.strokeStyle = '#ff5'; }
-							losl.beginPath();
-							losl.moveTo(tx + x_split, ty);
-							losl.lineTo(tx + x_split, ty2);
-							losl.stroke();
-							
-							if (debug_grid) { losl.strokeStyle = '#ff5'; }
-							losl.beginPath();
-							losl.moveTo(tx + x_split, (ty + ty2) / 2);
-							losl.lineTo(tx + 100, (ty + ty2) / 2);
-							losl.stroke();
-						}
-					});
+						});
+					} else if (s > e) {
+						$.each($(el).find('.match'), function(key2,el2) {
+							if (key2 % 2 == 0) {
+								tx = parseInt($('#losers').position().left)
+									+ parseInt($(el2).position().left)
+									+ parseInt($(el2).width());
+								ty = parseInt($(el2).position().top)
+									+ parseInt($(el2).find('.player:eq(0)').outerHeight())
+									+ parseInt($('#loser_rounds').outerHeight())
+									+ adjust_yw;
+								ty2 = parseInt($(el).find('.match:eq('+(key2 + 1)+')').position().top)
+									+ parseInt($(el).find('.match:eq('+(key2 + 1)+')').find('.player:eq(0)').outerHeight())
+									+ parseInt($('#loser_rounds').outerHeight())
+									+ adjust_yw;
+								
+								
+								if (debug_grid) { losl.strokeStyle = '#5f5'; }
+								losl.beginPath();
+								losl.moveTo(tx - 10, ty);
+								losl.lineTo(tx + x_split + (line_width / 2), ty);
+								losl.stroke();
+								
+								if (debug_grid) { losl.strokeStyle = '#f55'; }
+								losl.beginPath();
+								losl.moveTo(tx - 10, ty2);
+								losl.lineTo(tx + x_split + (line_width / 2), ty2);
+								losl.stroke();
+								
+								if (debug_grid) { losl.strokeStyle = '#ff5'; }
+								losl.beginPath();
+								losl.moveTo(tx + x_split, ty);
+								losl.lineTo(tx + x_split, ty2);
+								losl.stroke();
+								
+								if (debug_grid) { losl.strokeStyle = '#ff5'; }
+								losl.beginPath();
+								losl.moveTo(tx + x_split, (ty + ty2) / 2);
+								losl.lineTo(tx + 100, (ty + ty2) / 2);
+								losl.stroke();
+							}
+						});
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 	
 	this.setHeader = function() {

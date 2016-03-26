@@ -39,11 +39,12 @@ body {
 .admin:hover a { color: #caa !important}
 #status {
 	position: fixed;
-	bottom: 2px;
+	bottom: 15px;
 	right: 2px;
 	width: 120px;
 	height: 120px;
 	display: none;
+	z-index: 500;
 }
 
 /**
