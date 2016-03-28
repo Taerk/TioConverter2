@@ -3,12 +3,10 @@
 	
 	<label for="basic-url">Select Bracket</label>
 	<select size="8" class="form-control"><?php
-	foreach ($tio->getEvents() as $id=>$event) {
-		echo '<option value="'.$id.'">'.$event.'</option>';
+	foreach ($tio->getTournaments() as $id=>$tournament) {
+		echo '<option value="'.$tournament['id'].'">'.$tournament['name'].'</option>';
 	}
 	?></select>
-	<?php var_dump($tio->getEvents()); ?>
-	<?php var_dump($tio->getArchive()); ?>
 	<h5><a href="#" class="text-danger pull-right">Delete Bracket</a></h5>
 	
 	<div id="update_bracket_confirm">
@@ -70,7 +68,7 @@
 		
 		<hr>
 		
-		<button type="button" class="btn btn-primary btn-block" aria-haspopup="true" aria-expanded="true">Update Settings</button>
+		<button type="button" class="btn btn-primary btn-block" aria-haspopup="true" aria-expanded="true" disabled>Update Settings</button>
 	</div>
 	
 	<div id="update_bracket_confirm">

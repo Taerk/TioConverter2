@@ -71,15 +71,23 @@ function tioConverterJS() {
 	 * = BRACKET this.loading
 	 * ======================
 	 */
-	this.autoTio = function(file, tournament) {		
+	this.autoTio = function(file, tournament, interval) {		
 		_js.selected_tournament = file;
 		_js.selected_event = tournament;
 		_js.loadTioFile(false);
 		
-		$('#refresh-bracket').click(function() {
+		$('#refresh-bracket').click(function(e) {
+			e.preventDefault();
 			_js.loadTioFile(true);
 		});
-		auto_load = setInterval(function() { _js.loadTioFile(true); }, 30000);
+		
+		// Set up auto-check
+		if (typeof interval == 'undefined') {
+			interval = 30;
+		}
+		if (typeof auto_load == 'undefined') {
+			auto_load = setInterval(function() { _js.loadTioFile(true); }, interval * 1000);
+		}
 	}
 	
 	this.loadTioFile = function(reload) {		
@@ -267,6 +275,20 @@ function tioConverterJS() {
 						var m_setup_is = (m_setup == '' ? ' none' : '');
 						
 						/**
+						 * ADD KO Indicator
+						 */
+						ko_template = '<i class="ko">KO</i>';
+						ko_p1 = "";
+						ko_p2 = "";
+						if (_match['loser_next'] == -1 && _match['p1']['id'] != "00000001-0001-0001-0101-010101010101" && _match['p2']['id'] != "00000001-0001-0001-0101-010101010101") {
+							if (_match['winner'] == _match['p1']['id']) {
+								ko_p2 = ko_template;
+							} else if (_match['winner'] == _match['p2']['id']) {
+								ko_p1 = ko_template;
+							}
+						}
+						 
+						/**
 						 * OUTPUT TEXT
 						 */
 						$('#' + m_side + '_matches .match-column.round-' + _match['round']).append(`
@@ -278,13 +300,13 @@ function tioConverterJS() {
 								<div class="players">
 									<div class="player player1` + m_is_winner_p1 + m_is_system_p1 +`" player-seed="` + _match['p1']['seed'] + `" player-id="` + _match['p1']['id'] + `">
 										<div class="player-seed">` + _match['p1']['seed'] + `</div>
-										<div class="player-tag">` + _match['p1']['tag'] + `</div>
+										<div class="player-tag">` + _match['p1']['tag'] + ko_p1 + `</div>
 										<div class="player-score">` + _match['s1'] + `</div>
 									</div>
 									<div class="sep"></div>
 									<div class="player player2` + m_is_winner_p2 + m_is_system_p2 +`" player-seed="` + _match['p2']['seed'] + `" player-id="` + _match['p2']['id'] + `">
 										<div class="player-seed">` + _match['p2']['seed'] + `</div>
-										<div class="player-tag">` + _match['p2']['tag'] + `</div>
+										<div class="player-tag">` + _match['p2']['tag'] + ko_p2 + `</div>
 										<div class="player-score">` + _match['s2'] + `</div>
 									</div>
 								</div>
@@ -294,7 +316,7 @@ function tioConverterJS() {
 				});
 				
 				$('#bracket').css('min-width', $('#container').innerWidth());
-				$('#bracket').css('width', (250 * $('#loser_rounds .round-column').length) + "px")
+				$('#bracket').css('width', (250 * _js.losers_round_count) + "px");
 				
 				_js.drawLines(reload);
 				_js.setHeader();

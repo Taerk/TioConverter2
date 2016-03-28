@@ -4,6 +4,7 @@ class tioParser {
 	public	$debug_mode = false;
 	public	$enable_results = true;
 	public	$logging = true;
+	public	$minimal_logging = true;
 	private	$error_level = E_ALL;
 	
 	/* Directories */
@@ -86,10 +87,10 @@ class tioParser {
 	/**
 	 * Logs input to $this->log_file
 	 */
-	public function log($input = null) {
+	public function log($input = null) {	
 		if ($this->logging) {
 			if (function_exists('custom_log')) {
-				custom_log($input, $this->session_id);
+				custom_log($input, $this->session_id, $this->minimal_logging);
 			} else {
 				// error_log($input);
 			}
@@ -172,7 +173,7 @@ class tioParser {
 						case ($archived_file == ".."):
 							// Skip . and .. file
 							break;
-						case (strpos($archived_file, ".tio") !== false):
+						case (strpos($archived_file, $archive.".tio") !== false):
 							$this->files[$archive]['bracket'] = $this->archive_directory . '/' . $archive . '/' . $archived_file;
 							break;
 						case ($archived_file == 'meta'):
@@ -449,6 +450,67 @@ class tioParser {
 	}
 	
 	/**
+	 * Gets the library section for a given tournament
+	 */
+	public function getTournamentLibrary() {
+		for ($i = 0; $i < count($this->library['tournaments']); $i++) {
+			if ($this->library['tournaments'][$i]['id'] == $this->getTournamentId(false)) {
+				return $this->library['tournaments'][$i];
+			}
+		}
+		
+		return [];
+	}
+	
+	/**
+	 * Gets the meta section for a given tournament
+	 */
+	public function getTournamentMeta() {
+		return json_decode(file_get_contents($this->files[$this->getTournamentId(false)]['info']), true);
+	}
+	
+	/**
+	 * Check for an update in the bracket file. If there's a change, update it
+	 */
+	public function updateFile() {
+		$this->log($this->getTournamentId(false) . " is looking for updates");
+		if ($this->getTournamentLibrary()['enabled']) {
+			// Check to see if the time span is now past the required update interval
+			// Also check to see if it's within the allowed "update_until" time
+			
+			$meta_block = $this->getTournamentMeta();
+			
+			if (strtotime('now') > $meta_block['next'] && strtotime('now') < strtotime($this->getTournamentLibrary()['update_until'])) {
+				
+				// Update meta file
+				$next_update_time = strtotime('now + ' . $this->getTournamentLibrary()['update_interval'] . ' seconds');
+				$meta_block['md5'] = md5_file($this->files[$this->getTournamentId(false)]['bracket']);
+				$meta_block['last'] = strtotime('now');
+				$meta_block['next'] = $next_update_time;
+				
+				file_put_contents($this->files[$this->getTournamentId(false)]['info'], json_encode($meta_block, JSON_PRETTY_PRINT));
+				
+				// Get MD5 of .tio file and the new file
+				$new_contents = file_get_contents($this->getTournamentLibrary()['download']);
+				$md5_records = [
+					"old" => md5_file($this->files[$this->getTournamentId(false)]['bracket']),
+					"new" => md5($new_contents)
+				];
+				
+				// If new md5 doesn't match with the old one, update it
+				if ($md5_records['old'] != $md5_records['new']) {
+					file_put_contents($this->files[$this->getTournamentId(false)]['bracket'], $new_contents);
+					$this->log($this->getTournamentId(false) . " bracket was updated");
+				} else {
+					$this->log($this->getTournamentId(false) . " had no md5 change");
+				}
+			} else {
+				$this->log($this->getTournamentId(false) . " is not ready to update -- time is " . strtotime('now') . " -- update requirement is " . $meta_block['next']);
+			}
+		}
+	}
+	
+	/**
 	 * For bracket use -- Converts a number into a two-letter key
 	 */
 	public function numToLetters($number) {
@@ -504,6 +566,8 @@ class tioParser {
 			return [];
 			die;
 		}
+		
+		$this->updateFile();
 		
 		if (!file_exists($this->archive_directory."/".$this->active_file)) {
 			$this->log("File not found: " . $this->archive_directory."/".$this->active_file);

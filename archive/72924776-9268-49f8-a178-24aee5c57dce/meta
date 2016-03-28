@@ -1,12 +1,12 @@
 {
     "id": "72924776-9268-49f8-a178-24aee5c57dce",
     "md5": "eaf8ba8247dc9c89ee2841aeb21a968b",
-    "last": 1456056000,
-    "next": 1456056000,
-	"players": {
-		"092093b9-1471-47d8-8b35-d174a237c1c0": {
-			"nick": "ewok41 + w8asek"
-			"global-id": -1,
-		}
-	}
+    "last": 1459179788,
+    "next": 1459179848,
+    "players": {
+        "092093b9-1471-47d8-8b35-d174a237c1c0": {
+            "nick": "ewok41 + w8asek",
+            "global-id": -1
+        }
+    }
 }

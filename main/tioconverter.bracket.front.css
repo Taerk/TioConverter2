@@ -234,6 +234,11 @@ body {
 	flex-grow: 3;
 	padding: 5px 6px;
 }
+.match .player .ko {
+	display: none;
+	float: right;
+	color: rgba(0,0,0,0.3);
+}
 
 /* Matches - Highlights */
 .player.hover, .player.selected {

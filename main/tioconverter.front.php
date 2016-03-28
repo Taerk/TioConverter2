@@ -5,6 +5,7 @@ $title_extension = ($tio->loaded ? " - " . $tio->getTournamentName(false) . ' - 
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link rel="shortcut icon" type="image/png" href="/etc/images/polarity_compass.png">
 		
 		<title>Polarity - Bracket<?php echo $title_extension; ?></title>
 		
@@ -24,7 +25,9 @@ $title_extension = ($tio->loaded ? " - " . $tio->getTournamentName(false) . ' - 
 			tioJS = new tioConverterJS();
 			tioJS.autoTio(
 				'<?php echo $tio->getTournamentId(false); ?>',
-				'<?php echo $tio->getEventId(false); ?>'
+				'<?php echo $tio->getEventId(false); ?>',
+				<?php echo $tio->getTournamentLibrary()['update_interval']; ?>
+				
 			);
 		});
 		</script><?php echo "\n"; } ?>
@@ -56,7 +59,7 @@ $title_extension = ($tio->loaded ? " - " . $tio->getTournamentName(false) . ' - 
 						<?php } ?>
 						<!-- Featured Tournaments -->
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Featured Tournaments<span class="caret"></span></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo ($tio->loaded ? $tio->getTournamentName(false) : 'Featured Tournaments' ); ?> <span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<?php
 								foreach ($tio->getTournaments() as $key=>$to) {
@@ -73,7 +76,7 @@ $title_extension = ($tio->loaded ? " - " . $tio->getTournamentName(false) . ' - 
 						<?php if ($tio->loaded) { ?>
 						<!-- Events -->
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Events <span class="caret"></span></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo $tio->getLoadedEvent()['name'] ?> <span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<?php foreach($tio->parseBracket()[$tio->getTournamentId(false)]['events'] as $key=>$event) { ?>
 								<li><a href="/<?php echo $tio->url_encode($tio->getTournamentName(false)); ?>/<?php echo $tio->url_encode($event['name']); ?>"><?php echo $event['name']; ?></a></li>
@@ -81,24 +84,25 @@ $title_extension = ($tio->loaded ? " - " . $tio->getTournamentName(false) . ' - 
 							</ul>
 						</li>
 						
-						<!-- Download -->
-						<li><a href="/download/<?php echo $tio->url_encode($tio->getTournamentName(false)); ?>.tio" id="download-bracket"><span class="glyphicon glyphicon-download-alt"></span></a></li>
-						
-						<!-- Refresh -->
-						<li><a href="#" id="refresh-bracket"><span class="glyphicon glyphicon-refresh"></a></li>
 						<?php } ?>
 					</ul>
 					
 					<ul class="nav navbar-nav navbar-right">
 						<?php if ($tio->loaded) { ?>					
+						<!-- Download -->
+						<li><a href="/download/<?php echo $tio->url_encode($tio->getTournamentName(false)); ?>.tio" id="download-bracket"><span class="glyphicon glyphicon-download-alt"></span></a></li>
+						
+						<!-- Refresh -->
+						<li><a href="#" id="refresh-bracket"><span class="glyphicon glyphicon-refresh"></a></li>
+						
 						<!-- View -->
-						<li class="dropdown">
+						<!-- <li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">View <span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a href="#">Bracket</a></li>
 								<li><a href="#">Results</a></li>
 							</ul>
-						</li>
+						</li> -->
 						<?php } ?>
 						
 						<!-- Search for Player -->
