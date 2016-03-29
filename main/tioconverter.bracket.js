@@ -338,19 +338,20 @@ function tioConverterJS() {
 	
 	this.listResults = function() {
 		var _data = _js.tio_data;
-		
+		$('#results').html('');
 		$('#results').append('<div class="heading">Top 8</div>');
 		prev_key = -1;
 		$.each(_data[_js.selected_tournament]['events'][_js.selected_event]['results'], function(key,val) {
-			if  (Object.keys(val).length > 0) {
+			if (Object.keys(val).length > 0) {
 				if ((parseInt(key) > 8) && (prev_key <= 8)) {
 					$('#results').append('<div class="heading">The Rest</div>');
 				}
 				prev_key = parseInt(key);
 				
-				$('#results').append('<div class="placing-row placing-' + key + '"><div class="placing-number">' + key + '</div><div class="placing-players"></div></div>');
+				// $('#results').append('<div class="placing-row placing-' + key + '"><div class="placing-number">' + key + '</div><div class="placing-players"></div></div>');
+				$('#results').append('<div class="placing-row placing-row-' + key + '"><span class="placing-number">' + key + '</span><div class="placing-players"></div></div>');
 				$.each(val, function(key2,val2) {
-					$('.placing-players').last().append('<div class="player">' + val2['tag'] + '</div>');
+					$('.placing-row-' + key + ' .placing-players').last().append('<div class="player">' + val2['tag'] + '</div>');
 				});
 			}
 		});
@@ -642,10 +643,10 @@ function tioConverterJS() {
 			// Use switch case so losers will be on top rather than winners
 			switch (true) {
 				case ($('#container').scrollTop() > $('.round-head:eq(1)').attr('init-y') - $('.round-head:eq(0)').height()): // Losers
-					$('.round-head:eq(1)').clone().appendTo('#container');
+					$('.round-head:eq(1)').clone().appendTo('#bracket');
 					break;
 				case ($('#container').scrollTop() > 0): // Winners
-					$('.round-head:eq(0)').clone().appendTo('#container');
+					$('.round-head:eq(0)').clone().appendTo('#bracket');
 					break;
 			}
 			
@@ -690,6 +691,19 @@ function tioConverterJS() {
 					$('#winner_matches').css('padding-top', $('.round-head:eq(0)').outerHeight() + 'px');
 					break;
 			}
+		}
+	}
+	
+	this.changeView = function(view) {
+		switch (view) {
+			case 0:
+				$('#bracket').css('display', 'block');
+				$('#results').css('display', 'none');
+				break;
+			case 1:
+				$('#bracket').css('display', 'none');
+				$('#results').css('display', 'block');
+				break;
 		}
 	}
 	
@@ -754,4 +768,17 @@ $(document).ready(function() {
 			_js.adjustHeader();
 		}
 	});
+	
+	/* $('#bracket_view a:eq(0)').click(function(e) {
+		e.preventDefault();
+		if (typeof _js != 'undefined') {
+			_js.changeView(0);
+		};
+	});
+	$('#bracket_view a:eq(1)').click(function(e) {
+		e.preventDefault();
+		if (typeof _js != 'undefined') {
+			_js.changeView(1);
+		};
+	}); */
 });

@@ -17,7 +17,7 @@ class tioConverterLibrary {
 		$new_tourney_hidden		= (isset($options['tio-tourney-hidden']) ? $options['tio-tourney-hidden'] : false);
 		$new_tourney_featured	= (isset($options['tio-tourney-featured']) && $options['tio-tourney-featured'] == 1 ? true : false);
 		$new_tourney_default 	= (isset($options['tio-tourney-default']) ? $options['tio-tourney-default'] : 0);
-		$new_tourney_update_int	= (isset($options['tio-update-interval']) ? $options['tio-update-interval'] : 60);
+		$new_tourney_update_int	= (isset($options['tio-update-interval']) ? intval($options['tio-update-interval']) : 60);
 		$new_tourney_update_til	= (isset($options['tio-update-until']) ? $options['tio-update-until'] : date('m/d/Y H:00', strtotime('+1 day')));
 		
 		for ($i = 0, $exists = false, $exist_type = -1; $i < count($this->library['tournaments']) && $exists === false; $i++) {

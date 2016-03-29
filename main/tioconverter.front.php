@@ -79,7 +79,7 @@ $title_extension = ($tio->loaded ? " - " . $tio->getTournamentName(false) . ' - 
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?php echo $tio->getLoadedEvent()['name'] ?> <span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<?php foreach($tio->parseBracket()[$tio->getTournamentId(false)]['events'] as $key=>$event) { ?>
-								<li><a href="/<?php echo $tio->getTournamentLibrary()['permalink']; ?>/<?php echo $tio->url_encode($event['name']); ?>"><?php echo $event['name']; ?></a></li>
+								<li><a href="/<?php echo $tio->getTournamentLibrary()['permalink']; ?>/<?php echo $tio->url_encode($event['name']); ?><?php if ($_GET['tiomatch'] != "") { echo '/'.$_GET['tiomatch']; } ?>"><?php echo $event['name']; ?></a></li>
 								<?php } ?>
 							</ul>
 						</li>
@@ -95,16 +95,14 @@ $title_extension = ($tio->loaded ? " - " . $tio->getTournamentName(false) . ' - 
 						<!-- Refresh -->
 						<li><a href="#" id="refresh-bracket"><span class="glyphicon glyphicon-refresh"></a></li>
 						
-						<?php if (isset($_SESSION['admin'])) {?>
 						<!-- View -->
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">View <span class="caret"></span></a>
 							<ul class="dropdown-menu" id="bracket_view">
-								<li><a href="bracket">Bracket</a></li>
-								<li><a href="results">Results</a></li>
+								<li><a href="/<?php echo $tio->getTournamentLibrary()['permalink']; ?>/<?php echo $tio->url_encode($event['name']); ?>/brackets">Brackets</a></li>
+								<li><a href="/<?php echo $tio->getTournamentLibrary()['permalink']; ?>/<?php echo $tio->url_encode($event['name']); ?>/results">Results</a></li>
 							</ul>
 						</li>
-						<?php } ?>
 						<?php } ?>
 						
 						<!-- Search for Player -->
@@ -125,7 +123,8 @@ $title_extension = ($tio->loaded ? " - " . $tio->getTournamentName(false) . ' - 
 		
 		<?php if ($tio->loaded) { ?>
 		<div id="container">
-			<div id="bracket">
+			<div id="results"<?php if ($_GET['tiomatch'] != "results") { echo ' class="hidden"'; } ?>></div>
+			<div id="bracket"<?php if ($_GET['tiomatch'] == "results") { echo ' class="hidden"'; } ?>>
 				<div id="winners" class="big-section">
 					<div class="round-head"><div id="winner_rounds"></div></div>
 					<canvas id="winner_lines"></canvas>
@@ -137,9 +136,6 @@ $title_extension = ($tio->loaded ? " - " . $tio->getTournamentName(false) . ' - 
 					<div id="loser_matches"></div>
 				</div>
 			</div>
-			<?php if (isset($_SESSION['admin'])) {?>
-			<!-- <div id="results"></div> -->
-			<?php } ?>
 		</div>
 		<?php } else { ?>
 		<div id="regular-container">

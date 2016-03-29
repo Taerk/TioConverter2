@@ -475,37 +475,41 @@ class tioParser {
 	public function updateFile() {
 		$this->log($this->getTournamentId(false) . " is looking for updates");
 		if ($this->getTournamentLibrary()['enabled']) {
+			
 			// Check to see if the time span is now past the required update interval
 			// Also check to see if it's within the allowed "update_until" time
-			
 			$meta_block = $this->getTournamentMeta();
 			
-			if (true) {
-				
-				// Update meta file
-				$next_update_time = strtotime('now + ' . $this->getTournamentLibrary()['update_interval'] . ' seconds');
-				$meta_block['md5'] = md5_file($this->files[$this->getTournamentId(false)]['bracket']);
-				$meta_block['last'] = strtotime('now');
-				$meta_block['next'] = $next_update_time;
-				
-				file_put_contents($this->files[$this->getTournamentId(false)]['info'], json_encode($meta_block, JSON_PRETTY_PRINT));
-				
-				// Get MD5 of .tio file and the new file
-				$new_contents = file_get_contents($this->getTournamentLibrary()['download']);
-				$md5_records = [
-					"old" => md5_file($this->files[$this->getTournamentId(false)]['bracket']),
-					"new" => md5($new_contents)
-				];
-				
-				// If new md5 doesn't match with the old one, update it
-				if ($md5_records['old'] != $md5_records['new']) {
-					file_put_contents($this->files[$this->getTournamentId(false)]['bracket'], $new_contents);
-					$this->log($this->getTournamentId(false) . " bracket was updated");
+			if (strtotime('now') < strtotime($this->getTournamentLibrary()['update_until'])) {
+				if (strtotime('now') > $meta_block['next']) {
+					
+					// Update meta file
+					$next_update_time = strtotime('now + ' . $this->getTournamentLibrary()['update_interval'] . ' seconds');
+					$meta_block['md5'] = md5_file($this->files[$this->getTournamentId(false)]['bracket']);
+					$meta_block['last'] = strtotime('now');
+					$meta_block['next'] = $next_update_time;
+					
+					file_put_contents($this->files[$this->getTournamentId(false)]['info'], json_encode($meta_block, JSON_PRETTY_PRINT));
+					
+					// Get MD5 of .tio file and the new file
+					$new_contents = file_get_contents($this->getTournamentLibrary()['download']);
+					$md5_records = [
+						"old" => md5_file($this->files[$this->getTournamentId(false)]['bracket']),
+						"new" => md5($new_contents)
+					];
+					
+					// If new md5 doesn't match with the old one, update it
+					if ($md5_records['old'] != $md5_records['new']) {
+						file_put_contents($this->files[$this->getTournamentId(false)]['bracket'], $new_contents);
+						$this->log($this->getTournamentId(false) . " bracket was updated");
+					} else {
+						$this->log($this->getTournamentId(false) . " had no md5 change");
+					}
 				} else {
-					$this->log($this->getTournamentId(false) . " had no md5 change");
+					$this->log($this->getTournamentId(false) . " is not ready to update -- time is " . strtotime('now') . " -- update requirement is " . $meta_block['next']);
 				}
 			} else {
-				$this->log($this->getTournamentId(false) . " is not ready to update -- time is " . strtotime('now') . " -- update requirement is " . $meta_block['next']);
+				$this->log($this->getTournamentId(false) . " has exceeded update_until time");
 			}
 		}
 	}
@@ -720,7 +724,7 @@ class tioParser {
 					 * - Losers round 1 starts at -1
 					 * - Winners round 1 starts at 1
 					 */
-					if ($this->debug_mode) { echo "<h1>".$this->events[$tournament_id]['name']."</h1>"; }
+					if ($this->debug_mode) { echo "<h1>".$this->tournaments[$tournament_id]['name']."</h1>"; }
 					
 					// Declare variables to be used later
 					$all_matches = [];
@@ -750,10 +754,10 @@ class tioParser {
 						
 						// Get the number of rounds
 						if ($this_matches_round > 0 && abs($this_matches_round) > $max_rounds_winner) {
-							$max_rounds_winner = abs($this_matches_round);
+							$max_rounds_winner = abs($this_matches_round) + 2;
 						}
 						if ($this_matches_round < 0 && abs($this_matches_round) > $max_rounds_loser) {
-							$max_rounds_loser = abs($this_matches_round);
+							$max_rounds_loser = abs($this_matches_round) + 2;
 						}
 					}
 					ksort($all_matches);
@@ -810,18 +814,19 @@ class tioParser {
 								foreach ($all_matches[$mi] as $match) {
 									$checked_matches++;
 									
-									if ($match['winner'] != "00000000-0000-0000-0000-000000000000" && isset($all_matches[$i + 1]) && $placing > 1) {
+									if ($match['winner'] != "00000000-0000-0000-0000-000000000000" && $placing >= 1) {
 										
 										// Add loser to array of players who have already been assigned a placing
 										if (trim($match['winner']) == trim($match['p1']['id'])) {
 											$loser = trim($match['p2']['id']);
 											$winner = trim($match['p1']['id']);
-										} else {
+										} else if (trim($match['winner']) == trim($match['p2']['id'])) {
 											$loser = trim($match['p1']['id']);
 											$winner = trim($match['p2']['id']);
 										}
+										
 										if (!in_array($loser, $used_player) == -1) {
-											if ($this->debug_mode) { echo "<div style='color: #d66'>&raquo; ".$loser." -- ".$this->getPlayerById($loser)['tag']." (eliminated by ".$this->getPlayerById(trim($match['winner']))['tag']." in round $mi)</div>"; }
+											if ($this->debug_mode) { echo "<div style='color: #d66'>&raquo; (#" . $match['id'] . ") ".$loser." -- ".$this->getPlayerById($loser)['tag']." (eliminated by ".$this->getPlayerById(trim($match['winner']))['tag']." in round $mi)</div>"; }
 											array_push($used_player, $loser);
 											array_push($current_loser_placing, $loser);
 										}
@@ -849,7 +854,7 @@ class tioParser {
 									}
 											
 									// Set placing for 1st place
-									if ($placing == 2) {
+									if ($placing == 2 && !in_array($winner, $used_player) == -1) {
 										$placing = 1;
 										if ($this->debug_mode) { echo "<div style='color: #6d6'>&raquo; ".$winner." -- ".$this->getPlayerById($winner)['tag']." (won the tournament in round $mi)</div>"; }
 										if ($this->debug_mode) { echo "<div>$cur &rarr; ".$this->getPlayerById($winner)['tag']." &rarr; $placing</div>"; }
