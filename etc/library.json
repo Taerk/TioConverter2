@@ -8,32 +8,18 @@
     },
     "tournaments": [
         {
-            "id": "72924776-9268-49f8-a178-24aee5c57dce",
-            "name": "CFL Smackdown February Monthly Smash 4",
-            "added": "02/21/2016 06:15",
-            "added_by": "admin",
-            "permalink": "cfl-smackdown-february-monthly-smash-4",
-            "download": "https://t.polarity.gg/uploads/CFL%20Smackdown%20February%20Monthly%20Smash%204.tio",
+            "id": "3de80e94-37f7-4b41-8bf3-3bdee38f4c44",
+            "name": "CFL Smackdown 71: Melee Singles and PM Singles",
+            "added": "03/28/2016 19:35",
+            "added_by": "Polarity",
+            "permalink": "cfl-smackdown-71-melee-singles-and-pm-singles",
+            "download": "https://t.polarity.gg/uploads/CFL%20Smackdown%2071%20Melee%20and%20PM.tio",
             "enabled": true,
             "hidden": false,
             "featured": true,
-            "default_event": "1410df16-2549-4fad-9456-f5af2ae8f15e",
-            "update_interval": "60",
-            "update_until": "03/29/2016 07:00"
-        },
-        {
-            "id": "72e62701-1327-4ecf-82ee-43f79511597a",
-            "name": "CFL Smackdown 64 Melee",
-            "added": "02/21/2016 06:15",
-            "added_by": "admin",
-            "permalink": "cfl-smackdown-64-melee",
-            "download": "https://t.polarity.gg/uploads/CFL%20Smackdown%2064%20Melee.tio",
-            "enabled": true,
-            "hidden": false,
-            "featured": true,
-            "default_event": "95331a4c-12b1-4521-8489-98e7db85c07d",
-            "update_interval": "60",
-            "update_until": "02/21/2016 07:00"
+            "default_event": "ad042ec0-e86c-4e34-bdea-0dec3ff5cbb6",
+            "update_interval": 60,
+            "update_until": "03/28/2016 20:00"
         }
     ]
 }

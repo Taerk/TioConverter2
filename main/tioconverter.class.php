@@ -480,7 +480,7 @@ class tioParser {
 			
 			$meta_block = $this->getTournamentMeta();
 			
-			if (strtotime('now') > $meta_block['next'] && strtotime('now') < strtotime($this->getTournamentLibrary()['update_until'])) {
+			if (true) {
 				
 				// Update meta file
 				$next_update_time = strtotime('now + ' . $this->getTournamentLibrary()['update_interval'] . ' seconds');
@@ -628,6 +628,7 @@ class tioParser {
 			}
 		}
 		
+		
 		// Events
 		foreach ($tio->EventList->Event as $key=>$tournament) {
 			$tournament_id = trim((string)$tournament->ID);
@@ -636,8 +637,8 @@ class tioParser {
 			$this->tournaments[$tournament_id] = [];
 			$this->tournaments[$tournament_id]['name'] = $tournament_name;
 			$this->tournaments[$tournament_id]['stations'] = [];
-			$this->tournaments[$tournament_id]['stations_ez'] = [];
 			$this->tournaments[$tournament_id]['events'] = [];
+			$this->tournaments[$tournament_id]['stations_ez'] = [];
 			
 			// Stations
 			foreach ($tournament->Stations->Station as $key=>$station) {
@@ -651,11 +652,10 @@ class tioParser {
 			
 			// Stations EZ (Uses match ID as key to match stream name)
 			foreach ($tournament->Stations->Station as $key=>$station) {
-				$station_tournament_id = trim((string)$station->Queue->Match->tournamentID);
 				$station_match_num = trim((string)$station->Queue->Match->Number);
 				
-				if (($station_tournament_id != "") && ($station_match_num != "")) {
-					$this->tournaments[$tournament_id]['stations_ez'][$station_tournament_id.":".$station_match_num] = trim((string)$station->Name);
+				if ($station_match_num != "") {
+					$this->tournaments[$tournament_id]['stations_ez'][$station_match_num] = trim((string)$station->Name);
 				}
 			}
 			

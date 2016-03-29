@@ -271,8 +271,18 @@ function tioConverterJS() {
 						 * SET UP MATCH INFORMATION TO PRINT OUT
 						 */					
 						// Setup
-						var m_setup = (typeof _tournament['stations_ez'][_match['id']] != 'undefined' ? _tournament['stations_ez'][_match['id']] : '');
-						var m_setup_is = (m_setup == '' ? ' none' : '');
+						var m_setup = (typeof _tournament['stations_ez'][_match['id']] != 'undefined' ? _tournament['stations_ez'][_match['id']] : false);
+						switch (true) {
+							case (m_setup === false): // No setup
+								m_setup_is = " none";
+								break;
+							case (m_setup.toLowerCase().indexOf("stream") > -1): // Stream setup
+								m_setup_is = " stream";
+								break;
+							default: // Regular setup
+								m_setup_is = "";
+								break;
+						}
 						
 						/**
 						 * ADD KO Indicator
@@ -321,8 +331,34 @@ function tioConverterJS() {
 				_js.drawLines(reload);
 				_js.setHeader();
 				_js.setHover();
+				_js.listResults();
 			}
 		}
+	}
+	
+	this.listResults = function() {
+		var _data = _js.tio_data;
+		
+		$('#results').append('<div class="heading">Top 8</div>');
+		prev_key = -1;
+		$.each(_data[_js.selected_tournament]['events'][_js.selected_event]['results'], function(key,val) {
+			if  (Object.keys(val).length > 0) {
+				if ((parseInt(key) > 8) && (prev_key <= 8)) {
+					$('#results').append('<div class="heading">The Rest</div>');
+				}
+				prev_key = parseInt(key);
+				
+				$('#results').append('<div class="placing-row placing-' + key + '"><div class="placing-number">' + key + '</div><div class="placing-players"></div></div>');
+				$.each(val, function(key2,val2) {
+					$('.placing-players').last().append('<div class="player">' + val2['tag'] + '</div>');
+				});
+			}
+		});
+		$.each($('.placing-players'), function(key,el) {
+			if ($(this).find('.player').length > 1) {
+				$(this).find('.player:even').addClass('odd');
+			}
+		});
 	}
 	
 	this.setHover = function() {
