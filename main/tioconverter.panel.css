@@ -1,6 +1,11 @@
 body {
 	padding-top: 50px;
 }
+select { padding: 0 !important }
+select option {
+	padding: 2px 6px;
+	margin: 0;
+}
 #add_bracket_progress {
 	display: flex;
 	flex-direction: row;
@@ -35,3 +40,5 @@ h1.result {
 	text-align: center;
 	opacity: 0;
 }
+.featured-bracket { background-color: #f0f055 }
+.hidden-bracket { background-color: #f05555; color: white }

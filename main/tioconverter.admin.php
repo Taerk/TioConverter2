@@ -107,7 +107,7 @@ if (isset($_GET['page'])) {
 		$(document).ready(function() {
 			$('#tio-update-until').datetimepicker({
 				format: 'm/d/Y H:i',
-				startDate: '<?php echo date('m/d/Y H:00', strtotime('+1 hour')); ?>'
+				startDate: '<?php echo date('m/d/Y H:00', strtotime('+1 day')); ?>'
 			});
 		});
 		</script>

@@ -6,7 +6,7 @@ html, body, #container {
 }
 body {
 	padding-top: 50px;
-	padding-bottom: 20px;
+	/* padding-bottom: 20px; */
 	font-family: arial, consolas, calibri, sans-serif;
 	background-image: url('/etc/images/grid.png');
 	background-position: top left;
@@ -49,6 +49,7 @@ body {
 #regular-container {
 	padding-left: 15px;
 	font-size: 1.5em;
+	margin-bottom: 30px;
 }
 
 /**
@@ -169,25 +170,25 @@ body {
 	width: 150px;
 	margin: auto;
 	text-align: center;
-	border: 1px solid #aaa;
+	border: 1px solid #448;
 	border-bottom: 0px;
-	background-color: #eee;
+	background-color: #66c;
 	/* background-image: linear-gradient(to top, #aaa, #eee); */
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
 	font-weight: bold;
 	display: inline-block;
-	color: #222;
+	color: #fff;
 	text-decoration: none;
 }
 .match .setup.stream {
-	border: 1px solid #a0a;
+	border: 1px solid #606;
 	border-bottom: 0px;
-	background-color: #eee;
-	color: #a0a;
+	background-color: #84d;
+	color: #fff;
 	/* background-image: linear-gradient(to top, #b40, #920); */
 }
-.match .setup.stream:hover { background-color: #fff }
+/* .match .setup.stream:hover { background-color: #fff } */
 .match .setup.youtube {
 	border: 1px solid #900;
 	border-bottom: 0px;
@@ -238,11 +239,11 @@ body {
 }
 
 /* Matches - Highlights */
-.player.hover, .player.selected {
-	color: #fff;
+.player.hover, .player.selected, .player.hover .player-score, .player.selected .player-score {
+	color: #fff !important;
 }
-#winner_matches .player.hover, #winner_matches .player.selected { background-color: #0a0 }
-#loser_matches .player.hover, #loser_matches .player.selected { background-color: #a00 }
+#winner_matches .player.hover, #winner_matches .player.selected { background-color: #696 }
+#loser_matches .player.hover, #loser_matches .player.selected { background-color: #966 }
 .player.highlight {
 	color: black;
 	text-shadow: 1px 1px 2px rgba(51,51,51,0.5);
@@ -351,10 +352,16 @@ body {
 	color: #000;
 }
 #results .placing-row {
+	display: -webkit-flex;
+	-webkit-flex-direction: row;
+	-webkit-align-content: center;
+	-webkit-align-items: flex-start;
+	
 	display: flex;
 	flex-direction: row;
 	align-content: center;
 	align-items: flex-start;
+	
 	margin: 8px 0;
 	padding: 0 50px;
 	background-image: linear-gradient(to right,

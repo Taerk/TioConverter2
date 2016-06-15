@@ -15,6 +15,7 @@ $title_extension = ($tio->loaded ? " - " . $tio->getTournamentName(false) . ' - 
 		<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mobile/1.4.1/jquery.mobile.min.js"></script> -->
 		<script type="text/javascript" src="/3rdparty/jquery/jscolor/jquery.color.plus-names-2.1.2.min.js"></script>
 		<script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"></script>
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 		
@@ -84,13 +85,19 @@ $title_extension = ($tio->loaded ? " - " . $tio->getTournamentName(false) . ' - 
 							</ul>
 						</li>
 						
+						<!-- # of Entrants -->
+						<li><a><?php echo $tio->parseBracket()[$tio->getTournamentId(false)]['events'][$tio->getLoadedEvent()['id']]['entrants']; ?> entrants</a></li>
+						<?php } ?>
+						
+						<?php if ($tio->download_error) { ?>
+						<li><a style="color: #d00; font-weight: bold">Download error!!</a></li>
 						<?php } ?>
 					</ul>
 					
 					<ul class="nav navbar-nav navbar-right">
 						<?php if ($tio->loaded) { ?>					
 						<!-- Download -->
-						<li><a href="/download/<?php echo $tio->url_encode($tio->getTournamentName(false)); ?>.tio" id="download-bracket"><span class="glyphicon glyphicon-download-alt"></span></a></li>
+						<li><a href="/download/<?php echo $tio->getTournamentLibrary()['permalink']; ?>.tio" id="download-bracket"><span class="glyphicon glyphicon-download-alt"></span></a></li>
 						
 						<!-- Refresh -->
 						<li><a href="#" id="refresh-bracket"><span class="glyphicon glyphicon-refresh"></a></li>
@@ -99,29 +106,33 @@ $title_extension = ($tio->loaded ? " - " . $tio->getTournamentName(false) . ' - 
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">View <span class="caret"></span></a>
 							<ul class="dropdown-menu" id="bracket_view">
-								<li><a href="/<?php echo $tio->getTournamentLibrary()['permalink']; ?>/<?php echo $tio->url_encode($event['name']); ?>/brackets">Brackets</a></li>
-								<li><a href="/<?php echo $tio->getTournamentLibrary()['permalink']; ?>/<?php echo $tio->url_encode($event['name']); ?>/results">Results</a></li>
+								<li><a href="/<?php echo $tio->getTournamentLibrary()['permalink']; ?>/<?php echo $tio->url_encode($tio->getLoadedEvent()['name']); ?>/brackets">Brackets</a></li>
+								<li><a href="/<?php echo $tio->getTournamentLibrary()['permalink']; ?>/<?php echo $tio->url_encode($tio->getLoadedEvent()['name']); ?>/results">Results</a></li>
 							</ul>
 						</li>
 						<?php } ?>
 						
 						<!-- Search for Player -->
-						<!-- <li>
-							<form class="navbar-form" role="search" id="search-player">
+						<li>
+							<form class="navbar-form" role="search" id="tio-search">
 								<div class="input-group">
-									<input class="form-control" placeholder="Search for Player" type="search">
+									<input class="form-control" placeholder="Search" type="search">
 									<div class="input-group-btn">
 										<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
 									</div>
 								</div>
 							</form>
-						</li> -->
+						</li>
 					</ul>
 				</div><!-- /.navbar-collapse -->
 			</div><!-- /.container-fluid -->
 		</nav>
 		
-		<?php if ($tio->loaded) { ?>
+		<?php
+			/**
+			 * Handle bracket pages
+			 */
+		if ($tio->loaded) { ?>
 		<div id="container">
 			<div id="results"<?php if ($_GET['tiomatch'] != "results") { echo ' class="hidden"'; } ?>></div>
 			<div id="bracket"<?php if ($_GET['tiomatch'] == "results") { echo ' class="hidden"'; } ?>>
@@ -137,13 +148,78 @@ $title_extension = ($tio->loaded ? " - " . $tio->getTournamentName(false) . ' - 
 				</div>
 			</div>
 		</div>
-		<?php } else { ?>
+		<?php
+		} else if (defined('SEARCH')) {
+			/**
+			 * Handle select bracket page
+			 */
+			require_once(CONVERTER . '/tioconverter.search.php');
+		
+		} else {
+			/**
+			 * Handle select bracket page
+			 */
+		?>
 		<div id="regular-container">
-			<h1>Select a bracket</h1>
+			<?php
+			function my_sort($a, $b) {
+				if ($a['name'] == $b['name']) {
+					return 0;
+				} else {
+					return ($a['name'] > $b['name']) ? -1 : 1;
+				}
+			}
+			
+			$sorted_tournaments = $tio->getLibrary()['tournaments'];
+			usort($sorted_tournaments, "my_sort");
+			
+			$exclude_from_other = [];
+			
+			// Output tournaments
+			?>
+			<h1>Featured</h1>
 			<ul>
 			<?php
-			foreach ($tio->getLibrary()['tournaments'] as $key=>$library) {
-				echo '<li>' . ($library['featured'] ? '<span class="fa fa-star"></span> ' : '') . '<a href="/' . $library['permalink'] . '">' . $library['name'] . '</a></li>';
+			foreach ($sorted_tournaments as $key=>$library) {
+				if ($library['featured']) {
+					echo '<li>' . ($library['featured'] ? '<span class="fa fa-star"></span> ' : '') . '<a href="/' . $library['permalink'] . '">' . $library['name'] . '</a></li>';
+				}
+			}
+			?>
+			</ul>
+			
+			<h1>Weeklies</h1>
+			<ul>
+			<?php
+			foreach ($sorted_tournaments as $key=>$library) {
+				$weekly_match = preg_match('/CFL Smackdown [0-9]+/i', $library['name'], $matches);
+				if (!$library['hidden'] && count($matches) > 0) {
+					array_push($exclude_from_other, $library['permalink']);
+					echo '<li><a href="/' . $library['permalink'] . '">' . $library['name'] . '</a></li>';
+				}
+			}
+			?>
+			</ul>
+			
+			<h1>Monthlies</h1>
+			<ul>
+			<?php
+			foreach ($sorted_tournaments as $key=>$library) {
+				if (!$library['hidden'] && stripos($library['name'], 'Monthly') > -1) {
+					array_push($exclude_from_other, $library['permalink']);
+					echo '<li><a href="/' . $library['permalink'] . '">' . $library['name'] . '</a></li>';
+				}
+			}
+			?>
+			</ul>
+			
+			<h1>Other</h1>
+			<ul>
+			<?php
+			foreach ($sorted_tournaments as $key=>$library) {
+				if (!$library['hidden'] && in_array($library['permalink'], $exclude_from_other) === false) {
+					echo '<li><a href="/' . $library['permalink'] . '">' . $library['name'] . '</a></li>';
+				}
 			}
 			?>
 			</ul>
@@ -152,10 +228,12 @@ $title_extension = ($tio->loaded ? " - " . $tio->getTournamentName(false) . ' - 
 		
 		<div id="status"></div>
 		
-		<nav class="navbar navbar-default navbar-fixed-bottom" id="footer">
+		<!-- <nav class="navbar navbar-default navbar-fixed-bottom" id="footer">
 			<div class="container-fluid">
-				Powered by <a href="https://github.com/Taerk/TioConverter2" target="_blank">TioConverter 2.0</a>
+				Designed and Programmed by <a href="https://taerk.net/">Taerk</a> for <a href="https://polarity.gg/">Polarity</a>
+				&#149;
+				Developed with <a href="https://getbootstrap.com/">Bootstrap</a> and <a href="https://fortawesome.github.io/Font-Awesome/">Font Awesome</a>
 			</div>
-		</nav>
+		</nav> -->
 	</body>
 </html>

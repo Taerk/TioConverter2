@@ -191,6 +191,66 @@ $(document).ready(function() {
 	/**
 	 * Modify a Tio File
 	 */
+	function highlightBrackets() {
+		$('.hidden-bracket').removeClass('hidden-bracket');
+		$('[tournament-info*="\"hidden\":true"]').addClass('hidden-bracket');
+		
+		$('.featured-bracket').removeClass('featured-bracket');
+		$('[tournament-info*="\"featured\":true"]').addClass('featured-bracket');
+	}
+	highlightBrackets();
+	
+	$('#update_bracket_select').change(function() {
+		to_data = $.parseJSON($(this).find('option:selected').attr('tournament-info'));
+		$('#tio-tourney-id').val(to_data.id);
+		$('#tio-tourney-download').val(to_data.download);
+		$('#tio-tourney-name').val(to_data.name);
+		$('#tio-tourney-permalink').val(to_data.permalink);
+		$('#tio-update-interval').val(to_data.update_interval);
+		$('#tio-update-until').val(to_data.update_until);
+		
+		// Featured
+		$('#tio-tourney-featured').val(to_data.featured ? 0 : 1)
+		$('#tio-tourney-featured-switch').click();
+		
+		// Hidden
+		$('#tio-tourney-hidden').val(to_data.hidden ? 0 : 1)
+		$('#tio-tourney-hidden-switch').click();
+		
+		// Default event
+		$('#tio-tourney-default').html('');
+		$.each(to_data.events, function(event_id, event_name) {
+			$('#tio-tourney-default').append('<option value="' + event_id + '">' + event_name + '</option>');
+		});
+		$('#tio-tourney-default').val(to_data.default_event);
+	});
+	
+	$('#update_bracket').submit(function(e) {
+		e.preventDefault();
+		$.post('?action=update', {'data': $('#update_bracket').serialize()},
+			function(response) {
+				console.log(response);
+				
+				// Update the information on the option
+				new_to_data = $.parseJSON($('#update_bracket_select').find('option:selected').attr('tournament-info'));
+				new_to_data.id = $('#tio-tourney-id').val();
+				new_to_data.download = $('#tio-tourney-download').val();
+				new_to_data.name = $('#tio-tourney-name').val();
+				new_to_data.permalink = $('#tio-tourney-permalink').val();
+				new_to_data.update_interval = $('#tio-update-interval').val();
+				new_to_data.update_until = $('#tio-update-until').val();
+				new_to_data.default_event = $('#tio-tourney-default').val();
+				new_to_data.featured = (parseInt($('#tio-tourney-featured').val()) == 1 ? true : false);
+				new_to_data.hidden = (parseInt($('#tio-tourney-hidden').val()) == 1 ? true : false);
+				
+				// Update name in top select
+				$('#update_bracket_select [value="' + new_to_data.id + '"]').html(new_to_data.name);
+				$('#update_bracket_select [value="' + new_to_data.id + '"]').attr('tournament-info', JSON.stringify(new_to_data));
+				highlightBrackets();
+			},
+			'json'
+		);
+	});
 	
 	/**
 	 * Validation Checks
@@ -231,6 +291,24 @@ $(document).ready(function() {
 			$('#tio-tourney-permalink-auto').val(0);
 			$('#tio-tourney-permalink-auto').removeClass('btn-primary');
 			$('#tio-tourney-permalink-auto').addClass('btn-danger');
+		}
+	});
+	
+	// Toggle Hidden
+	$('#tio-tourney-hidden-switch').click(function() {
+		console.log($('#tio-tourney-hidden').val());
+		if ($('#tio-tourney-hidden').val() == 0) {
+			$('#tio-tourney-hidden').val(1);
+			$('#tio-tourney-hidden-switch').removeClass('btn-success');
+			$('#tio-tourney-hidden-switch').addClass('btn-danger');
+			$('#tio-tourney-hidden-switch .fa').removeClass('fa-check');
+			$('#tio-tourney-hidden-switch .fa').addClass('fa-close');
+		} else {
+			$('#tio-tourney-hidden').val(0);
+			$('#tio-tourney-hidden-switch').removeClass('btn-danger');
+			$('#tio-tourney-hidden-switch').addClass('btn-success');
+			$('#tio-tourney-hidden-switch .fa').removeClass('fa-close');
+			$('#tio-tourney-hidden-switch .fa').addClass('fa-check');
 		}
 	});
 	

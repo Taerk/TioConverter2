@@ -23,6 +23,9 @@ function tioConverterJS() {
 	this.start_pos_y = 0;
 	this.start_mouse_x = 0;
 	this.start_mouse_y = 0;
+	this.scroll_fix = false;
+	this.scroll_y = 0;
+	this.scroll_y = 0;
 	
 	this.highlight = {};
 	this.events = [];
@@ -83,68 +86,83 @@ function tioConverterJS() {
 		
 		// Set up auto-check
 		if (typeof interval == 'undefined') {
-			interval = 30;
+			interval = 1; // Interval to update bracket (in seconds)
 		}
 		if (typeof auto_load == 'undefined') {
-			auto_load = setInterval(function() { _js.loadTioFile(true); }, interval * 1000);
+			console.log("Starting automatic updates");
+			auto_load = setInterval(function() {
+				_js.loadTioFile(true);
+			}, interval * 1000);
 		}
 	}
 	
-	this.loadTioFile = function(reload) {		
+	this.loadTioFile = function(reload) {
+		console.log("Loading data");
 		if ((typeof reload != 'undefined') && (reload == true)) {
 			_js.loading = true;
 		} else {
 			_js.loading = false;
 		}
 		
-		if (!_js.first_load) {
-			_js.win_ctx.clearRect(0, _js.win_lines.width, 0, _js.win_lines.height);
-			_js.los_ctx.clearRect(0, _js.lose_lines.width, 0, _js.lose_lines.height);
-			
-			$('#bracket').css('display', 'none');
-			_js.changeStatus();
-			return false;
-		}
-		this.changeStatus('loading');
+		$.getJSON("?get=data", function(hashData) {
+			if (hashData.md5 != _js.md5) {
+				_js.md5 = hashData.md5;
+				console.log("There was a change in md5 -- new md5 is: " + hashData.md5);
 		
-		var succeeded = false;
-		_js.loading = true;
-		
-		$.getJSON("?get",
-			function(data) {
-				try {
-					_js.tio_data = data;
+				if (!_js.first_load) {
+					_js.win_ctx.clearRect(0, _js.win_lines.width, 0, _js.win_lines.height);
+					_js.los_ctx.clearRect(0, _js.lose_lines.width, 0, _js.lose_lines.height);
 					
-					// Count the number of rounds in the tournament
-					var used_rounds = [];
-					_js.winners_round_count = 0;
-					_js.losers_round_count = 0;
-					
-					$.each(data[_js.selected_tournament]['events'][_js.selected_event]['matches'], function(key,_match) {
-						if ($.inArray(_match['round'], used_rounds) == -1) {
-							if (parseInt(_match['round']) > 0) {
-								_js.winners_round_count++;
-							}
-							if (parseInt(_match['round']) < 0) {
-								_js.losers_round_count++;
-							}	
-							used_rounds.push(_match['round']);
-						}
-					});
-				} catch(e) {
-					_js.changeStatus('parse-failed');
+					$('#bracket').css('display', 'none');
+					_js.changeStatus();
+					return false;
 				}
+				
+				_js.changeStatus('loading');
+				
+				var succeeded = false;
+				_js.loading = true;
+				
+				$.getJSON("?get",
+					function(data) {
+						try {
+							_js.tio_data = data;
+							
+							// Count the number of rounds in the tournament
+							var used_rounds = [];
+							_js.winners_round_count = 0;
+							_js.losers_round_count = 0;
+							
+							$.each(data[_js.selected_tournament]['events'][_js.selected_event]['matches'], function(key,_match) {
+								if ($.inArray(_match['round'], used_rounds) == -1) {
+									if (parseInt(_match['round']) > 0) {
+										_js.winners_round_count++;
+									}
+									if (parseInt(_match['round']) < 0) {
+										_js.losers_round_count++;
+									}	
+									used_rounds.push(_match['round']);
+								}
+							});
+						} catch(e) {
+							_js.changeStatus('parse-failed');
+						}
+					}
+				).always(function() {
+					_js.loading = false;
+				}).fail(function() {
+					_js.changeStatus('connect-failed');
+					return false;
+				}).success(function() {
+					_js.changeStatus();
+					_js.drawBracket(reload);
+					return true;
+				});
+			} else {
+				console.log("No changes in md5");
 			}
-		).always(function() {
-			_js.loading = false;
-		}).fail(function() {
-			_js.changeStatus('connect-failed');
-			return false;
-		}).success(function() {
-			_js.changeStatus();
-			_js.drawBracket(reload);
-			return true;
 		});
+		
 	}
 
 	this.getRound = function(round) {
@@ -179,7 +197,6 @@ function tioConverterJS() {
 	this.getWinKey = function(_event, _match, player_port) {
 		var wl;
 		
-		
 		if (_match['p' + player_port + '_prev'] != -1) {
 			switch (true) {
 				// If it's a player that's going into losers from winners
@@ -205,10 +222,7 @@ function tioConverterJS() {
 			return false;
 		}
 		
-		$('#loser_rounds').html('');
-		$('#loser_matches').html('');
-		$('#winner_rounds').html('');
-		$('#winner_matches').html('');
+		$('#loser_rounds, #loser_matches, #winner_rounds, #winner_matches').html('');
 		
 		if (typeof _data[_js.selected_tournament] != 'undefined') {
 			var _tournament = _data[_js.selected_tournament];
@@ -271,7 +285,7 @@ function tioConverterJS() {
 						 * SET UP MATCH INFORMATION TO PRINT OUT
 						 */					
 						// Setup
-						var m_setup = (typeof _tournament['stations_ez'][_match['id']] != 'undefined' ? _tournament['stations_ez'][_match['id']] : false);
+						var m_setup = (typeof _tournament['stations_ez'][_js.selected_event + ':' + _match['id']] != 'undefined' ? _tournament['stations_ez'][_js.selected_event + ':' + _match['id']] : false);
 						switch (true) {
 							case (m_setup === false): // No setup
 								m_setup_is = " none";
@@ -332,6 +346,26 @@ function tioConverterJS() {
 				_js.setHeader();
 				_js.setHover();
 				_js.listResults();
+				
+				// Redraw bracket if there's something screwy going on
+				if ($('.match').length < _event['matches'].length - 1 && _js.scroll_fix == false) {
+					console.log("Drew " + $('.match').length + " matches even though there are " + (_event['matches'].length - 1) + " listed");
+					
+					// Ghetto fix
+					_js.scroll_fix = true;
+					_js.scroll_x = $('#container').scrollLeft();
+					_js.scroll_y = $('#container').scrollTop();
+					$('#container').scrollLeft(0);
+					$('#container').scrollTop(0);
+					_js.loadTioFile(true);
+				}
+				
+				if (_js.scroll_fix) {
+					console.log("Moving back to (" + _js.scroll_x + "," + _js.scroll_y + ")");
+					_js.scroll_fix = false;
+					// $('#container').scrollLeft(_js.scroll_x);
+					// $('#container').scrollTop(_js.scroll_y);
+				}
 			}
 		}
 	}
@@ -341,17 +375,16 @@ function tioConverterJS() {
 		$('#results').html('');
 		$('#results').append('<div class="heading">Top 8</div>');
 		prev_key = -1;
-		$.each(_data[_js.selected_tournament]['events'][_js.selected_event]['results'], function(key,val) {
+		$.each(_data[_js.selected_tournament]['events'][_js.selected_event]['results'], function(placement,val) {
 			if (Object.keys(val).length > 0) {
-				if ((parseInt(key) > 8) && (prev_key <= 8)) {
+				if ((parseInt(placement) > 8) && (prev_key <= 8)) {
 					$('#results').append('<div class="heading">The Rest</div>');
 				}
-				prev_key = parseInt(key);
+				prev_key = parseInt(placement);
 				
-				// $('#results').append('<div class="placing-row placing-' + key + '"><div class="placing-number">' + key + '</div><div class="placing-players"></div></div>');
-				$('#results').append('<div class="placing-row placing-row-' + key + '"><span class="placing-number">' + key + '</span><div class="placing-players"></div></div>');
-				$.each(val, function(key2,val2) {
-					$('.placing-row-' + key + ' .placing-players').last().append('<div class="player">' + val2['tag'] + '</div>');
+				$('#results').append('<div class="placing-row placing-row-' + placement + '"><span class="placing-number">' + placement + '</span><div class="placing-players"></div></div>');
+				$.each(val, function(key2,player) {
+					$('.placing-row-' + placement + ' .placing-players').last().append('<div class="player">' + player['tag'] + '</div>');
 				});
 			}
 		});
@@ -767,6 +800,12 @@ $(document).ready(function() {
 		if (typeof _js != 'undefined') {
 			_js.adjustHeader();
 		}
+	});
+	
+	// Enable searching
+	$('#tio-search').submit(function(e) {
+		e.preventDefault();
+		window.location = '/search/' + $('#tio-search [type="search"]').val();
 	});
 	
 	/* $('#bracket_view a:eq(0)').click(function(e) {

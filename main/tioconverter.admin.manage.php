@@ -2,12 +2,24 @@
 	<div class="page-header"><h1>Manage Bracket</h1></div>
 	
 	<label for="basic-url">Select Bracket</label>
-	<select size="8" class="form-control"><?php
-	foreach ($tio->getTournaments() as $id=>$tournament) {
-		echo '<option value="'.$tournament['id'].'">'.$tournament['name'].'</option>';
+	<select size="8" class="form-control" id="update_bracket_select"><?php
+	function my_sort($a, $b) {
+		if ($a['name'] == $b['name']) {
+			return 0;
+		} else {
+			return ($a['name'] > $b['name']) ? -1 : 1;
+		}
+	}
+	
+	$sorted_tournaments = $tio->getTournaments();
+	usort($sorted_tournaments, "my_sort");
+	
+	foreach ($sorted_tournaments as $id=>$tournament) {
+		$tournament['events'] = $tio->getEvents($tournament['id']);
+		echo '<option value="'.$tournament['id'].'" tournament-info=\'' . json_encode($tournament) . '\'>'.$tournament['name'].'</option>';
 	}
 	?></select>
-	<h5><a href="#" class="text-danger pull-right">Delete Bracket</a></h5>
+	<h5><a class="text-danger pull-right" style="opacity: 0.5; text-decoration: none; cursor: not-allowed">Delete Bracket</a></h5>
 	
 	<div id="update_bracket_confirm">
 		<div class="page-header"><h3>Update Information</h3></div>
@@ -16,7 +28,12 @@
 			<input type="text" class="form-control" id="tio-tourney-id" name="tio-tourney-id" aria-describedby="tio-tourney-id-tip" readonly>
 		</div>
 		
-		<input type="hidden" id="tio-tourney-download" name="tio-tourney-download" readonly>
+		<br>
+		
+		<div class="input-group">
+			<span class="input-group-addon" id="tio-tourney-download-tip" name="tio-tourney-id-tip">Download URL</span>
+			<input type="text" class="form-control" id="tio-tourney-download" name="tio-tourney-download" aria-describedby="tio-tourney-download-tip">
+		</div>
 		
 		<br>
 	
@@ -24,10 +41,16 @@
 			<div class="col-xs-6">
 				<label for="tio-tourney-name">Display Name</label>
 				<div class="input-group">
+					<span class="input-group-btn">
+						<input id="tio-tourney-hidden" name="tio-tourney-hidden" type="hidden" value="0">
+						<button class="btn btn-success" id="tio-tourney-hidden-switch" name="tio-tourney-hidden-switch" type="button" value="0" title="Display Bracket"><span class="fa fa-check fa-fw"></span></button>
+					</span>
+					
 					<input type="text" class="form-control" id="tio-tourney-name" name="tio-tourney-name">
+					
 					<span class="input-group-btn">
 						<input id="tio-tourney-featured" name="tio-tourney-featured" type="hidden" value="0">
-						<button class="btn btn-default" id="tio-tourney-featured-switch" name="tio-tourney-featured-switch" type="button" value="0" title="Featured Bracket"><span class="fa fa-star-o"></span></button>
+						<button class="btn btn-default" id="tio-tourney-featured-switch" name="tio-tourney-featured-switch" type="button" value="0" title="Featured Bracket"><span class="fa fa-star-o fa-fw"></span></button>
 					</span>
 				</div>
 			</div>
@@ -68,11 +91,11 @@
 		
 		<hr>
 		
-		<button type="button" class="btn btn-primary btn-block" aria-haspopup="true" aria-expanded="true" disabled>Update Settings</button>
+		<button type="submit" class="btn btn-primary btn-block" aria-haspopup="true" aria-expanded="true">Update Settings</button>
 	</div>
 	
-	<div id="update_bracket_confirm">
+	<!-- <div id="update_bracket_players">
 		<div class="page-header"><h3>Manage Players</h3></div>
-	</div>
+	</div> -->
 	
 </form>

@@ -1,10 +1,13 @@
 <?php
 class tioConverterLibrary {
 	public $library;
+	public $config_path;
 	
 	function __construct($config) {
 		$this->library = json_decode(file_get_contents($config), true);
+		$this->config_path = $config;
 	}
+	
 	function addTournament($options) {
 		$uniq = uniqid();
 		$new_tourney_id			= $options['tio-tourney-id'];
@@ -58,7 +61,8 @@ class tioConverterLibrary {
 				'md5' => md5_file(ARCHIVE . '/' . $new_tourney_id . '/' . $new_tourney_id . '.tio'),
 				'last' => strtotime($new_tourney_update_til),
 				'next' => strtotime($new_tourney_update_til),
-				'players' => []
+				'players' => [],
+				'teams' => []
 			];
 			file_put_contents(ARCHIVE . '/' . $new_tourney_id . '/meta', json_encode($meta, JSON_PRETTY_PRINT));
 			
@@ -80,6 +84,56 @@ class tioConverterLibrary {
 		}
 		die;
 	}
+	
+	function updateTournament($options) {
+		$uniq = uniqid();
+		$new_tourney_id			= $options['tio-tourney-id'];
+		$new_tourney_name		= (isset($options['tio-tourney-name']) ? $options['tio-tourney-name'] : $uniq);
+		$new_tourney_added_date	= (isset($options['tio-tourney-added-date']) ? $options['tio-tourney-added-date'] : date('m/d/Y H:i'));
+		$new_tourney_added_by	= (isset($_SESSION['username']) ? $_SESSION['username'] : 'unknown');
+		$new_tourney_permalink	= (isset($options['tio-tourney-permalink']) ? $options['tio-tourney-permalink'] : $options['tio-tourney-id']);
+		$new_tourney_download	= (isset($options['tio-tourney-download']) ? $options['tio-tourney-download'] : '-1');
+		$new_tourney_enabled	= (isset($options['tio-tourney-enabled']) ? $options['tio-tourney-enabled'] : true);
+		$new_tourney_hidden		= (isset($options['tio-tourney-hidden']) && $options['tio-tourney-hidden'] == 1 ? true : false);
+		$new_tourney_featured	= (isset($options['tio-tourney-featured']) && $options['tio-tourney-featured'] == 1 ? true : false);
+		$new_tourney_default 	= (isset($options['tio-tourney-default']) ? $options['tio-tourney-default'] : 0);
+		$new_tourney_update_int	= (isset($options['tio-update-interval']) ? intval($options['tio-update-interval']) : 60);
+		$new_tourney_update_til	= (isset($options['tio-update-until']) ? $options['tio-update-until'] : date('m/d/Y H:00', strtotime('+1 day')));
+		
+		for ($i = 0, $exists = false, $exist_type = -1; $i < count($this->library['tournaments']) && $exists === false; $i++) {
+			if ($this->library['tournaments'][$i]['id'] == $new_tourney_id) {
+				$exist_type = 0;
+				$exists = $i;
+			} else if ($this->library['tournaments'][$i]['permalink'] == $new_tourney_permalink) {
+				$exist_type = 1;
+				$exists = $i;
+			}
+		}
+		
+		// End if the bracket doesn't exist
+		if ($exists === false) {
+			echo json_encode(['result' => false, 'message' => 'Bracket with id ' . $new_tournament_id . ' does not exist']);
+			die;
+		}
+		
+		$this->library['tournaments'][$exists] = [
+			'id' 				=> $new_tourney_id,
+			'name' 				=> $new_tourney_name,
+			'added' 			=> $new_tourney_added_date,
+			'added_by' 			=> $new_tourney_added_by,
+			'permalink' 		=> $new_tourney_permalink,
+			'download' 			=> $new_tourney_download,
+			'enabled' 			=> $new_tourney_enabled,
+			'hidden' 			=> $new_tourney_hidden,
+			'featured' 			=> $new_tourney_featured,
+			'default_event'		=> $new_tourney_default,
+			'update_interval'	=> $new_tourney_update_int,
+			'update_until'		=> $new_tourney_update_til
+		];
+		
+		file_put_contents($this->config_path, json_encode($this->library, JSON_PRETTY_PRINT));
+		echo json_encode(['result' => true, 'message' => 'Bracket updated']);
+	}
 }
 
 if (isset($_GET['action'])) {	
@@ -94,16 +148,21 @@ if (isset($_GET['action'])) {
 	
 	parse_str(stripslashes($_POST['data']), $data);
 	
+	if (!isset($data['tio-tourney-id'])) {
+		echo json_encode(['result' => false, 'message' => 'No tournament ID set']);
+		die;
+	} else if (trim($data['tio-tourney-id']) == "") {
+		echo json_encode(['result' => false, 'message' => 'Tournament ID is blank']);
+		die;
+	}
+	
 	switch ($_GET['action']) {
 		case 'add':			
-			if (!isset($data['tio-tourney-id'])) {
-				echo json_encode(['result' => false, 'message' => 'No tournament ID set']);
-				die;
-			}
 			
 			$lib->addTournament($data);
 			break;
-		case 'manage':
+		case 'update':			
+			$lib->updateTournament($data);
 			break;
 	}
 	die;
