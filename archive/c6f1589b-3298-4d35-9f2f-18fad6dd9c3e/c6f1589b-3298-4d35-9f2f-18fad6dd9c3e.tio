@@ -1,0 +1,235 @@
+<br />
+<b>Notice</b>:  Undefined index: enabled in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>492</b><br />
+<br />
+<b>Warning</b>:  simplexml_load_file(): /home/polarity/public_html/TioConverter2/archive//.tio:1: parser error : Document is empty in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>603</b><br />
+<br />
+<b>Notice</b>:  Trying to get property of non-object in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>647</b><br />
+<br />
+<b>Notice</b>:  Trying to get property of non-object in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>647</b><br />
+<br />
+<b>Warning</b>:  Invalid argument supplied for foreach() in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>647</b><br />
+<br />
+<b>Notice</b>:  Undefined index: enabled in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>492</b><br />
+<br />
+<b>Notice</b>:  Undefined index:  in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>392</b><br />
+<br />
+<b>Warning</b>:  Invalid argument supplied for foreach() in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>392</b><br />
+<br />
+<b>Notice</b>:  Undefined index: enabled in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>492</b><br />
+<br />
+<b>Notice</b>:  Undefined index: enabled in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>492</b><br />
+<br />
+<b>Notice</b>:  Undefined offset: 0 in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>377</b><br />
+<br />
+<b>Notice</b>:  Undefined index:  in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>452</b><br />
+<br />
+<b>Notice</b>:  Undefined index: enabled in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>492</b><br />
+<br />
+<b>Notice</b>:  Undefined offset: 0 in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>377</b><br />
+<br />
+<b>Warning</b>:  array_merge(): Argument #1 is not an array in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>453</b><br />
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link rel="shortcut icon" type="image/png" href="/etc/images/polarity_compass.png">
+		
+		<title>Polarity - Bracket -  - </title>
+		
+		<!-- Libraries -->
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+		<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mobile/1.4.1/jquery.mobile.min.js"></script> -->
+		<script type="text/javascript" src="/3rdparty/jquery/jscolor/jquery.color.plus-names-2.1.2.min.js"></script>
+		<script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		
+		<!-- In-house -->
+		<script type="text/javascript" src="/main/tioconverter.bracket.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function() {
+			tioJS = new tioConverterJS();
+			tioJS.autoTio(
+				'',
+				'<br />
+<b>Notice</b>:  Undefined index: enabled in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>492</b><br />
+<br />
+<b>Notice</b>:  Undefined offset: 0 in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>377</b><br />
+',
+				<br />
+<b>Notice</b>:  Undefined index: update_interval in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.front.php</b> on line <b>29</b><br />
+				
+			);
+		});
+		</script>
+		<link rel="stylesheet" type="text/css" href="/main/tioconverter.bracket.front.css">
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top" id="header">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+				  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				  </button>
+				  <a class="navbar-brand pull-left" href="/">Polarity Brackets</a>
+				</div>
+
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+												<!-- Featured Tournaments -->
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+																<li><a href="/cfl-smackdown-74-melee-singles-and-doubles">CFL Smackdown 74 Melee Singles and Doubles</a></li>
+															</ul>
+						</li>
+						
+												<!-- Events -->
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><br />
+<b>Notice</b>:  Undefined index: enabled in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>492</b><br />
+<br />
+<b>Notice</b>:  Undefined index: enabled in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>492</b><br />
+<br />
+<b>Notice</b>:  Undefined offset: 0 in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>377</b><br />
+<br />
+<b>Notice</b>:  Undefined index:  in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>452</b><br />
+<br />
+<b>Notice</b>:  Undefined index: enabled in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>492</b><br />
+<br />
+<b>Notice</b>:  Undefined offset: 0 in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>377</b><br />
+<br />
+<b>Warning</b>:  array_merge(): Argument #1 is not an array in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>453</b><br />
+ <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<br />
+<b>Notice</b>:  Undefined index: enabled in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>492</b><br />
+<br />
+<b>Notice</b>:  Undefined index:  in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.front.php</b> on line <b>81</b><br />
+<br />
+<b>Warning</b>:  Invalid argument supplied for foreach() in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.front.php</b> on line <b>81</b><br />
+							</ul>
+						</li>
+						
+						<!-- # of Entrants -->
+						<li><a><br />
+<b>Notice</b>:  Undefined index: enabled in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>492</b><br />
+<br />
+<b>Notice</b>:  Undefined index: enabled in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>492</b><br />
+<br />
+<b>Notice</b>:  Undefined index: enabled in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>492</b><br />
+<br />
+<b>Notice</b>:  Undefined offset: 0 in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>377</b><br />
+<br />
+<b>Notice</b>:  Undefined index:  in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>452</b><br />
+<br />
+<b>Notice</b>:  Undefined index: enabled in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>492</b><br />
+<br />
+<b>Notice</b>:  Undefined offset: 0 in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>377</b><br />
+<br />
+<b>Warning</b>:  array_merge(): Argument #1 is not an array in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>453</b><br />
+<br />
+<b>Notice</b>:  Undefined index:  in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.front.php</b> on line <b>88</b><br />
+ entrants</a></li>
+						
+											</ul>
+					
+					<ul class="nav navbar-nav navbar-right">
+											
+						<!-- Download -->
+						<li><a href="/download/.tio" id="download-bracket"><span class="glyphicon glyphicon-download-alt"></span></a></li>
+						
+						<!-- Refresh -->
+						<li><a href="#" id="refresh-bracket"><span class="glyphicon glyphicon-refresh"></a></li>
+						
+						<!-- View -->
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">View <span class="caret"></span></a>
+							<ul class="dropdown-menu" id="bracket_view">
+								<li><a href="/<br />
+<b>Notice</b>:  Undefined index: permalink in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.front.php</b> on line <b>105</b><br />
+/<br />
+<b>Notice</b>:  Undefined index: enabled in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>492</b><br />
+<br />
+<b>Notice</b>:  Undefined index: enabled in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>492</b><br />
+<br />
+<b>Notice</b>:  Undefined offset: 0 in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>377</b><br />
+<br />
+<b>Notice</b>:  Undefined index:  in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>452</b><br />
+<br />
+<b>Notice</b>:  Undefined index: enabled in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>492</b><br />
+<br />
+<b>Notice</b>:  Undefined offset: 0 in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>377</b><br />
+<br />
+<b>Warning</b>:  array_merge(): Argument #1 is not an array in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>453</b><br />
+/brackets">Brackets</a></li>
+								<li><a href="/<br />
+<b>Notice</b>:  Undefined index: permalink in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.front.php</b> on line <b>106</b><br />
+/<br />
+<b>Notice</b>:  Undefined index: enabled in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>492</b><br />
+<br />
+<b>Notice</b>:  Undefined index: enabled in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>492</b><br />
+<br />
+<b>Notice</b>:  Undefined offset: 0 in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>377</b><br />
+<br />
+<b>Notice</b>:  Undefined index:  in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>452</b><br />
+<br />
+<b>Notice</b>:  Undefined index: enabled in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>492</b><br />
+<br />
+<b>Notice</b>:  Undefined offset: 0 in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>377</b><br />
+<br />
+<b>Warning</b>:  array_merge(): Argument #1 is not an array in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.class.php</b> on line <b>453</b><br />
+/results">Results</a></li>
+							</ul>
+						</li>
+												
+						<!-- Search for Player -->
+						<!-- <li>
+							<form class="navbar-form" role="search" id="search-player">
+								<div class="input-group">
+									<input class="form-control" placeholder="Search for Player" type="search">
+									<div class="input-group-btn">
+										<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+									</div>
+								</div>
+							</form>
+						</li> -->
+					</ul>
+				</div><!-- /.navbar-collapse -->
+			</div><!-- /.container-fluid -->
+		</nav>
+		
+				<div id="container">
+			<div id="results" class="hidden"></div>
+			<div id="bracket">
+				<div id="winners" class="big-section">
+					<div class="round-head"><div id="winner_rounds"></div></div>
+					<canvas id="winner_lines"></canvas>
+					<div id="winner_matches"></div>
+				</div>
+				<div id="losers" class="big-section">
+					<div class="round-head"><div id="loser_rounds"></div></div>
+					<canvas id="loser_lines"></canvas>
+					<div id="loser_matches"></div>
+				</div>
+			</div>
+		</div>
+				
+		<div id="status"></div>
+		
+		<nav class="navbar navbar-default navbar-fixed-bottom" id="footer">
+			<div class="container-fluid">
+				Designed and Programmed by <a href="https://taerk.net/">Taerk</a> for <a href="https://polarity.gg/">Polarity</a>
+				&#149;
+				Developed with <a href="https://getbootstrap.com/">Bootstrap</a> and <a href="https://fortawesome.github.io/Font-Awesome/">Font Awesome</a>
+			</div>
+		</nav>
+	</body>
+</html>

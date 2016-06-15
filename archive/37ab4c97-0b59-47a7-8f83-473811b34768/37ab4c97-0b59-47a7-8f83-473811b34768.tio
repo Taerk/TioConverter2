@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link rel="shortcut icon" type="image/png" href="/etc/images/polarity_compass.png">
+		
+		<title>Polarity - Bracket</title>
+		
+		<!-- Libraries -->
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+		<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mobile/1.4.1/jquery.mobile.min.js"></script> -->
+		<script type="text/javascript" src="/3rdparty/jquery/jscolor/jquery.color.plus-names-2.1.2.min.js"></script>
+		<script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		
+		<!-- In-house -->
+		<script type="text/javascript" src="/main/tioconverter.bracket.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function() {
+			tioJS = new tioConverterJS();
+			tioJS.autoTio(
+				'',
+				'',
+				<br />
+<b>Notice</b>:  Undefined index: update_interval in <b>/home/polarity/public_html/TioConverter2/main/tioconverter.front.php</b> on line <b>29</b><br />
+				
+			);
+		});
+		</script>
+		<link rel="stylesheet" type="text/css" href="/main/tioconverter.bracket.front.css">
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top" id="header">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+				  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				  </button>
+				  <a class="navbar-brand pull-left" href="/">Polarity Brackets</a>
+				</div>
+
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+												<!-- Featured Tournaments -->
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Featured Tournaments <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+																<li><a href="/cfl-smackdown-75-melee-and-pm">CFL Smackdown 75 Melee and PM</a></li>
+															</ul>
+						</li>
+						
+											</ul>
+					
+					<ul class="nav navbar-nav navbar-right">
+												
+						<!-- Search for Player -->
+						<!-- <li>
+							<form class="navbar-form" role="search" id="search-player">
+								<div class="input-group">
+									<input class="form-control" placeholder="Search for Player" type="search">
+									<div class="input-group-btn">
+										<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+									</div>
+								</div>
+							</form>
+						</li> -->
+					</ul>
+				</div><!-- /.navbar-collapse -->
+			</div><!-- /.container-fluid -->
+		</nav>
+		
+				<div id="regular-container">
+						<h1>Featured</h1>
+			<ul>
+			<li><span class="fa fa-star"></span> <a href="/cfl-smackdown-75-melee-and-pm">CFL Smackdown 75 Melee and PM</a></li>			</ul>
+			
+			<h1>Weeklies</h1>
+			<ul>
+			<li><a href="/cfl-smackdown-75-melee-and-pm">CFL Smackdown 75 Melee and PM</a></li><li><a href="/cfl-smackdown-74-smash-4-singles-and-doubles">CFL Smackdown 74 Smash 4 Singles and Doubles</a></li><li><a href="/cfl-smackdown-74-melee-singles-and-doubles">CFL Smackdown 74 Melee Singles and Doubles</a></li><li><a href="/cfl-smackdown-73-melee-and-pm-singles">CFL Smackdown 73: Melee and PM Singles</a></li><li><a href="/cfl-smackdown-72-smash-4-and-smash-64">CFL Smackdown 72: Smash 4 and Smash 64</a></li><li><a href="/cfl-smackdown-72-melee-singles-and-doubles">CFL Smackdown 72: Melee Singles and Doubles</a></li><li><a href="/cfl-smackdown-71-melee-singles-and-pm-singles">CFL Smackdown 71: Melee Singles and PM Singles</a></li><li><a href="/cfl-smackdown-71-smash-4-and-64">CFL Smackdown 71 Smash 4 and 64</a></li><li><a href="/cfl-smackdown-64-melee">CFL Smackdown 64 Melee</a></li><li><a href="/cl-smackdown-63-smash-4">CFL Smackdown 63 Smash 4</a></li><li><a href="/cfl-smackdown-63-melee-and-pm">CFL Smackdown 63 Melee and PM</a></li><li><a href="/cfl-smackdown-62-smash-4">CFL Smackdown 62 Smash 4</a></li><li><a href="/cfl-smackdown-62-melee">CFL Smackdown 62 Melee</a></li><li><a href="/cfl-smackdown-61-smash-4">CFL Smackdown 61 Smash 4</a></li><li><a href="/cfl-smackdown-61">CFL Smackdown 61 Melee</a></li><li><a href="/cfl-smackdown-60-Smash 4">CFL Smackdown 60 Smash 4</a></li><li><a href="/cfl-smackdown-60-melee">CFL Smackdown 60 Melee</a></li><li><a href="/cfl-smackdown-58-Smash 4">CFL Smackdown 58 Smash 4</a></li><li><a href="/cfl-smackdown-58-melee">CFL Smackdown 58 Melee</a></li><li><a href="/cfl-smackdown-57-melee-and-pm">CFL Smackdown 57 Melee and PM</a></li><li><a href="/cfl-smackdown-56-Smash 4">CFL Smackdown 56 Smash 4</a></li><li><a href="/cfl-smackdown-56-melee">CFL Smackdown 56 Melee</a></li><li><a href="/cfl-smackdown-55-melee-and-pm">CFL Smackdown 55 Melee and PM</a></li><li><a href="/cfl-smackdown-55-doubles">CFL Smackdown 55 Doubles</a></li><li><a href="/cfl-smackdown-54-Smash 4">CFL Smackdown 54 Smash 4</a></li><li><a href="/cfl-smackdown-54-melee">CFL Smackdown 54 Melee</a></li><li><a href="/cfl-smackdown-53-Smash 4">CFL Smackdown 53 Smash 4</a></li><li><a href="/cfl-smackdown-53-Melee and PM">CFL Smackdown 53 Melee and PM</a></li><li><a href="/cfl-smackdown-52-Smash 4">CFL Smackdown 52 Smash 4</a></li><li><a href="/cfl-smackdown-52-melee">CFL Smackdown 52 Melee</a></li><li><a href="/cfl-smackdown-51-smash-4">CFL Smackdown 51 Smash 4</a></li><li><a href="/cfl-smackdown-51-melee">CFL Smackdown 51 Melee</a></li><li><a href="/cfl-smackdown-50-smash-4">CFL Smackdown 50 Smash 4</a></li><li><a href="/cfl-smackdown-50-Melee and PM">CFL Smackdown 50 Melee and PM</a></li><li><a href="/cfl-smackdown-smash-4-weekly-49">CFL Smackdown 49 Smash 4</a></li><li><a href="/cfl-smackdown-49-melee">CFL Smackdown 49 Melee</a></li><li><a href="/cfl-smackdown-48">CFL Smackdown 48 Melee and PM</a></li><li><a href="/cfl-smackdown-47-part-2">CFL Smackdown 47 Smash 4</a></li><li><a href="/cfl-smackdown-45">CFL Smackdown 45</a></li><li><a href="/cfl-smackdown-44">CFL Smackdown 44</a></li><li><a href="/cfl-smackdown-43">CFL Smackdown 43</a></li><li><a href="/cfl-smackdown-weekly-42">CFL Smackdown 42</a></li><li><a href="/cfl-smackdown-41">CFL Smackdown 41</a></li><li><a href="/cfl-smackdown-40">CFL Smackdown 40</a></li><li><a href="/cfl-smackdown-39">CFL Smackdown 39</a></li><li><a href="/cfl-smackdown-38">CFL Smackdown 38</a></li>			</ul>
+			
+			<h1>Monthlies</h1>
+			<ul>
+			<li><a href="/cfl-smackdown-november-melee-monthly">CFL Smackdown November 2015 Monthly Melee</a></li><li><a href="/cfl-smackdown-february-monthly-smash-4">CFL Smackdown February 2015 Monthly Smash 4</a></li><li><a href="/cfl-smackdown-december-monthly-smash-4">CFL Smackdown December 2015 Monthly Smash 4</a></li>			</ul>
+			
+			<h1>Other</h1>
+			<ul>
+			<li><a href="/test-bracket">Test Bracket</a></li>			</ul>
+		</div>
+				
+		<div id="status"></div>
+		
+		<nav class="navbar navbar-default navbar-fixed-bottom" id="footer">
+			<div class="container-fluid">
+				Designed and Programmed by <a href="https://taerk.net/">Taerk</a> for <a href="https://polarity.gg/">Polarity</a>
+				&#149;
+				Developed with <a href="https://getbootstrap.com/">Bootstrap</a> and <a href="https://fortawesome.github.io/Font-Awesome/">Font Awesome</a>
+			</div>
+		</nav>
+	</body>
+</html>

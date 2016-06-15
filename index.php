@@ -31,7 +31,16 @@ switch (true) {
 						$tio->setEvent((isset($_GET['tioevent']) && trim($_GET['tioevent']) != "" ? $_GET['tioevent'] : $tio->getDefaultEvent()));
 					}
 				}
-				$output = json_encode($tio->parseBracket(), JSON_PRETTY_PRINT);
+				
+				if ($_GET['get'] == "data") {
+					$output = json_encode([
+						"md5" => md5_file($tio->archive_directory."/".$tio->active_file),
+						"sha1" => sha1_file($tio->archive_directory."/".$tio->active_file),
+						"size" => filesize($tio->archive_directory."/".$tio->active_file)
+					], JSON_PRETTY_PRINT);
+				} else {
+					$output = json_encode($tio->parseBracket(), JSON_PRETTY_PRINT);
+				}
 				break;
 		}
 		
@@ -48,9 +57,17 @@ switch (true) {
 	// Download link
 	case (isset($_GET['tiotournament']) && $_GET['tiotournament'] == 'download' && isset($_GET['tioevent'])):
 		$this_event = str_replace('.tio', '', $_GET['tioevent']);
+		$file_path = ARCHIVE . '/' . $tio->getTournamentId($this_event) . '/' . $tio->getTournamentId($this_event) . '.tio';
 		
-		header("Content-type: application/octet-stream");
-		echo file_get_contents(ARCHIVE . '/' . $tio->getTournamentId($this_event) . '/' . $tio->getTournamentId($this_event) . '.tio');
+		if (file_exists($file_path) && filesize($file_path) > 0 && stripos(file_get_contents($file_path), '<?xml version="1.0" encoding="utf-8"?>') > -1) {
+			header("Content-type: application/octet-stream");
+			header("Content-Length: " . filesize($file_path));
+			echo file_get_contents($file_path);
+		} else {
+			header("HTTP/1.1 400 Bad Request");
+			echo "<h1>400 Bad Request</h1>";
+		}
+		die;
 		break;
 	
 	// Admin Panel
@@ -75,7 +92,7 @@ switch (true) {
 					require_once(CONVERTER . '/encrypt.php');
 					break;
 					
-				case "download":
+				case "download": // Download tio file from outside
 					require_once(CONVERTER . '/tioconverter.download.php');
 					break;
 					
@@ -115,6 +132,13 @@ switch (true) {
 		} else {
 			require_once(CONVERTER . '/tioconverter.admin.php');
 		}
+		break;
+	
+	// Search for a player
+	case (isset($_GET['tiotournament']) && $_GET['tiotournament'] == 'search'):
+		define('SEARCH', $_GET['tioevent']);
+		require_once(CONVERTER . '/tioconverter.front.php');
+		break;
 		
 	// Front Page
 	default:		
