@@ -1,4 +1,7 @@
 smstest.php
 error_log
 tioconverter.log
+etc/tioconverter.log
+BracketConnect_PolarityGG_only.7z
 *.exe
+*.tio
