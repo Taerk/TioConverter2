@@ -41,6 +41,7 @@ class tioParser {
 	private $info = [];
 	private $lost_to = [];
 	private $elim_by = [];
+    public $last_search_results = NULL;
 	
 	/**
 	 * =====================
@@ -557,11 +558,21 @@ class tioParser {
 					"old" => md5_file($this->files[$this->getTournamentId(false)]['bracket']),
 					"new" => md5($new_contents)
 				];
+                $this->log("Matching content from " . $this->getTournamentLibrary()['download'] . " with " . $this->files[$this->getTournamentId(false)]['bracket']);
+                $this->log("MD5 hash " . $md5_records['old'] . " => " . $md5_records['new']);
 				
 				// If new md5 doesn't match with the old one, update it
 				if ($md5_records['old'] != $md5_records['new']) {
 					if (stripos($new_contents, '<?xml version="1.0" encoding="utf-8"?>') > -1) {
-						file_put_contents($this->files[$this->getTournamentId(false)]['bracket'], $new_contents);
+						
+                        file_put_contents($this->files[$this->getTournamentId(false)]['bracket'], $new_contents);
+                        
+                        // Save a revision version as well
+                        if (!file_exists(dirname($this->files[$this->getTournamentId(false)]['bracket']) . "/revisions")) {
+                            mkdir(dirname($this->files[$this->getTournamentId(false)]['bracket']) . "/revisions");
+                        }
+                        file_put_contents(dirname($this->files[$this->getTournamentId(false)]['bracket']) . "/revisions/" . $this->getTournamentId(false) . "_" . time() . ".tio", $new_contents);
+                        
 						$this->log($this->getTournamentId(false) . " bracket was updated");
 					} else {
 						$this->log($this->getTournamentId(false) . " bracket not updated -- not a bracket");
@@ -796,7 +807,7 @@ class tioParser {
 					 * - Losers round 1 starts at -1
 					 * - Winners round 1 starts at 1
 					 */
-					if ($this->debug_mode) { echo "<h1>".$this->events[$tournament_id]['name']."</h1>"; }
+					if ($this->debug_mode && isset($this->events[$tournament_id]['name'])) { echo "<h1>".$this->events[$tournament_id]['name']."</h1>"; }
 					
 					// Declare variables to be used later
 					$all_matches = [];
@@ -939,11 +950,57 @@ class tioParser {
 										}
 									}
 											
-									// Set placing for 1st place
-									if ($placing == 2) {
+									// Set placing for 3rd-1st place
+									if ($placing == 3 || $placing == 2) {
+										$placing = 3;
+										$mi = $max_rounds_loser * -1;
+										$match = $all_matches[$mi][array_keys($all_matches[$mi])[0]];
+										// Add loser to array of players who have already been assigned a placing
+										if (trim($match['winner']) == trim($match['p1']['id'])) {
+											$loser = trim($match['p2']['id']);
+											$winner = trim($match['p1']['id']);
+										} else {
+											$loser = trim($match['p1']['id']);
+											$winner = trim($match['p2']['id']);
+										}
+										if ($this->debug_mode) { echo "<div style='color: #d66'>&raquo; <b>(Corrected)</b> ".$loser." -- ".$this->getPlayerById($loser)['tag']." (eliminated by ".$this->getPlayerById(trim($match['winner']))['tag']." in round $mi)</div>"; }
+										array_push($used_player, $loser);
+										$this->tournaments[$tournament_id]['events'][$event_id]['results'][$placing] = [];
+										$this->tournaments[$tournament_id]['events'][$event_id]['results'][$placing][$this->getPlayerById($loser)['tag']] = array_merge(
+											$this->getPlayerById($loser),
+											[
+												'lost_to' => ['tag' => '???'],
+												'elim_by' => ['tag' => '???']
+											]
+										);
+										if ($this->debug_mode) { echo "<div><b>(Corrected)</b> $cur &rarr; ".$this->getPlayerById($loser)['tag']." &rarr; $placing</div>"; }
+										
+										$placing = 2;
+										$mi = $max_rounds_winner - 1;
+										$match = $all_matches[$mi][array_keys($all_matches[$mi])[0]];
+										// Add loser to array of players who have already been assigned a placing
+										if (trim($match['winner']) == trim($match['p1']['id'])) {
+											$loser = trim($match['p2']['id']);
+											$winner = trim($match['p1']['id']);
+										} else {
+											$loser = trim($match['p1']['id']);
+											$winner = trim($match['p2']['id']);
+										}
+										if ($this->debug_mode) { echo "<div style='color: #d66'>&raquo; <b>(Corrected)</b> ".$loser." -- ".$this->getPlayerById($loser)['tag']." (eliminated by ".$this->getPlayerById(trim($match['winner']))['tag']." in round $mi)</div>"; }
+										array_push($used_player, $loser);
+										$this->tournaments[$tournament_id]['events'][$event_id]['results'][$placing] = [];
+										$this->tournaments[$tournament_id]['events'][$event_id]['results'][$placing][$this->getPlayerById($loser)['tag']] = array_merge(
+											$this->getPlayerById($loser),
+											[
+												'lost_to' => ['tag' => '???'],
+												'elim_by' => ['tag' => '???']
+											]
+										);
+										if ($this->debug_mode) { echo "<div><b>(Corrected)</b> $cur &rarr; ".$this->getPlayerById($loser)['tag']." &rarr; $placing</div>"; }
+										
 										$placing = 1;
-										if ($this->debug_mode) { echo "<div style='color: #6d6'>&raquo; ".$winner." -- ".$this->getPlayerById($winner)['tag']." (won the tournament in round $mi)</div>"; }
-										if ($this->debug_mode) { echo "<div>$cur &rarr; ".$this->getPlayerById($winner)['tag']." &rarr; $placing</div>"; }
+										if ($this->debug_mode) { echo "<div style='color: #6d6'>&raquo; <b>(Corrected)</b> ".$winner." -- ".$this->getPlayerById($winner)['tag']." (won the tournament in round $mi)</div>"; }
+										if ($this->debug_mode) { echo "<div><b>(Corrected)</b> $cur &rarr; ".$this->getPlayerById($winner)['tag']." &rarr; $placing</div>"; }
 										$this->tournaments[$tournament_id]['events'][$event_id]['results'][$placing][$this->getPlayerById($winner)['tag']] = array_merge(
 											$this->getPlayerById($winner),
 											[
@@ -1062,29 +1119,40 @@ class tioParser {
 				
 				$meta_json = json_decode(file_get_contents($files['info']), true);
 				
-				$cached_players = $meta_json['players'];				
-				$cached_teams = $meta_json['teams'];
+                if (isset($meta_json['players'])) {
+                    $cached_players = $meta_json['players'];
+                }
+                if (isset($meta_json['teams'])) {
+                    $cached_teams = $meta_json['teams'];
+                }
 				
 				// Search for a player
 				foreach($cached_players as $pid=>$player) {
-					similar_text($search, $player['tag'], $similarity_tag);
-					similar_text($search, $player['name'], $similarity_name);
+                    $has_clan_tag = (strpos($player['tag'], "|") > -1);
+                    if ($has_clan_tag) $player['tag2'] = trim(explode("|", $player['tag'])[1]);
+                    
+                    $similarity_tag2 = 0;
+					similar_text(strtolower($search), strtolower($player['tag']), $similarity_tag);
+                    // Try it without a clan tag
+                    if ($has_clan_tag) similar_text(strtolower($search), strtolower($player['tag2']), $similarity_tag2);
+					similar_text(strtolower($search), strtolower($player['name']), $similarity_name);
 					
 					if ($this->search_debug) {
 						echo "<div> \\_ tag::{$player['tag']} => $similarity_tag</div>";
+                        if ($has_clan_tag) echo "<div> \\_ tag2::{$player['tag2']} => $similarity_tag2</div>";
 						echo "<div> \\_ name::{$player['name']} => $similarity_name</div>";
 					}
 					
-					if ($similarity_tag >= $this->search_threshold['tag'] || $similarity_name >= $this->search_threshold['name']) {
+					if ($similarity_tag >= $this->search_threshold['tag'] || $similarity_tag2 >= $this->search_threshold['tag'] || $similarity_name >= $this->search_threshold['name']) {
 						
 						// Add the tournament they were in if it wasn't already added
-						if (in_array($tid, $added_tournament_ids) === false) {
+						/* if (in_array($tid, $added_tournament_ids) === false) {
 							array_push($added_tournament_ids, $tid);
 							array_push($results['results']['brackets'], $this->getTournament($tid));
-						}
+						} */
 						
 						$player_to_add = $player;
-						$player_to_add['tournament_id'] = $tid;
+                        $player_to_add['tournament_info'] = $this->getTournament($tid);
 						array_push($results['results']['players'], $player_to_add);
 					}
 				}
@@ -1102,20 +1170,20 @@ class tioParser {
 					if ($similarity_tag >= $this->search_threshold['tag_team'] || $similarity_name >= $this->search_threshold['name_team']) {
 						
 						// Add the tournament they were in if it wasn't already added
-						if (in_array($tid, $added_tournament_ids) === false) {
+						/* if (in_array($tid, $added_tournament_ids) === false) {
 							array_push($added_tournament_ids, $tid);
 							array_push($results['results']['brackets'], $this->getTournament($tid));
-						}
+						} */
 						
 						$team_to_add = $team;
-						$team_to_add['tournament_id'] = $tid;
+                        $team_to_add['tournament_info'] = $this->getTournament($tid);
 						array_push($results['results']['teams'], $team_to_add);
 					}
 				}
 			}
 		}
 		
-		$results['total_results'] = count($results['results']['brackets']) + count($results['results']['playrs']) + count($results['results']['teams']);
+		$results['total_results'] = count($results['results']['brackets']) + count($results['results']['players']) + count($results['results']['teams']);
 		
 		if ($this->search_debug) {
 			echo '</pre>';
@@ -1124,6 +1192,8 @@ class tioParser {
 			echo '</pre>';
 			die;
 		}
+        
+        $this->last_search_results = $results;
 		return $results;
 	}
 	

@@ -11,6 +11,7 @@ body {
 	background-image: url('/etc/images/grid.png');
 	background-position: top left;
 	background-attachment: fixed;
+	background-size: cover;
 }
 #container { overflow: auto }
 #footer {

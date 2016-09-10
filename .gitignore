@@ -2,6 +2,13 @@ smstest.php
 error_log
 tioconverter.log
 etc/tioconverter.log
+etc/library.json
 BracketConnect_PolarityGG_only.7z
+archive
+meta
 *.exe
 *.tio
+php.ini
+.user.ini
+uploads/.ftpquota
+archive
