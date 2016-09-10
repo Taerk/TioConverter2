@@ -23,7 +23,6 @@ function tioConverterJS() {
 	this.start_pos_y = 0;
 	this.start_mouse_x = 0;
 	this.start_mouse_y = 0;
-	this.scroll_fix = false;
 	this.scroll_y = 0;
 	this.scroll_y = 0;
 	
@@ -349,23 +348,10 @@ function tioConverterJS() {
 				_js.listResults();
 				
 				// Redraw bracket if there's something screwy going on
-				if ($('.match').length < _event['matches'].length - 1 && _js.scroll_fix == false) {
+				if ($('.match').length < _event['matches'].length - 1) {
 					console.log("Drew " + $('.match').length + " matches even though there are " + (_event['matches'].length - 1) + " listed");
-					
-					// Ghetto fix
-					_js.scroll_fix = true;
-					_js.scroll_x = $('#container').scrollLeft();
-					_js.scroll_y = $('#container').scrollTop();
-					$('#container').scrollLeft(0);
-					$('#container').scrollTop(0);
+					console.log("Drew " + $('.match').length + " matches even though there are " + (_event['matches'].length - 1) + " listed");
 					_js.loadTioFile(true);
-				}
-				
-				if (_js.scroll_fix) {
-					console.log("Moving back to (" + _js.scroll_x + "," + _js.scroll_y + ")");
-					_js.scroll_fix = false;
-					// $('#container').scrollLeft(_js.scroll_x);
-					// $('#container').scrollTop(_js.scroll_y);
 				}
 			}
 		}
