@@ -19,7 +19,7 @@
 		echo '<option value="'.$tournament['id'].'" tournament-info=\'' . json_encode($tournament) . '\'>'.$tournament['name'].'</option>';
 	}
 	?></select>
-	<h5><a class="text-danger pull-right" style="opacity: 0.5; text-decoration: none; cursor: not-allowed">Delete Bracket</a></h5>
+	<h5><a class="text-danger pull-right" href="../main/tioconverter.cron.cleaner.php" style="text-decoration: none">Remove Invalid Brackets</a></h5>
 	
 	<div id="update_bracket_confirm">
 		<div class="page-header"><h3>Update Information</h3></div>
