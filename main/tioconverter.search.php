@@ -75,25 +75,46 @@ $tio->search_threshold = [
 
 if ($tio->search_debug) { 
 	$tio->search(SEARCH);
+    die;
 }
+
+$tio->search(SEARCH);
 ?>
 
+<!-- <pre><?php var_dump($tio->last_search_results); ?></pre> -->
+
 <!-- Work below this line--><!-- Work below this line--><!-- Work below this line--><!-- Work below this line-->
 <!-- Work below this line--><!-- Work below this line--><!-- Work below this line--><!-- Work below this line-->
+<div style="padding: 10px">
 
-<br>
+    <h1>Searching for: <?php echo $tio->last_search_results['term'] ?></h1>
+    <h2><?php echo $tio->last_search_results['total_results'] ?> results found</h2>
 
-<h1>Player: <?php echo(($tio->search(SEARCH))['term']) ?></h1>
-<h2>Events Attended: <?php echo(($tio->search(SEARCH))['total_results']) ?></h2>
-
-<h3>Events Attended</h3>
-
-<ul>
-<?php 
-for($x = 0; $x <= 3; $x++) { ?>
-	<li>
-		<?php echo(($tio->search(SEARCH))['results']['brackets'][$x]['name']) ?>
-	</li>
-<?php } ?>
-
-</ul>
+    <h3>Events Found (<?php echo count($tio->last_search_results['results']['brackets']); ?>)</h3>
+    <ul>
+    <?php
+    foreach ($tio->last_search_results['results']['brackets'] as $key=>$tournament) {
+        echo '<li><a href="/' . $tournament['permalink'] . '">' . $tournament['name'] . '</a></li>';
+    }
+    ?>
+    </ul>
+    
+    <h3>Players Found (<?php echo count($tio->last_search_results['results']['players']); ?>)</h3>
+    <ul>
+    <?php
+    foreach ($tio->last_search_results['results']['players'] as $key=>$player) {
+        echo '<li><a href="/' . $player['tournament_info']['permalink'] . '">' . $player['tag'] . ' (' . $player['tournament_info']['name'] . ')</a></li>';
+    }
+    ?>
+    </ul>
+    
+    <h3>Teams Found (<?php echo count($tio->last_search_results['results']['teams']); ?>)</h3>
+    <ul>
+    <?php
+    foreach ($tio->last_search_results['results']['teams'] as $key=>$team) {
+        echo '<li><a href="/' . $team['tournament_info']['permalink'] . '">' . $team['tag'] . ' (' . $team['tournament_info']['name'] . ')</a></li>';
+    }
+    ?>
+    </ul>
+    
+</div>

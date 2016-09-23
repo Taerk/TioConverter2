@@ -23,7 +23,6 @@ function tioConverterJS() {
 	this.start_pos_y = 0;
 	this.start_mouse_x = 0;
 	this.start_mouse_y = 0;
-	this.scroll_fix = false;
 	this.scroll_y = 0;
 	this.scroll_y = 0;
 	
@@ -34,6 +33,7 @@ function tioConverterJS() {
 	this.lose_lines;
 	this.win_ctx;
 	this.lose_ctx;
+	this.hidden_lines = 0;
 	
 	/* ======================
 	 * = PAGE CONTROLS
@@ -348,23 +348,10 @@ function tioConverterJS() {
 				_js.listResults();
 				
 				// Redraw bracket if there's something screwy going on
-				if ($('.match').length < _event['matches'].length - 1 && _js.scroll_fix == false) {
+				if ($('.match').length < _event['matches'].length - 1) {
 					console.log("Drew " + $('.match').length + " matches even though there are " + (_event['matches'].length - 1) + " listed");
-					
-					// Ghetto fix
-					_js.scroll_fix = true;
-					_js.scroll_x = $('#container').scrollLeft();
-					_js.scroll_y = $('#container').scrollTop();
-					$('#container').scrollLeft(0);
-					$('#container').scrollTop(0);
+					console.log("Drew " + $('.match').length + " matches even though there are " + (_event['matches'].length - 1) + " listed");
 					_js.loadTioFile(true);
-				}
-				
-				if (_js.scroll_fix) {
-					console.log("Moving back to (" + _js.scroll_x + "," + _js.scroll_y + ")");
-					_js.scroll_fix = false;
-					// $('#container').scrollLeft(_js.scroll_x);
-					// $('#container').scrollTop(_js.scroll_y);
 				}
 			}
 		}
@@ -454,7 +441,19 @@ function tioConverterJS() {
 		$('.player, .round-column').addClass('hover-set');
 	}
 	
+	this.resizeLines = function() {
+		$.each($('canvas'), function(key,el) {
+			$(el).attr({
+				'width': $(el).outerWidth(),
+				'height': $(el).outerHeight()
+			});
+		});
+	};
+	
 	this.drawLines = function(reload) {
+		console.log("Drawing line");
+		_js.resizeLines();
+		
 		if (!reload) {
 			_js.win_lines = document.getElementById('winner_lines');
 			_js.lose_lines = document.getElementById('loser_lines');
@@ -465,12 +464,6 @@ function tioConverterJS() {
 			_js.win_ctx.clearRect(0, _js.win_lines.width, 0, _js.win_lines.height);
 			_js.lose_ctx.clearRect(0, _js.lose_lines.width, 0, _js.lose_lines.height);
 			
-			$.each($('canvas'), function(key,el) {
-				$(el).attr({
-					'width': $(el).css('width'),
-					'height': $(el).css('height')
-				});
-			});
 			
 			var s = 0;
 			var e = 0;
@@ -532,7 +525,8 @@ function tioConverterJS() {
 							$.each($(el).find('.match'), function(key2,el2) {
 								tx = parseInt($('#winners').position().left)
 									+ parseInt($(el2).position().left)
-									+ parseInt($(el2).width());
+									+ parseInt($(el2).width())
+									+ $('#container').scrollLeft();
 								ty = parseInt($(el2).position().top)
 									+ parseInt($(el2).find('.player:eq(0)').outerHeight())
 									+ parseInt($('#winner_rounds').outerHeight())
@@ -549,7 +543,8 @@ function tioConverterJS() {
 								if (key2 % 2 == 0) {
 									tx = parseInt($('#winners').position().left)
 										+ parseInt($(el2).position().left)
-										+ parseInt($(el2).width());
+										+ parseInt($(el2).width())
+										+ $('#container').scrollLeft();
 									ty = parseInt($(el2).position().top)
 										+ parseInt($(el2).find('.player:eq(0)').outerHeight())
 										+ parseInt($('#winner_rounds').outerHeight())
@@ -603,7 +598,8 @@ function tioConverterJS() {
 						$.each($(el).find('.match'), function(key2,el2) {
 							tx = parseInt($('#losers').position().left)
 								+ parseInt($(el2).position().left)
-								+ parseInt($(el2).width());
+								+ parseInt($(el2).width())
+								+ $('#container').scrollLeft();
 							ty = parseInt($(el2).position().top)
 								+ parseInt($(el2).find('.player:eq(0)').outerHeight())
 								+ parseInt($('#loser_rounds').outerHeight())
@@ -620,7 +616,8 @@ function tioConverterJS() {
 							if (key2 % 2 == 0) {
 								tx = parseInt($('#losers').position().left)
 									+ parseInt($(el2).position().left)
-									+ parseInt($(el2).width());
+									+ parseInt($(el2).width())
+									+ $('#container').scrollLeft();
 								ty = parseInt($(el2).position().top)
 									+ parseInt($(el2).find('.player:eq(0)').outerHeight())
 									+ parseInt($('#loser_rounds').outerHeight())
@@ -796,10 +793,30 @@ $(document).ready(function() {
 		}
 	});
 	
-	$('#container').scroll(function() {
+	// On scroll
+	$('#container').scroll(function(e) {
 		if (typeof _js != 'undefined') {
 			_js.adjustHeader();
 		}
+		
+		var new_hidden_lines = 0;
+		
+		// Hide left-side
+		$('.match').css('display', 'block');
+		$.each($('.column'), function(key, el) {
+			if (($(el).offset().left + $(el).outerWidth()) < 0) {
+				/* $(el).find('.match').animate({height: '0px'}, function() {
+					$(el).find('.match').css('display', 'none');
+				}) */;
+				new_hidden_lines++;
+			}
+		});
+		if (new_hidden_lines != _js.hidden_lines) {
+			_js.resizeLines();
+			_js.drawLines();
+			_js.hidden_lines = new_hidden_lines;
+		}
+		
 	});
 	
 	// Enable searching
