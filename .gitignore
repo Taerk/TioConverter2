@@ -3,19 +3,5 @@
 **/error_log
 **/*.exe
 **/*.tio
+**/.ftpquota
 etc/tioconverter.log
-<<<<<<< HEAD
-etc/broken/*
-archive/*-*
-=======
-etc/library.json
-BracketConnect_PolarityGG_only.7z
-archive
-meta
-*.exe
-*.tio
-php.ini
-.user.ini
-uploads/.ftpquota
-archive
->>>>>>> c9fec6a1b790d15db984e308b2aa11f3eb8ad30c

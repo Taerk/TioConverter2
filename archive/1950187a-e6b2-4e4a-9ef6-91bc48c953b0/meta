@@ -1,0 +1,306 @@
+{
+    "id": "1950187a-e6b2-4e4a-9ef6-91bc48c953b0",
+    "md5": "e860cde32357c5f85bfb819b2d38495b",
+    "last": 1474618838,
+    "next": 1474618898,
+    "players": {
+        "12e2c4b5-b40a-44e6-a13f-18e7a1161f8b": {
+            "id": "12e2c4b5-b40a-44e6-a13f-18e7a1161f8b",
+            "name": "",
+            "tag": "Sighrax",
+            "location": "",
+            "skill": 5
+        },
+        "3073ce7a-1f3e-408f-b415-7f1e03f93c28": {
+            "id": "3073ce7a-1f3e-408f-b415-7f1e03f93c28",
+            "name": "PM Setup",
+            "tag": "Disco",
+            "location": "",
+            "skill": 5
+        },
+        "93755a54-6c05-45a3-a22d-f35d6772201e": {
+            "id": "93755a54-6c05-45a3-a22d-f35d6772201e",
+            "name": "PM Setup",
+            "tag": "FDL",
+            "location": "",
+            "skill": 5
+        },
+        "a7967238-f443-4b43-8968-74fbf36be923": {
+            "id": "a7967238-f443-4b43-8968-74fbf36be923",
+            "name": "",
+            "tag": "Pleb",
+            "location": "",
+            "skill": 5
+        },
+        "f6ea11f6-15c9-43ab-b7ba-df3b11ed6643": {
+            "id": "f6ea11f6-15c9-43ab-b7ba-df3b11ed6643",
+            "name": "Melee Setup",
+            "tag": "Sigh",
+            "location": "",
+            "skill": 5
+        },
+        "1d52571c-56a4-452b-b2d6-e64b2a899c53": {
+            "id": "1d52571c-56a4-452b-b2d6-e64b2a899c53",
+            "name": "Melee Setup",
+            "tag": "Drew",
+            "location": "",
+            "skill": 5
+        },
+        "378a5a16-04df-457d-8bae-be6ff47d8ed5": {
+            "id": "378a5a16-04df-457d-8bae-be6ff47d8ed5",
+            "name": "",
+            "tag": "Oaty",
+            "location": "",
+            "skill": 5
+        },
+        "98f72da5-4b9b-4412-887e-089156e2624c": {
+            "id": "98f72da5-4b9b-4412-887e-089156e2624c",
+            "name": "",
+            "tag": "Stonerocks",
+            "location": "",
+            "skill": 5
+        },
+        "48728893-6430-4f46-aac7-1f5dd3bc3be6": {
+            "id": "48728893-6430-4f46-aac7-1f5dd3bc3be6",
+            "name": "",
+            "tag": "Sword Dancer",
+            "location": "",
+            "skill": 5
+        },
+        "a730c159-6f12-4d7e-9d95-241835a25245": {
+            "id": "a730c159-6f12-4d7e-9d95-241835a25245",
+            "name": "",
+            "tag": "Envy",
+            "location": "",
+            "skill": 5
+        },
+        "92c247a8-cd5d-4e34-a34d-71a3529af692": {
+            "id": "92c247a8-cd5d-4e34-a34d-71a3529af692",
+            "name": "",
+            "tag": "Gahtzu",
+            "location": "",
+            "skill": 5
+        },
+        "83fa9e21-d5e6-4e1a-a835-7b4e23c8ae59": {
+            "id": "83fa9e21-d5e6-4e1a-a835-7b4e23c8ae59",
+            "name": "",
+            "tag": "Yeti",
+            "location": "",
+            "skill": 5
+        },
+        "feeb1845-93e8-418f-8f5c-06d536e67413": {
+            "id": "feeb1845-93e8-418f-8f5c-06d536e67413",
+            "name": "",
+            "tag": "Orange",
+            "location": "",
+            "skill": 5
+        },
+        "d1f694c3-f9f4-420d-95e3-f6b7a020e568": {
+            "id": "d1f694c3-f9f4-420d-95e3-f6b7a020e568",
+            "name": "Melee Setup",
+            "tag": "Broasty",
+            "location": "",
+            "skill": 5
+        },
+        "d332ea2b-1223-48f4-a28b-23e6f17bdb4d": {
+            "id": "d332ea2b-1223-48f4-a28b-23e6f17bdb4d",
+            "name": "",
+            "tag": "Flash",
+            "location": "",
+            "skill": 5
+        },
+        "52d12b15-5e19-48e5-b18c-d8af1f202c88": {
+            "id": "52d12b15-5e19-48e5-b18c-d8af1f202c88",
+            "name": "",
+            "tag": "TP Fo Sho",
+            "location": "",
+            "skill": 5
+        },
+        "8621df2e-f1e8-487a-8ff9-8a9c37972ace": {
+            "id": "8621df2e-f1e8-487a-8ff9-8a9c37972ace",
+            "name": "Melee Setups",
+            "tag": "Eradons",
+            "location": "",
+            "skill": 5
+        },
+        "f24dec30-0765-45bd-836d-6632b3c8537d": {
+            "id": "f24dec30-0765-45bd-836d-6632b3c8537d",
+            "name": "",
+            "tag": "Lad",
+            "location": "",
+            "skill": 5
+        },
+        "5668eeb1-10a1-4f88-b810-3c0c6d958a3b": {
+            "id": "5668eeb1-10a1-4f88-b810-3c0c6d958a3b",
+            "name": "",
+            "tag": "Bi-Op",
+            "location": "",
+            "skill": 5
+        },
+        "d6c38a30-5263-450a-b901-301956cef5a9": {
+            "id": "d6c38a30-5263-450a-b901-301956cef5a9",
+            "name": "",
+            "tag": "Azzy",
+            "location": "",
+            "skill": 5
+        },
+        "2387c4b6-05d5-40eb-b7c9-d7fd4127920f": {
+            "id": "2387c4b6-05d5-40eb-b7c9-d7fd4127920f",
+            "name": "",
+            "tag": "Zeek",
+            "location": "",
+            "skill": 5
+        },
+        "35956c72-ef00-4c1e-be24-262bbf00a8cd": {
+            "id": "35956c72-ef00-4c1e-be24-262bbf00a8cd",
+            "name": "",
+            "tag": "Missing",
+            "location": "",
+            "skill": 5
+        },
+        "e0ae3e92-f509-4836-b923-6057c7e27454": {
+            "id": "e0ae3e92-f509-4836-b923-6057c7e27454",
+            "name": "",
+            "tag": "Aura",
+            "location": "",
+            "skill": 5
+        },
+        "7570ee39-e5d7-4ba7-8a2d-36964ab45748": {
+            "id": "7570ee39-e5d7-4ba7-8a2d-36964ab45748",
+            "name": "Melee Setup",
+            "tag": "Steele",
+            "location": "",
+            "skill": 5
+        },
+        "2334cde8-8a52-4269-a5f8-dcd29b6d77e6": {
+            "id": "2334cde8-8a52-4269-a5f8-dcd29b6d77e6",
+            "name": "",
+            "tag": "Yami",
+            "location": "",
+            "skill": 5
+        },
+        "62376b0e-d406-4232-b3d8-5d02ee7ed3bb": {
+            "id": "62376b0e-d406-4232-b3d8-5d02ee7ed3bb",
+            "name": "",
+            "tag": "Erki",
+            "location": "",
+            "skill": 5
+        },
+        "8a4a8276-92f0-47e4-8ec6-336a207bb391": {
+            "id": "8a4a8276-92f0-47e4-8ec6-336a207bb391",
+            "name": "",
+            "tag": "Sensitive",
+            "location": "",
+            "skill": 5
+        },
+        "f00f1aae-8985-4e72-a7c5-c66bff517a3a": {
+            "id": "f00f1aae-8985-4e72-a7c5-c66bff517a3a",
+            "name": "",
+            "tag": "Bolder",
+            "location": "",
+            "skill": 5
+        },
+        "e6130d57-832a-496d-9bfc-4cf1a255c9d7": {
+            "id": "e6130d57-832a-496d-9bfc-4cf1a255c9d7",
+            "name": "",
+            "tag": "Tucker",
+            "location": "",
+            "skill": 5
+        },
+        "a7f57c3c-f144-4ba5-b765-0375fe162e93": {
+            "id": "a7f57c3c-f144-4ba5-b765-0375fe162e93",
+            "name": "Melee Setup",
+            "tag": "Gsai",
+            "location": "",
+            "skill": 5
+        },
+        "d931fc81-0875-49fa-a892-727e42628ca8": {
+            "id": "d931fc81-0875-49fa-a892-727e42628ca8",
+            "name": "Melee setup",
+            "tag": "DownAirOnly",
+            "location": "",
+            "skill": 5
+        },
+        "e2217503-bb92-4424-ae95-68f3df38b38f": {
+            "id": "e2217503-bb92-4424-ae95-68f3df38b38f",
+            "name": "",
+            "tag": "Pi",
+            "location": "",
+            "skill": 5
+        },
+        "dbfdb4e6-dc54-4200-99e7-f90986f34d56": {
+            "id": "dbfdb4e6-dc54-4200-99e7-f90986f34d56",
+            "name": "",
+            "tag": "Cruddo",
+            "location": "",
+            "skill": 5
+        },
+        "fa9f28ea-da17-483b-998c-7820fa0a84a9": {
+            "id": "fa9f28ea-da17-483b-998c-7820fa0a84a9",
+            "name": "",
+            "tag": "Exo",
+            "location": "",
+            "skill": 5
+        },
+        "5c11a7ab-f2db-4469-b5e6-09b6cb00f079": {
+            "id": "5c11a7ab-f2db-4469-b5e6-09b6cb00f079",
+            "name": "",
+            "tag": "Bill",
+            "location": "",
+            "skill": 5
+        },
+        "0700c0eb-f78e-4da2-9ed4-6240a5a8859a": {
+            "id": "0700c0eb-f78e-4da2-9ed4-6240a5a8859a",
+            "name": "",
+            "tag": "NetPlayTrainingIsOP (Hiroshi)",
+            "location": "",
+            "skill": 5
+        },
+        "fb83ea7b-c772-41b9-b5b7-243c88776c90": {
+            "id": "fb83ea7b-c772-41b9-b5b7-243c88776c90",
+            "name": "",
+            "tag": "Panda",
+            "location": "",
+            "skill": 5
+        },
+        "7481a40e-41d3-4de2-9db0-6cbe7d787d40": {
+            "id": "7481a40e-41d3-4de2-9db0-6cbe7d787d40",
+            "name": "Melee Setup",
+            "tag": "Geedorah",
+            "location": "",
+            "skill": 5
+        },
+        "8f86a81c-787e-49a1-ba4e-7855cda39b5c": {
+            "id": "8f86a81c-787e-49a1-ba4e-7855cda39b5c",
+            "name": "",
+            "tag": "Pengie",
+            "location": "",
+            "skill": 5
+        },
+        "413569c3-fd0a-4d1d-84a1-9115538ed886": {
+            "id": "413569c3-fd0a-4d1d-84a1-9115538ed886",
+            "name": "",
+            "tag": "NigNoggen",
+            "location": "",
+            "skill": 5
+        },
+        "8935ac56-31ea-4fcb-bf2e-12c217252855": {
+            "id": "8935ac56-31ea-4fcb-bf2e-12c217252855",
+            "name": "",
+            "tag": "Hero",
+            "location": "",
+            "skill": 5
+        }
+    },
+    "teams": [],
+    "events": [
+        {
+            "id": "0eb14a69-2e34-4188-8433-01da0644d093",
+            "name": "Melee Singles"
+        },
+        {
+            "id": "b77f9cfa-5c79-4e90-b005-68fd2f33da41",
+            "name": "PM Singles"
+        }
+    ]
+}

@@ -1,0 +1,362 @@
+{
+    "md5": "8bafed2a6d245396d0ba3a47ec1bb216",
+    "last": 1474618856,
+    "next": 1474618916,
+    "players": {
+        "1d1837ed-398a-451c-bf88-b6f82d874668": {
+            "id": "1d1837ed-398a-451c-bf88-b6f82d874668",
+            "name": "Setup",
+            "tag": "TendersSigh",
+            "location": "",
+            "skill": 5
+        },
+        "85046c16-4ec5-4776-ab9b-a12c64354870": {
+            "id": "85046c16-4ec5-4776-ab9b-a12c64354870",
+            "name": "Setup",
+            "tag": "Gsai",
+            "location": "",
+            "skill": 5
+        },
+        "d14bbc18-46ff-4932-9432-f2b420cb879b": {
+            "id": "d14bbc18-46ff-4932-9432-f2b420cb879b",
+            "name": "Setup",
+            "tag": "Eradons",
+            "location": "",
+            "skill": 5
+        },
+        "3a56fdfc-f891-49b0-8440-55c4530308f3": {
+            "id": "3a56fdfc-f891-49b0-8440-55c4530308f3",
+            "name": "Setup",
+            "tag": "Stonerocks",
+            "location": "",
+            "skill": 5
+        },
+        "9fcfb190-727f-439c-bb59-536af02a1c55": {
+            "id": "9fcfb190-727f-439c-bb59-536af02a1c55",
+            "name": "Setup",
+            "tag": "Detective B",
+            "location": "",
+            "skill": 5
+        },
+        "353205c1-ec23-4bc7-af20-ee8461e7282d": {
+            "id": "353205c1-ec23-4bc7-af20-ee8461e7282d",
+            "name": "Setup",
+            "tag": "Joog",
+            "location": "",
+            "skill": 5
+        },
+        "a47fc55f-c3ea-4cb2-acd5-657633891b1d": {
+            "id": "a47fc55f-c3ea-4cb2-acd5-657633891b1d",
+            "name": "Setup",
+            "tag": "Schmoop",
+            "location": "",
+            "skill": 5
+        },
+        "96129e31-c4ad-4b44-a1f8-e699fe1b7b3a": {
+            "id": "96129e31-c4ad-4b44-a1f8-e699fe1b7b3a",
+            "name": "",
+            "tag": "Elijah (Greed)",
+            "location": "",
+            "skill": 5
+        },
+        "000f6c50-800d-4452-b95c-9994417d8816": {
+            "id": "000f6c50-800d-4452-b95c-9994417d8816",
+            "name": "",
+            "tag": "Mr. E",
+            "location": "",
+            "skill": 5
+        },
+        "08c19c54-dceb-4882-a39f-9d19ae13a2d7": {
+            "id": "08c19c54-dceb-4882-a39f-9d19ae13a2d7",
+            "name": "",
+            "tag": "Kaike",
+            "location": "",
+            "skill": 5
+        },
+        "cd9e7e9a-dcf1-4a14-8d7d-4e77aefe9c7a": {
+            "id": "cd9e7e9a-dcf1-4a14-8d7d-4e77aefe9c7a",
+            "name": "",
+            "tag": "Hurt",
+            "location": "",
+            "skill": 5
+        },
+        "e1b0f67d-b397-4593-884d-f5ef9ec25cf8": {
+            "id": "e1b0f67d-b397-4593-884d-f5ef9ec25cf8",
+            "name": "",
+            "tag": "Swiss",
+            "location": "",
+            "skill": 5
+        },
+        "2b7d6a9a-b702-4dd3-9fec-480db819c2d9": {
+            "id": "2b7d6a9a-b702-4dd3-9fec-480db819c2d9",
+            "name": "",
+            "tag": "Biggest Troll at CFL (Sweet Lou)",
+            "location": "",
+            "skill": 5
+        },
+        "a440184a-9dcd-4d4d-b7af-a615af8a0514": {
+            "id": "a440184a-9dcd-4d4d-b7af-a615af8a0514",
+            "name": "Setup",
+            "tag": "Geedorah",
+            "location": "",
+            "skill": 5
+        },
+        "42f9cc36-5185-4ce8-ba8d-2a2d93126fb5": {
+            "id": "42f9cc36-5185-4ce8-ba8d-2a2d93126fb5",
+            "name": "",
+            "tag": "Reno",
+            "location": "",
+            "skill": 5
+        },
+        "8274efd2-158d-44a8-bf7c-e52a2a44dc20": {
+            "id": "8274efd2-158d-44a8-bf7c-e52a2a44dc20",
+            "name": "",
+            "tag": "Gahtzu",
+            "location": "",
+            "skill": 5
+        },
+        "835ad9a7-f0ce-4c00-9112-89cd942f4e9f": {
+            "id": "835ad9a7-f0ce-4c00-9112-89cd942f4e9f",
+            "name": "",
+            "tag": "ItsADair",
+            "location": "",
+            "skill": 5
+        },
+        "0d83a91b-ca7a-4667-b39a-e07622a9b4a8": {
+            "id": "0d83a91b-ca7a-4667-b39a-e07622a9b4a8",
+            "name": "",
+            "tag": "Captain Crunch",
+            "location": "",
+            "skill": 5
+        },
+        "125cf223-8700-4c16-9474-1814d2870c3f": {
+            "id": "125cf223-8700-4c16-9474-1814d2870c3f",
+            "name": "",
+            "tag": "Guava",
+            "location": "",
+            "skill": 5
+        },
+        "e58929f2-dc19-4f75-830d-9c2d51f07f82": {
+            "id": "e58929f2-dc19-4f75-830d-9c2d51f07f82",
+            "name": "",
+            "tag": "SeemsGood",
+            "location": "",
+            "skill": 5
+        },
+        "fa942430-9556-45f0-b228-761e40a29a39": {
+            "id": "fa942430-9556-45f0-b228-761e40a29a39",
+            "name": "",
+            "tag": "George",
+            "location": "",
+            "skill": 5
+        },
+        "cbf186e2-b307-4ad4-bc15-c5aca5de6b21": {
+            "id": "cbf186e2-b307-4ad4-bc15-c5aca5de6b21",
+            "name": "",
+            "tag": "J Ferg",
+            "location": "",
+            "skill": 5
+        },
+        "af427e53-ea24-4488-a04d-c5f55d888803": {
+            "id": "af427e53-ea24-4488-a04d-c5f55d888803",
+            "name": "",
+            "tag": "Pepperoni",
+            "location": "",
+            "skill": 5
+        },
+        "778b6faf-a71a-4bd4-87c2-174e5c6b0547": {
+            "id": "778b6faf-a71a-4bd4-87c2-174e5c6b0547",
+            "name": "",
+            "tag": "Lysozy",
+            "location": "",
+            "skill": 5
+        },
+        "f379cb2d-10a1-41a2-b780-64e6c01f9c84": {
+            "id": "f379cb2d-10a1-41a2-b780-64e6c01f9c84",
+            "name": "",
+            "tag": "Yami",
+            "location": "",
+            "skill": 5
+        },
+        "5a68ab69-34cb-4e7c-848b-8ce1f176e220": {
+            "id": "5a68ab69-34cb-4e7c-848b-8ce1f176e220",
+            "name": "",
+            "tag": "Oaty",
+            "location": "",
+            "skill": 5
+        },
+        "0626dbb4-12fe-49bd-a81e-c995bfd13d62": {
+            "id": "0626dbb4-12fe-49bd-a81e-c995bfd13d62",
+            "name": "",
+            "tag": "K Pop is Life",
+            "location": "",
+            "skill": 5
+        },
+        "e32b4037-d756-4fcd-9b4f-ff287cfd883e": {
+            "id": "e32b4037-d756-4fcd-9b4f-ff287cfd883e",
+            "name": "",
+            "tag": "DrunkSloth",
+            "location": "",
+            "skill": 5
+        },
+        "0c531b20-c1fb-4905-bbdd-9c6652e3ccd7": {
+            "id": "0c531b20-c1fb-4905-bbdd-9c6652e3ccd7",
+            "name": "",
+            "tag": "Lucky",
+            "location": "",
+            "skill": 5
+        },
+        "243ebdcc-fb75-41c3-826d-23bbc255dd1a": {
+            "id": "243ebdcc-fb75-41c3-826d-23bbc255dd1a",
+            "name": "",
+            "tag": "Envy",
+            "location": "",
+            "skill": 5
+        },
+        "9bdff8d1-fe8f-4102-a9c4-69367391759e": {
+            "id": "9bdff8d1-fe8f-4102-a9c4-69367391759e",
+            "name": "",
+            "tag": "Onehandbackhand",
+            "location": "",
+            "skill": 5
+        },
+        "26ef2174-121e-4b82-9a73-d6a65d46e3b4": {
+            "id": "26ef2174-121e-4b82-9a73-d6a65d46e3b4",
+            "name": "",
+            "tag": "Homecookin",
+            "location": "",
+            "skill": 5
+        },
+        "330ceb36-d6a1-459a-bae4-516c54d751c4": {
+            "id": "330ceb36-d6a1-459a-bae4-516c54d751c4",
+            "name": "",
+            "tag": "Milk",
+            "location": "",
+            "skill": 5
+        },
+        "50b5236b-1ab5-48b2-97e0-58ff324a16d9": {
+            "id": "50b5236b-1ab5-48b2-97e0-58ff324a16d9",
+            "name": "",
+            "tag": "Elfonzio",
+            "location": "",
+            "skill": 5
+        },
+        "0f755cbf-a161-4d6a-8f22-51e26b2df97f": {
+            "id": "0f755cbf-a161-4d6a-8f22-51e26b2df97f",
+            "name": "",
+            "tag": "Appel",
+            "location": "",
+            "skill": 5
+        },
+        "60f336ff-81f3-4121-a1df-df692a8cbae6": {
+            "id": "60f336ff-81f3-4121-a1df-df692a8cbae6",
+            "name": "",
+            "tag": "Bolder",
+            "location": "",
+            "skill": 5
+        },
+        "fe41fbd7-bbc1-4bcd-8770-59c4b46a12a1": {
+            "id": "fe41fbd7-bbc1-4bcd-8770-59c4b46a12a1",
+            "name": "",
+            "tag": "Shotland",
+            "location": "",
+            "skill": 5
+        },
+        "0e83abea-374e-4364-ab57-dc43e8e14242": {
+            "id": "0e83abea-374e-4364-ab57-dc43e8e14242",
+            "name": "",
+            "tag": "Grish",
+            "location": "",
+            "skill": 5
+        },
+        "47e7dec9-8aeb-4f66-8fc4-73e1a9a4119e": {
+            "id": "47e7dec9-8aeb-4f66-8fc4-73e1a9a4119e",
+            "name": "",
+            "tag": "Fred",
+            "location": "",
+            "skill": 5
+        }
+    },
+    "teams": {
+        "1f7ae39e-0b01-4367-9d7d-ed1632e1443c": {
+            "id": "1f7ae39e-0b01-4367-9d7d-ed1632e1443c",
+            "name": "",
+            "tag": "Eradons + TendersSigh",
+            "location": "",
+            "skill": 5
+        },
+        "402beec5-21be-4bd8-af8c-1e462b36017b": {
+            "id": "402beec5-21be-4bd8-af8c-1e462b36017b",
+            "name": "",
+            "tag": "Kaike + Gahtzu",
+            "location": "",
+            "skill": 5
+        },
+        "73f059b0-ccf2-4a7c-a4da-fa9c5b445347": {
+            "id": "73f059b0-ccf2-4a7c-a4da-fa9c5b445347",
+            "name": "",
+            "tag": "ItsADair + Captain Crunch",
+            "location": "",
+            "skill": 5
+        },
+        "08f83d11-6a1c-462d-854f-76bda9d9fda1": {
+            "id": "08f83d11-6a1c-462d-854f-76bda9d9fda1",
+            "name": "",
+            "tag": "Guava + SeemsGood",
+            "location": "",
+            "skill": 5
+        },
+        "94fb1667-1bc5-4c0f-9e7d-8f40f671ffb5": {
+            "id": "94fb1667-1bc5-4c0f-9e7d-8f40f671ffb5",
+            "name": "",
+            "tag": "Hurt + George",
+            "location": "",
+            "skill": 5
+        },
+        "95896247-1e5d-48c0-abc0-e552f9aa31a8": {
+            "id": "95896247-1e5d-48c0-abc0-e552f9aa31a8",
+            "name": "",
+            "tag": "Yami + Greed",
+            "location": "",
+            "skill": 5
+        },
+        "d23108f4-7324-4ce5-8a06-7fc6340df2f8": {
+            "id": "d23108f4-7324-4ce5-8a06-7fc6340df2f8",
+            "name": "",
+            "tag": "Reno + Lucky",
+            "location": "",
+            "skill": 5
+        },
+        "1e67890a-be61-4184-9fe7-5851b00f4ed8": {
+            "id": "1e67890a-be61-4184-9fe7-5851b00f4ed8",
+            "name": "",
+            "tag": "K Pop is Life + Onehandbackhand",
+            "location": "",
+            "skill": 5
+        },
+        "e275af74-259e-4530-a765-ebe81d035e74": {
+            "id": "e275af74-259e-4530-a765-ebe81d035e74",
+            "name": "",
+            "tag": "J Ferg + Pepperoni",
+            "location": "",
+            "skill": 5
+        },
+        "466e1d55-a441-4edf-ab7e-bfc4651b575b": {
+            "id": "466e1d55-a441-4edf-ab7e-bfc4651b575b",
+            "name": "",
+            "tag": "Homecookin + Mr. E",
+            "location": "",
+            "skill": 5
+        }
+    },
+    "events": [
+        {
+            "id": "b17b805e-1351-4b44-add1-4c8a8154b040",
+            "name": "Melee Singles"
+        },
+        {
+            "id": "d766d4a9-5968-4d92-9c60-a693131193d2",
+            "name": "Melee Doubles"
+        }
+    ]
+}

@@ -1,0 +1,522 @@
+{
+    "md5": "a8898c08b769477dcf1cbee31a1b5f5c",
+    "last": 1474618853,
+    "next": 1474618913,
+    "players": {
+        "7a20281d-4788-4a7f-8060-c4c9570f2b79": {
+            "id": "7a20281d-4788-4a7f-8060-c4c9570f2b79",
+            "name": "",
+            "tag": "FOX | MVG| Mew2King",
+            "location": "",
+            "skill": 5
+        },
+        "27b2857f-5b08-467c-b87d-d033373a01d7": {
+            "id": "27b2857f-5b08-467c-b87d-d033373a01d7",
+            "name": "Setup",
+            "tag": "Minty",
+            "location": "",
+            "skill": 5
+        },
+        "5e6eb1a8-f11d-46a5-92f5-40e59d4fb285": {
+            "id": "5e6eb1a8-f11d-46a5-92f5-40e59d4fb285",
+            "name": "",
+            "tag": "el_dominico",
+            "location": "a",
+            "skill": 5
+        },
+        "9525f40f-4615-49ab-a773-953c22053c0d": {
+            "id": "9525f40f-4615-49ab-a773-953c22053c0d",
+            "name": "",
+            "tag": "DuffoBagBoi",
+            "location": "a",
+            "skill": 5
+        },
+        "9c1b449f-e50b-4cd3-98e3-118c904a2827": {
+            "id": "9c1b449f-e50b-4cd3-98e3-118c904a2827",
+            "name": "Setup",
+            "tag": "KingWill",
+            "location": "",
+            "skill": 5
+        },
+        "a0920b48-5ffd-4eac-bbd0-652cb879c11e": {
+            "id": "a0920b48-5ffd-4eac-bbd0-652cb879c11e",
+            "name": "",
+            "tag": "LPGamer15",
+            "location": "",
+            "skill": 5
+        },
+        "21a5bfc4-c9d3-4a71-9edd-f7637347fc54": {
+            "id": "21a5bfc4-c9d3-4a71-9edd-f7637347fc54",
+            "name": "Setup",
+            "tag": "SuperHarambeFan",
+            "location": "",
+            "skill": 5
+        },
+        "f76b00dd-713a-4289-aae5-2b89bba17f38": {
+            "id": "f76b00dd-713a-4289-aae5-2b89bba17f38",
+            "name": "Setup",
+            "tag": "Amazo",
+            "location": "",
+            "skill": 5
+        },
+        "d35aa0a1-2b4e-40fa-91c3-af041447c694": {
+            "id": "d35aa0a1-2b4e-40fa-91c3-af041447c694",
+            "name": "",
+            "tag": "Hiro",
+            "location": "",
+            "skill": 5
+        },
+        "30d9ec73-6853-4d71-827e-cd6a8b0a5139": {
+            "id": "30d9ec73-6853-4d71-827e-cd6a8b0a5139",
+            "name": "",
+            "tag": "Milk",
+            "location": "",
+            "skill": 5
+        },
+        "a2f886a4-bdc8-474b-8a23-a1710abea641": {
+            "id": "a2f886a4-bdc8-474b-8a23-a1710abea641",
+            "name": "Setup",
+            "tag": "Pride",
+            "location": "",
+            "skill": 5
+        },
+        "f82b7eb3-7d94-46c3-99aa-31b75ebd01db": {
+            "id": "f82b7eb3-7d94-46c3-99aa-31b75ebd01db",
+            "name": "",
+            "tag": "It's Real Wispbae Hours (Tribal)",
+            "location": "b",
+            "skill": 5
+        },
+        "55e805ce-2822-41a6-af99-de8012d448e5": {
+            "id": "55e805ce-2822-41a6-af99-de8012d448e5",
+            "name": "",
+            "tag": "B0ss",
+            "location": "",
+            "skill": 5
+        },
+        "060d2c67-f764-42a0-900f-bddb3c7fdb3d": {
+            "id": "060d2c67-f764-42a0-900f-bddb3c7fdb3d",
+            "name": "Setup",
+            "tag": "Ocelot",
+            "location": "",
+            "skill": 5
+        },
+        "2a23e0ee-c5fb-4024-a9ef-16b7cd4ac0f0": {
+            "id": "2a23e0ee-c5fb-4024-a9ef-16b7cd4ac0f0",
+            "name": "Setup",
+            "tag": "Nimble",
+            "location": "",
+            "skill": 5
+        },
+        "f933b89b-e3e1-4551-a112-c8882f5afaa8": {
+            "id": "f933b89b-e3e1-4551-a112-c8882f5afaa8",
+            "name": "",
+            "tag": "Liam",
+            "location": "",
+            "skill": 5
+        },
+        "6e4a312d-1d59-4e93-a350-c362bd8c333d": {
+            "id": "6e4a312d-1d59-4e93-a350-c362bd8c333d",
+            "name": "Setup",
+            "tag": "TSF | Franknbean",
+            "location": "b",
+            "skill": 5
+        },
+        "33ebcdb2-9242-4888-83f3-fff3a1cc7679": {
+            "id": "33ebcdb2-9242-4888-83f3-fff3a1cc7679",
+            "name": "Setup",
+            "tag": "Wispbae",
+            "location": "",
+            "skill": 5
+        },
+        "ddac5f65-2756-47e8-a3d2-e22c9feae5db": {
+            "id": "ddac5f65-2756-47e8-a3d2-e22c9feae5db",
+            "name": "Setup",
+            "tag": "SPF 420",
+            "location": "",
+            "skill": 5
+        },
+        "fd428031-3470-49e7-a711-fadacfe11bc0": {
+            "id": "fd428031-3470-49e7-a711-fadacfe11bc0",
+            "name": "",
+            "tag": "Brand",
+            "location": "",
+            "skill": 5
+        },
+        "d6af6b68-76ef-4a00-8b0a-b4aab303954e": {
+            "id": "d6af6b68-76ef-4a00-8b0a-b4aab303954e",
+            "name": "Setup",
+            "tag": "HovrG",
+            "location": "i",
+            "skill": 5
+        },
+        "2cf1fc63-435a-4420-9fe0-320dadaafff7": {
+            "id": "2cf1fc63-435a-4420-9fe0-320dadaafff7",
+            "name": "",
+            "tag": "Foxy",
+            "location": "",
+            "skill": 5
+        },
+        "66b834c9-05ac-48c3-a49b-dbc00f07cd5d": {
+            "id": "66b834c9-05ac-48c3-a49b-dbc00f07cd5d",
+            "name": "",
+            "tag": "MarsWonderBoy",
+            "location": "",
+            "skill": 5
+        },
+        "191abb0e-4126-4102-b389-96a83ed44c7a": {
+            "id": "191abb0e-4126-4102-b389-96a83ed44c7a",
+            "name": "Setup",
+            "tag": "Ewok41",
+            "location": "",
+            "skill": 5
+        },
+        "0f3ccb5a-6848-43a0-ad9f-d3e338576c57": {
+            "id": "0f3ccb5a-6848-43a0-ad9f-d3e338576c57",
+            "name": "",
+            "tag": "W8asec",
+            "location": "",
+            "skill": 5
+        },
+        "706fa2ae-79b1-4d59-931f-f1fc5cc5373f": {
+            "id": "706fa2ae-79b1-4d59-931f-f1fc5cc5373f",
+            "name": "",
+            "tag": "Arash",
+            "location": "c",
+            "skill": 5
+        },
+        "859b859a-ed56-4210-9e9f-f94df6c5c4e6": {
+            "id": "859b859a-ed56-4210-9e9f-f94df6c5c4e6",
+            "name": "",
+            "tag": "A.R.",
+            "location": "c",
+            "skill": 5
+        },
+        "edf52b21-87ff-4471-907f-75a5fa9587b9": {
+            "id": "edf52b21-87ff-4471-907f-75a5fa9587b9",
+            "name": "",
+            "tag": "Zol",
+            "location": "c",
+            "skill": 5
+        },
+        "2f91320a-6701-416d-a11c-5e3978ea96e2": {
+            "id": "2f91320a-6701-416d-a11c-5e3978ea96e2",
+            "name": "",
+            "tag": "A Alra",
+            "location": "c",
+            "skill": 5
+        },
+        "75d631f5-524b-4c6e-a64c-06d9ca8a6722": {
+            "id": "75d631f5-524b-4c6e-a64c-06d9ca8a6722",
+            "name": "",
+            "tag": "Melo",
+            "location": "d",
+            "skill": 5
+        },
+        "2875f66b-9bd1-4a0f-9e4f-2b5b02faea06": {
+            "id": "2875f66b-9bd1-4a0f-9e4f-2b5b02faea06",
+            "name": "",
+            "tag": "MVG | dyr",
+            "location": "d",
+            "skill": 5
+        },
+        "2c50842b-0a7d-42c2-a7d0-4304438006a1": {
+            "id": "2c50842b-0a7d-42c2-a7d0-4304438006a1",
+            "name": "",
+            "tag": "Seabass",
+            "location": "d",
+            "skill": 5
+        },
+        "1b63fdb4-e8fa-4421-b0fc-ec2de7410c47": {
+            "id": "1b63fdb4-e8fa-4421-b0fc-ec2de7410c47",
+            "name": "",
+            "tag": "TSF | Deadpool",
+            "location": "b",
+            "skill": 5
+        },
+        "125bf813-51d3-4564-9f77-d5ee0eeb7e4d": {
+            "id": "125bf813-51d3-4564-9f77-d5ee0eeb7e4d",
+            "name": "",
+            "tag": "Small Loan",
+            "location": "",
+            "skill": 5
+        },
+        "11048974-0a34-407d-955f-8cd82dd53267": {
+            "id": "11048974-0a34-407d-955f-8cd82dd53267",
+            "name": "",
+            "tag": "Vinylic",
+            "location": "",
+            "skill": 5
+        },
+        "c49d5d50-c897-4a94-9c42-0b2fb453c921": {
+            "id": "c49d5d50-c897-4a94-9c42-0b2fb453c921",
+            "name": "",
+            "tag": "OHS | Zae26",
+            "location": "",
+            "skill": 5
+        },
+        "9cf7abe5-7b33-468b-8c19-43020980c109": {
+            "id": "9cf7abe5-7b33-468b-8c19-43020980c109",
+            "name": "",
+            "tag": "E22",
+            "location": "e",
+            "skill": 5
+        },
+        "f946500f-bf6d-479d-8623-fe0c4db91351": {
+            "id": "f946500f-bf6d-479d-8623-fe0c4db91351",
+            "name": "",
+            "tag": "TSF | GoblinMan",
+            "location": "b",
+            "skill": 5
+        },
+        "d0036783-d8d1-4e09-b55c-8ca387a82120": {
+            "id": "d0036783-d8d1-4e09-b55c-8ca387a82120",
+            "name": "",
+            "tag": "Scooby",
+            "location": "",
+            "skill": 5
+        },
+        "13c055b4-471f-45f7-9cd3-ecc20bea7bd4": {
+            "id": "13c055b4-471f-45f7-9cd3-ecc20bea7bd4",
+            "name": "",
+            "tag": "AGO",
+            "location": "e",
+            "skill": 5
+        },
+        "9f8d48a8-fc00-4fa8-bb6a-488ae54f0dbd": {
+            "id": "9f8d48a8-fc00-4fa8-bb6a-488ae54f0dbd",
+            "name": "",
+            "tag": "Son",
+            "location": "",
+            "skill": 5
+        },
+        "ed5d73f1-7d74-403a-8284-3d81ec1f7b6a": {
+            "id": "ed5d73f1-7d74-403a-8284-3d81ec1f7b6a",
+            "name": "",
+            "tag": "Kuro",
+            "location": "",
+            "skill": 5
+        },
+        "4e654abb-adfa-4f03-b0e5-0bf31666c594": {
+            "id": "4e654abb-adfa-4f03-b0e5-0bf31666c594",
+            "name": "",
+            "tag": "Dam_Tewton",
+            "location": "",
+            "skill": 5
+        },
+        "620c6956-c4b0-4ee0-9e72-48b702b991b0": {
+            "id": "620c6956-c4b0-4ee0-9e72-48b702b991b0",
+            "name": "",
+            "tag": "DeathCPO",
+            "location": "",
+            "skill": 5
+        },
+        "619385a1-0ca2-4f81-a987-6b59b382b81e": {
+            "id": "619385a1-0ca2-4f81-a987-6b59b382b81e",
+            "name": "Setup",
+            "tag": "Nothing",
+            "location": "",
+            "skill": 5
+        },
+        "744d94d5-9f37-4177-9ca3-33553bb60549": {
+            "id": "744d94d5-9f37-4177-9ca3-33553bb60549",
+            "name": "",
+            "tag": "Cass",
+            "location": "d",
+            "skill": 5
+        },
+        "fdd1477a-7459-473e-937e-5a514c94ef51": {
+            "id": "fdd1477a-7459-473e-937e-5a514c94ef51",
+            "name": "",
+            "tag": "Janj",
+            "location": "",
+            "skill": 5
+        },
+        "1a3a4fd0-972f-47e8-abc2-b97b0da7cdf7": {
+            "id": "1a3a4fd0-972f-47e8-abc2-b97b0da7cdf7",
+            "name": "",
+            "tag": "Kiki",
+            "location": "",
+            "skill": 5
+        },
+        "086723b1-5254-4c0c-90fa-3ab66ab3fb9e": {
+            "id": "086723b1-5254-4c0c-90fa-3ab66ab3fb9e",
+            "name": "",
+            "tag": "Missing",
+            "location": "",
+            "skill": 5
+        },
+        "53b92e29-de4d-42b5-8d34-cbfb9129b86f": {
+            "id": "53b92e29-de4d-42b5-8d34-cbfb9129b86f",
+            "name": "",
+            "tag": "Spynil",
+            "location": "f",
+            "skill": 5
+        },
+        "28813f8a-e18a-4717-ad63-8ae4780453f6": {
+            "id": "28813f8a-e18a-4717-ad63-8ae4780453f6",
+            "name": "",
+            "tag": "Harambe's Vengeance (AggroOracle)",
+            "location": "f",
+            "skill": 5
+        },
+        "109d9206-2fbd-4b84-b12f-7cabe16bced8": {
+            "id": "109d9206-2fbd-4b84-b12f-7cabe16bced8",
+            "name": "",
+            "tag": "Blanc",
+            "location": "f",
+            "skill": 5
+        },
+        "6d864003-fe09-41b7-9e55-a5f54f34c280": {
+            "id": "6d864003-fe09-41b7-9e55-a5f54f34c280",
+            "name": "",
+            "tag": "Jericho",
+            "location": "",
+            "skill": 5
+        },
+        "babda5f4-67de-4dc5-9309-489ac1564d4e": {
+            "id": "babda5f4-67de-4dc5-9309-489ac1564d4e",
+            "name": "",
+            "tag": "Weavile493",
+            "location": "",
+            "skill": 5
+        },
+        "34918611-6413-4c94-9d87-da8f81307a18": {
+            "id": "34918611-6413-4c94-9d87-da8f81307a18",
+            "name": "",
+            "tag": "PradaGii",
+            "location": "",
+            "skill": 5
+        },
+        "585626b5-8df9-436e-bca8-1403cf070fd0": {
+            "id": "585626b5-8df9-436e-bca8-1403cf070fd0",
+            "name": "",
+            "tag": "Mugi",
+            "location": "",
+            "skill": 5
+        },
+        "d495e9ba-50ed-4811-8685-4495fef4bb3a": {
+            "id": "d495e9ba-50ed-4811-8685-4495fef4bb3a",
+            "name": "",
+            "tag": "Tozzi",
+            "location": "",
+            "skill": 5
+        },
+        "d525d00d-7d5e-49b6-ade6-2c01b0871a57": {
+            "id": "d525d00d-7d5e-49b6-ade6-2c01b0871a57",
+            "name": "",
+            "tag": "FBC | Bouffaloof",
+            "location": "",
+            "skill": 5
+        },
+        "675e995f-187e-4ed5-ac94-3dcc16fb1eb5": {
+            "id": "675e995f-187e-4ed5-ac94-3dcc16fb1eb5",
+            "name": "",
+            "tag": "FBC | PapaMink",
+            "location": "",
+            "skill": 5
+        },
+        "3787e721-2e47-4067-8404-91dea9ab8107": {
+            "id": "3787e721-2e47-4067-8404-91dea9ab8107",
+            "name": "",
+            "tag": "Leo Heart",
+            "location": "",
+            "skill": 5
+        },
+        "1dff8d99-ef14-478c-9416-62b6858b9254": {
+            "id": "1dff8d99-ef14-478c-9416-62b6858b9254",
+            "name": "",
+            "tag": "Ookami",
+            "location": "",
+            "skill": 5
+        },
+        "b3533265-06ab-4e52-b43e-7244d54a7fa7": {
+            "id": "b3533265-06ab-4e52-b43e-7244d54a7fa7",
+            "name": "",
+            "tag": "PrinceRamen",
+            "location": "",
+            "skill": 5
+        },
+        "44602be3-6022-4d14-9250-e791585964ad": {
+            "id": "44602be3-6022-4d14-9250-e791585964ad",
+            "name": "Setup",
+            "tag": "Wild",
+            "location": "",
+            "skill": 5
+        },
+        "8b57fcab-36be-4d3a-baa5-3d2046007044": {
+            "id": "8b57fcab-36be-4d3a-baa5-3d2046007044",
+            "name": "",
+            "tag": "Riot",
+            "location": "",
+            "skill": 5
+        },
+        "bb26a2cc-dd52-438f-aab0-396016ee8ce1": {
+            "id": "bb26a2cc-dd52-438f-aab0-396016ee8ce1",
+            "name": "",
+            "tag": "Squeak",
+            "location": "",
+            "skill": 5
+        },
+        "68589059-6da5-45ca-a683-ade2b953644a": {
+            "id": "68589059-6da5-45ca-a683-ade2b953644a",
+            "name": "",
+            "tag": "ChickenClock",
+            "location": "g",
+            "skill": 5
+        },
+        "d51d9702-146a-4753-9361-eff21be6c204": {
+            "id": "d51d9702-146a-4753-9361-eff21be6c204",
+            "name": "",
+            "tag": "Pooty",
+            "location": "g",
+            "skill": 5
+        },
+        "37e262b3-b2e8-4351-bb0b-82b1f2b1dc3c": {
+            "id": "37e262b3-b2e8-4351-bb0b-82b1f2b1dc3c",
+            "name": "",
+            "tag": "Caskan",
+            "location": "",
+            "skill": 5
+        },
+        "f34a4927-b6d8-41c6-bc69-93953f4589b9": {
+            "id": "f34a4927-b6d8-41c6-bc69-93953f4589b9",
+            "name": "",
+            "tag": "Asis",
+            "location": "",
+            "skill": 5
+        },
+        "06d29cad-7691-4a36-aa81-ce733ac37af7": {
+            "id": "06d29cad-7691-4a36-aa81-ce733ac37af7",
+            "name": "",
+            "tag": "Strobics",
+            "location": "",
+            "skill": 5
+        },
+        "34ebd7cb-c27c-492d-8828-483c08fe3f97": {
+            "id": "34ebd7cb-c27c-492d-8828-483c08fe3f97",
+            "name": "",
+            "tag": "DnC | MagicTrashBag",
+            "location": "h",
+            "skill": 5
+        },
+        "1738c8a4-0d93-4e58-a290-dabf390d8e7d": {
+            "id": "1738c8a4-0d93-4e58-a290-dabf390d8e7d",
+            "name": "",
+            "tag": "DnC | MojoLojo",
+            "location": "h",
+            "skill": 5
+        }
+    },
+    "teams": [],
+    "events": [
+        {
+            "id": "b02e6add-cbeb-40fa-9120-404b0de678f3",
+            "name": "Smash 4 Singles"
+        },
+        {
+            "id": "c899288c-2c69-4a13-b406-dd7aacc31959",
+            "name": "64 Singles"
+        }
+    ]
+}

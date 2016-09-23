@@ -1,0 +1,127 @@
+{
+    "id": "6f6df876-f20a-40c9-b585-bc8b0d0cc760",
+    "md5": "2b488efc45f206c761f14693b6c63f41",
+    "last": 1474618846,
+    "next": 1474618906,
+    "players": {
+        "64a4adf8-0c15-46c0-a7ee-ef509f29c3fa": {
+            "id": "64a4adf8-0c15-46c0-a7ee-ef509f29c3fa",
+            "name": "",
+            "tag": "Player 1",
+            "location": "",
+            "skill": 5
+        },
+        "0d8a7bde-bdc8-41fc-9bab-a226766b2af3": {
+            "id": "0d8a7bde-bdc8-41fc-9bab-a226766b2af3",
+            "name": "",
+            "tag": "Player 2",
+            "location": "",
+            "skill": 5
+        },
+        "b0876b10-dd60-4634-8404-b0ddb26ef3eb": {
+            "id": "b0876b10-dd60-4634-8404-b0ddb26ef3eb",
+            "name": "",
+            "tag": "Player 3",
+            "location": "",
+            "skill": 5
+        },
+        "1c055b83-15f8-4989-8954-bee1aaae4a6d": {
+            "id": "1c055b83-15f8-4989-8954-bee1aaae4a6d",
+            "name": "",
+            "tag": "Player 4",
+            "location": "",
+            "skill": 5
+        },
+        "5028cbd6-c9dd-4d5a-8783-8912b986acbf": {
+            "id": "5028cbd6-c9dd-4d5a-8783-8912b986acbf",
+            "name": "",
+            "tag": "Player 5",
+            "location": "",
+            "skill": 5
+        },
+        "01c811ae-d8b8-4082-aabd-d12597a79c31": {
+            "id": "01c811ae-d8b8-4082-aabd-d12597a79c31",
+            "name": "",
+            "tag": "Player 6",
+            "location": "",
+            "skill": 5
+        },
+        "f55c61b6-401e-472c-b561-944dd7cb3f45": {
+            "id": "f55c61b6-401e-472c-b561-944dd7cb3f45",
+            "name": "",
+            "tag": "Player 7",
+            "location": "",
+            "skill": 5
+        },
+        "fa1157e4-0cae-4e68-ac53-218477a3c353": {
+            "id": "fa1157e4-0cae-4e68-ac53-218477a3c353",
+            "name": "",
+            "tag": "Player 8",
+            "location": "",
+            "skill": 5
+        },
+        "3ae07776-09c0-4898-90ee-b205b19db40a": {
+            "id": "3ae07776-09c0-4898-90ee-b205b19db40a",
+            "name": "",
+            "tag": "Player 9",
+            "location": "",
+            "skill": 5
+        },
+        "b47fa71e-ecf7-4b22-bcc5-e413c64dea76": {
+            "id": "b47fa71e-ecf7-4b22-bcc5-e413c64dea76",
+            "name": "",
+            "tag": "Player 10",
+            "location": "",
+            "skill": 5
+        },
+        "ab3259de-5925-4b7c-b61f-5267c1621d0e": {
+            "id": "ab3259de-5925-4b7c-b61f-5267c1621d0e",
+            "name": "",
+            "tag": "Player 11",
+            "location": "",
+            "skill": 5
+        },
+        "7d7ca9db-414f-4299-9c26-0ce51b3a00bb": {
+            "id": "7d7ca9db-414f-4299-9c26-0ce51b3a00bb",
+            "name": "",
+            "tag": "Player 12",
+            "location": "",
+            "skill": 5
+        },
+        "b7096809-17b4-44de-8b60-f42949c98771": {
+            "id": "b7096809-17b4-44de-8b60-f42949c98771",
+            "name": "",
+            "tag": "Player 13",
+            "location": "",
+            "skill": 5
+        },
+        "66a97fa5-7fbd-4281-90d2-8f6493218c97": {
+            "id": "66a97fa5-7fbd-4281-90d2-8f6493218c97",
+            "name": "",
+            "tag": "Player 14",
+            "location": "",
+            "skill": 5
+        },
+        "9ae388ad-f49e-4d1c-8ebc-7913b9540b83": {
+            "id": "9ae388ad-f49e-4d1c-8ebc-7913b9540b83",
+            "name": "",
+            "tag": "Player 15",
+            "location": "",
+            "skill": 5
+        },
+        "b811ab7f-a4b9-4bfa-8798-a945cd9a985a": {
+            "id": "b811ab7f-a4b9-4bfa-8798-a945cd9a985a",
+            "name": "",
+            "tag": "Player 16",
+            "location": "",
+            "skill": 5
+        }
+    },
+    "teams": [],
+    "events": [
+        {
+            "id": "4d3d1823-5b3b-434e-8ede-0e2f1a38c5cb",
+            "name": "Test Bracket"
+        }
+    ]
+}
