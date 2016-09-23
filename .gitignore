@@ -1,7 +1,8 @@
-smstest.php
-error_log
-tioconverter.log
+**/php.ini
+**/.user.ini
+**/error_log
+**/*.exe
+**/*.tio
 etc/tioconverter.log
-BracketConnect_PolarityGG_only.7z
-*.exe
-*.tio
+etc/broken/*
+archive/*-*
