@@ -59,7 +59,7 @@
 					</ul>
 					
 					<ul class="nav navbar-nav navbar-right">
-						<?php if ($tio->loaded) { ?>					
+						<?php if ($tio->loaded) { ?>
 						<!-- Download -->
 						<li><a href="/download/<?php echo $tio->getTournamentLibrary()['permalink']; ?>.tio" id="download-bracket"><span class="glyphicon glyphicon-download-alt"></span></a></li>
 						

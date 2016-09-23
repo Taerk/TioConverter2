@@ -4,4 +4,8 @@
 **/*.exe
 **/*.tio
 **/.ftpquota
+**/cgi-bin
 etc/tioconverter.log
+archive/*-*
+archive/*/*
+settings.php

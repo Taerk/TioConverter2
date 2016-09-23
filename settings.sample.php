@@ -1,14 +1,12 @@
 <?php
 
-$validate_session = true;
-
 // Set xdebug view
-ini_set('xdebug.var_display_max_children', 256);
-ini_set('xdebug.var_display_max_depth', 12);
+ini_set('xdebug.var_display_max_children',  256);
+ini_set('xdebug.var_display_max_depth',     12);
 
 // URLs
-define('HTTP',			'polarity.test'); // Unused
-define('HTTPS',			'polarity.test'); // Unused
+define('HTTP',			'domain.com'); // Unused
+define('HTTPS',			'domain.com'); // Unused
 
 // Directories
 define('PATH', 			dirname(__FILE__) . '/');
@@ -25,7 +23,8 @@ define('PASSWD', 		VARIABLE . '/passwd');
 define('BCRYPT', 		THIRDPARTY . '/bcrypt/class.bcrypt.php');
 
 // Authentication
-define('SALT', 'XOuKbA6EcdJ2f5dde0X7Xq3yK@PamFs4f*GO');
+define('SALT', 'INSERT A RANDOM STRING HERE');
+define('VALIDATE_SESSION_IPS', true);
 
 // When enabled, disables file writing
 define('MAINTENANCE_MODE', false);
@@ -41,10 +40,10 @@ if (file_exists(BCRYPT) && !function_exists('password_hash')) {
 	include_once(BCRYPT);
 }
 
-// Expire session if invalid
 session_start();
 
-if ($validate_session) {
+// Expire session if invalid
+if (VALIDATE_SESSION_IPS) {
 	if (isset($_SESSION['ip'])) {
 		if ($_SESSION['ip'] != $_SERVER['REMOTE_ADDR']) {
 			session_destroy();
