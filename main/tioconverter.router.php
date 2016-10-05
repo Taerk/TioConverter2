@@ -1,5 +1,75 @@
 <?php
 switch (true) {
+	// Admin Panel
+	case (isset($_GET['tiotournament']) && $_GET['tiotournament'] == 'admin'):
+		if (isset($_GET['tioevent'])) {
+			
+			switch ($_GET['tioevent']) {
+				case "debug":
+					// Check for password_has function. If it doesn't exist, get it from bcrypt
+					if (!function_exists('password_hash')) {
+						try {
+							require_once(BCRYPT);
+						} catch (Exception $e) {
+							die('bcrypt encryption missing');
+						}
+					}
+					
+					require_once(CONVERTER . '/tioconverter.debug.php');
+					break;
+					
+				case "encrypt":
+					require_once(CONVERTER . '/encrypt.php');
+					break;
+					
+				case "download": // Download tio file from outside
+					require_once(CONVERTER . '/tioconverter.download.php');
+					break;
+					
+				default:
+					// Allow shortcuts to syles and js files
+					if (isset($_SESSION['admin']) && file_exists(CONVERTER . '/' . $_GET['tioevent']) && !is_dir(CONVERTER . '/' . $_GET['tioevent'])) {
+						
+						// Correct file type
+						$fileext = explode(".", $_GET['tioevent'])[count(explode(".", $_GET['tioevent'])) - 1];
+						
+						switch ($fileext) {
+							case 'js':
+								header("Content-type: text/javascript; charset=utf-8");
+								break;
+							case 'css':
+								header("Content-type: text/css; charset=utf-8");
+								break;
+							default:
+								header("HTTP/1.1 404 Not Found");
+								break;
+						}
+						echo file_get_contents(CONVERTER . '/' . $_GET['tioevent']);
+						
+						die;
+					} else {
+						if (trim($_GET['tioevent']) == "" || !isset($_SESSION['admin'])) {
+							require_once(CONVERTER . '/tioconverter.admin.php');
+						} else {
+							header("HTTP/1.1 404 Not Found");
+							echo "404 Not Found";
+						}
+						die;
+					}
+					break;
+			}
+			break;
+		} else {
+			require_once(CONVERTER . '/tioconverter.admin.php');
+		}
+		break;
+		
+	// Check if under maintenance
+	case (MAINTENANCE_MODE):
+		require_once(CONVERTER . '/tioconverter.front.maintenance.php');
+		die;
+		break;
+		
 	// GET data
 	case (isset($_GET['get'])):
 		require_once(CONVERTER . '/tioconverter.class.php'); // Should already be included in settings.php
@@ -65,70 +135,6 @@ switch (true) {
             echo "<h1>401 Unauthorized</h1>";
         }
 		die;
-		break;
-	
-	// Admin Panel
-	case (isset($_GET['tiotournament']) && $_GET['tiotournament'] == 'admin'):
-		if (isset($_GET['tioevent'])) {
-			
-			switch ($_GET['tioevent']) {
-				case "debug":
-					// Check for password_has function. If it doesn't exist, get it from bcrypt
-					if (!function_exists('password_hash')) {
-						try {
-							require_once(BCRYPT);
-						} catch (Exception $e) {
-							die('bcrypt encryption missing');
-						}
-					}
-					
-					require_once(CONVERTER . '/tioconverter.debug.php');
-					break;
-					
-				case "encrypt":
-					require_once(CONVERTER . '/encrypt.php');
-					break;
-					
-				case "download": // Download tio file from outside
-					require_once(CONVERTER . '/tioconverter.download.php');
-					break;
-					
-				default:
-					// Allow shortcuts to syles and js files
-					if (isset($_SESSION['admin']) && file_exists(CONVERTER . '/' . $_GET['tioevent']) && !is_dir(CONVERTER . '/' . $_GET['tioevent'])) {
-						
-						// Correct file type
-						$fileext = explode(".", $_GET['tioevent'])[count(explode(".", $_GET['tioevent'])) - 1];
-						
-						switch ($fileext) {
-							case 'js':
-								header("Content-type: text/javascript; charset=utf-8");
-								break;
-							case 'css':
-								header("Content-type: text/css; charset=utf-8");
-								break;
-							default:
-								header("HTTP/1.1 404 Not Found");
-								break;
-						}
-						echo file_get_contents(CONVERTER . '/' . $_GET['tioevent']);
-						
-						die;
-					} else {
-						if (trim($_GET['tioevent']) == "" || !isset($_SESSION['admin'])) {
-							require_once(CONVERTER . '/tioconverter.admin.php');
-						} else {
-							header("HTTP/1.1 404 Not Found");
-							echo "404 Not Found";
-						}
-						die;
-					}
-					break;
-			}
-			break;
-		} else {
-			require_once(CONVERTER . '/tioconverter.admin.php');
-		}
 		break;
 	
 	// Search for a player
