@@ -118,6 +118,15 @@ $(document).ready(function() {
 	}
 	
 	function allDone() {
+		// If hosted on the same domain, remove the default interval
+		if ($('#tio-check-url').val().indexOf(window.location.toString().split('/')[2]) > -1) {
+			$('#tio-update-interval').val(0);
+			$('#tio-update-interval').prop('readonly', true);
+		} else {
+			$('#tio-update-interval').val(60);
+			$('#tio-update-interval').prop('readonly', false);
+		}
+		
 		$('#tio-tourney-id').val($(xmlfile).find('AppData:eq(0) EventList:eq(0) Event:eq(0) ID:eq(0)').text());
 		$('#tio-tourney-name').val($(xmlfile).find('AppData:eq(0) EventList:eq(0) Event:eq(0) Name:eq(0)').text());		
 		$('#tio-tourney-permalink').val($('#tio-tourney-name').val().toLowerCase().replace().replace(/\W+/g, " ").replace(/\s+/g, '-'));
