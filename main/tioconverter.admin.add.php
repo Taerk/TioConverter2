@@ -78,7 +78,7 @@
 				<label for="tio-update-until">Update Until</label>
 				<div class="input-group">
 					<span class="input-group-addon" id="tio-update-until-addon" name="tio-update-until-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-					<input type="text" class="form-control" id="tio-update-until" name="tio-update-until" value="<?php echo date('m/d/Y H:00', strtotime('+1 hour')); ?>">
+					<input type="text" class="form-control" id="tio-update-until" name="tio-update-until" value="<?php echo date('m/d/Y H:00', strtotime('+1 day')); ?>">
 				</div>
 			</div>
 		</div>
