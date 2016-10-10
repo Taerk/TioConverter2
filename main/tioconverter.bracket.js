@@ -42,6 +42,7 @@ function tioConverterJS() {
 	this.changeStatus = function(status) {
 		if (typeof status != 'undefined') {
 			$('#status').css('display', 'block');
+			$('#no-matches').remove();
 			switch (status) {
 				case 'loading':
 					$('#status').css({
@@ -60,6 +61,11 @@ function tioConverterJS() {
 						'background-image': 'url(/main/images/load_js_fail_parse.png)'
 					});
 					$('#status img').css('display', 'none');
+					break;
+				case 'no-matches':
+					$('#status').css('display', 'none');
+					$('#status img').css('display', 'none');
+					$('#bracket').prepend('<h1 id="no-matches" style="text-align: center">This bracket has not been started</h1>');
 					break;
 				default:
 					$('#status').css('display', 'none');
@@ -123,40 +129,47 @@ function tioConverterJS() {
 				var succeeded = false;
 				_js.loading = true;
 				
-				$.getJSON("?get",
-					function(data) {
-						try {
-							_js.tio_data = data;
-							
-							// Count the number of rounds in the tournament
-							var used_rounds = [];
-							_js.winners_round_count = 0;
-							_js.losers_round_count = 0;
-							
-							$.each(data[_js.selected_tournament]['events'][_js.selected_event]['matches'], function(key,_match) {
-								if ($.inArray(_match['round'], used_rounds) == -1) {
-									if (parseInt(_match['round']) > 0) {
-										_js.winners_round_count++;
-									}
-									if (parseInt(_match['round']) < 0) {
-										_js.losers_round_count++;
-									}	
-									used_rounds.push(_match['round']);
+				$.getJSON("?get", function(data) {
+					try {
+						_js.tio_data = data;
+						
+						// Count the number of rounds in the tournament
+						var used_rounds = [];
+						_js.winners_round_count = 0;
+						_js.losers_round_count = 0;
+						
+						$.each(data[_js.selected_tournament]['events'][_js.selected_event]['matches'], function(key,_match) {
+							if ($.inArray(_match['round'], used_rounds) == -1) {
+								if (parseInt(_match['round']) > 0) {
+									_js.winners_round_count++;
 								}
-							});
-						} catch(e) {
-							_js.changeStatus('parse-failed');
+								if (parseInt(_match['round']) < 0) {
+									_js.losers_round_count++;
+								}	
+								used_rounds.push(_match['round']);
+							}
+						});
+						
+						if (data[_js.selected_tournament]['events'][_js.selected_event]['matches'].length === 0) {
+							_js.changeStatus('no-matches');
 						}
+						
+					} catch(e) {
+						console.log(e.toString());
+						_js.changeStatus('parse-failed');
 					}
-				).always(function() {
+				})
+				.always(function() {
 					_js.loading = false;
-				}).fail(function() {
-					_js.changeStatus('connect-failed');
-					return false;
-				}).success(function() {
+				})
+				.done(function() {
 					_js.changeStatus();
 					_js.drawBracket(reload);
 					return true;
+				})
+				.fail(function() {
+					_js.changeStatus('connect-failed');
+					return false;
 				});
 			} else {
 				console.log("No changes in md5");
@@ -258,6 +271,7 @@ function tioConverterJS() {
 						
 						// Add a column if it doesn't exist
 						if ($('#bracket .round-' + _match['round']).length < 1) {
+							console.log("adding column");
 							var new_round_column = '<div class="column round-column round-' + _match['round'] + '" round="' + _match['round'] + '">' + _js.getRound(_match['round']) + '</div>';
 							var new_match_column = '<div class="column match-column round-' + _match['round'] + '" round="' + _match['round'] + '"></div>';
 							$('#' + m_side + '_rounds').append(new_round_column);
@@ -455,6 +469,7 @@ function tioConverterJS() {
 		_js.resizeLines();
 		
 		if (!reload) {
+			console.log("Not a reload");
 			_js.win_lines = document.getElementById('winner_lines');
 			_js.lose_lines = document.getElementById('loser_lines');
 			_js.win_ctx = _js.win_lines.getContext("2d");
