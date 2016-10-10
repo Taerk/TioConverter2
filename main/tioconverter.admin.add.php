@@ -9,6 +9,20 @@
 		</span>
 	</div>
 	
+	<?php if (file_exists(PATH . '/uploads') && is_dir(PATH . '/uploads')) { ?>
+	<div class="input-group" style="width: 100%; text-align: center; margin-top: 5px">
+		<label for="tio_available_uploads" style="text-align: left; width: 100%">Or select an uploaded file</label>
+		<select class="form-control" id="tio_available_uploads" name="tio_available_uploads">
+			<option value="">-</option><?php
+		foreach (scandir(PATH . '/uploads') as $key=>$file) {
+			if (stripos($file, '.tio') > -1) {
+				echo '<option value="' . PATH . "uploads/" . $file . '">' . $file . '</option>';
+			}
+		}
+		?></select>
+	</div>
+	<?php } ?>
+	
 	<div id="add_bracket_check">
 		<div id="add_bracket_progress">
 			<div class="check">Download Check</div>

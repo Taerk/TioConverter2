@@ -20,31 +20,35 @@ if (isset($_SESSION['admin'])) {
 			curl_setopt($ch, CURLOPT_HEADER, 0);
 			$c = curl_exec($ch);
 			echo curl_getinfo($ch, CURLINFO_HTTP_CODE);
-		} else {			
-			// Return default cURL
-			
+		} else {
 			header("Content-type: application/json; charset=utf-8");
+			
+			// Attempt to find a local file first
+			if (file_exists($fileurl)) {
+				$data = file_get_contents($fileurl);
+				$return = ['url' => $fileurl, 'method' => $source, 'response' => 200, 'data' => $data];
+			} else {
+				// Get cURL resource
+				$curl = curl_init();
 				
-			// Get cURL resource
-			$curl = curl_init();
-			
-			// Set some options - we are passing in a useragent too here
-			curl_setopt_array($curl, [
-				CURLOPT_RETURNTRANSFER => true,
-				CURLOPT_HEADER => false,
-				CURLOPT_URL => $fileurl,
-				CURLOPT_USERAGENT => 'TioConverter2',
-				CURLOPT_SSL_VERIFYPEER => false,
-				CURLOPT_SSL_VERIFYHOST => false,
-				CURLOPT_FOLLOWLOCATION => true
-			]);
-			
-			$data = curl_exec($curl);
-			
-			$return = ['url' => $fileurl, 'method' => $source, 'response' => curl_getinfo($curl, CURLINFO_HTTP_CODE), 'data' => $data];
-			
-			// Close request to clear up some resources
-			curl_close($curl);
+				// Set some options - we are passing in a useragent too here
+				curl_setopt_array($curl, [
+					CURLOPT_RETURNTRANSFER => true,
+					CURLOPT_HEADER => false,
+					CURLOPT_URL => $fileurl,
+					CURLOPT_USERAGENT => 'TioConverter2',
+					CURLOPT_SSL_VERIFYPEER => false,
+					CURLOPT_SSL_VERIFYHOST => false,
+					CURLOPT_FOLLOWLOCATION => true
+				]);
+				
+				$data = curl_exec($curl);
+				
+				$return = ['url' => $fileurl, 'method' => $source, 'response' => curl_getinfo($curl, CURLINFO_HTTP_CODE), 'data' => $data];
+				
+				// Close request to clear up some resources
+				curl_close($curl);
+			}
 			
 			echo json_encode($return);
 			die;

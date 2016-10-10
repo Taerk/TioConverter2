@@ -118,13 +118,14 @@ $(document).ready(function() {
 	}
 	
 	function allDone() {
-		// If hosted on the same domain, remove the default interval
-		if ($('#tio-check-url').val().indexOf(window.location.toString().split('/')[2]) > -1) {
+		$('#tio-update-interval').prop('readonly', false);
+		if ($('#tio-check-url').val().indexOf(window.location.toString().split('/')[2]) > -1) { // If hosted on the same domain, decrease the default interval
+			$('#tio-update-interval').val(30);
+		} else if ($('#tio-check-url').val().indexOf("/home") === 0) { // If hosted locally, remove the default inverval
 			$('#tio-update-interval').val(0);
 			$('#tio-update-interval').prop('readonly', true);
 		} else {
 			$('#tio-update-interval').val(60);
-			$('#tio-update-interval').prop('readonly', false);
 		}
 		
 		$('#tio-tourney-id').val($(xmlfile).find('AppData:eq(0) EventList:eq(0) Event:eq(0) ID:eq(0)').text());
@@ -334,5 +335,10 @@ $(document).ready(function() {
 			$('#tio-tourney-featured-switch .fa').removeClass('fa-star');
 			$('#tio-tourney-featured-switch .fa').addClass('fa-star-o');
 		}
+	});
+	
+	// Select an uploaded file
+	$('#tio_available_uploads').change(function() {
+		$('#tio-check-url').val($(this).val());
 	});
 });
