@@ -2,18 +2,32 @@
 	<div class="page-header"><h1>Manage Bracket</h1></div>
 	
 	<label for="basic-url">Select Bracket</label>
-	<select size="8" class="form-control" id="update_bracket_select"><?php
-	function my_sort($a, $b) {
+	<?php
+	function sortTournaments($a, $b) {
+		// Remove Smash 4 from the name
+		$a['name'] = str_replace('Smash 4', '', $a['name']);
+		$b['name'] = str_replace('Smash 4', '', $b['name']);
+		
 		if ($a['name'] == $b['name']) {
 			return 0;
 		} else {
-			return ($a['name'] > $b['name']) ? -1 : 1;
+			// Sort by full number (windows style)
+			preg_match('/[0-9]+/', $a['name'], $matches_a);
+			preg_match('/[0-9]+/', $b['name'], $matches_b);
+			
+			if (isset($matches_a[0]) && isset($matches_b[0])) {
+				return (intval($matches_a[0]) > intval($matches_b[0]) ? -1 : 1);
+			}
+			
+			return ($a['name'] > $b['name'] ? -1 : 1);
 		}
 	}
 	
 	$sorted_tournaments = $tio->getTournaments();
-	usort($sorted_tournaments, "my_sort");
-	
+	usort($sorted_tournaments, "sortTournaments");
+	?>
+	<select size="8" class="form-control" id="update_bracket_select">
+	<?php
 	foreach ($sorted_tournaments as $id=>$tournament) {
 		$tournament['events'] = $tio->getEvents($tournament['id']);
 		echo '<option value="'.$tournament['id'].'" tournament-info=\'' . json_encode($tournament) . '\'>'.$tournament['name'].'</option>';

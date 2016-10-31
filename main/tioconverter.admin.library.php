@@ -23,7 +23,7 @@ if (isset($_GET['action'])) {
 			echo $tio->addTournament($data);
 			break;
 		case 'update':
-			echo $lib->updateTournament($data);
+			echo $tio->updateTournament($data);
 			break;
 	}
 	die;
