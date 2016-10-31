@@ -329,27 +329,27 @@ function tioConverterJS() {
 						/**
 						 * OUTPUT TEXT
 						 */
-						$('#' + m_side + '_matches .match-column.round-' + _match['round']).append(`
-							<div class="match" match-id="0" winner-id="` + _match['winner'] + `" in-progress="false">
-								<div class="match-info">
-									<div class="tio-match-id">` + _match['key'] + `</div>
-									<a class="setup` + m_setup_is + `">` + m_setup + `</a>
-								</div>
-								<div class="players">
-									<div class="player player1` + m_is_winner_p1 + m_is_system_p1 +`" player-seed="` + _match['p1']['seed'] + `" player-id="` + _match['p1']['id'] + `">
-										<div class="player-seed">` + _match['p1']['seed'] + `</div>
-										<div class="player-tag">` + _match['p1']['tag'] + ko_p1 + `</div>
-										<div class="player-score">` + _match['s1'] + `</div>
-									</div>
-									<div class="sep"></div>
-									<div class="player player2` + m_is_winner_p2 + m_is_system_p2 +`" player-seed="` + _match['p2']['seed'] + `" player-id="` + _match['p2']['id'] + `">
-										<div class="player-seed">` + _match['p2']['seed'] + `</div>
-										<div class="player-tag">` + _match['p2']['tag'] + ko_p2 + `</div>
-										<div class="player-score">` + _match['s2'] + `</div>
-									</div>
-								</div>
-							</div>
-						`);
+						$('#' + m_side + '_matches .match-column.round-' + _match['round']).append(
+							"<div class=\"match\" match-id=\"0\" winner-id=\"" + _match["winner"] + "\" in-progress=\"false\">\n" +
+							"		<div class=\"match-info\">\n" +
+							"			<div class=\"tio-match-id\">" + _match["key"] + "</div>\n" +
+							"			<a class=\"setup" + m_setup_is + "\">" + m_setup + "</a>\n" +
+							"		</div>" +
+							"		<div class=\"players\">\n" +
+							"			<div class=\"player player1" + m_is_winner_p1 + m_is_system_p1 +"\" player-seed=\"" + _match["p1"]["seed"] + "\" player-id=\"" + _match["p1"]["id"] + "\">\n" +
+							"				<div class=\"player-seed\">" + _match["p1"]["seed"] + "</div>\n" +
+							"				<div class=\"player-tag\">" + _match["p1"]["tag"] + ko_p1 + "</div>\n" +
+							"				<div class=\"player-score\">" + _match["s1"] + "</div>\n" +
+							"			</div>\n" +
+							"			<div class=\"sep\"></div>\n" +
+							"			<div class=\"player player2" + m_is_winner_p2 + m_is_system_p2 +"\" player-seed=\"" + _match["p2"]["seed"] + "\" player-id=\"" + _match["p2"]["id"] + "\">\n" +
+							"				<div class=\"player-seed\">" + _match["p2"]["seed"] + "</div>\n" +
+							"				<div class=\"player-tag\">" + _match["p2"]["tag"] + ko_p2 + "</div>\n" +
+							"				<div class=\"player-score\">" + _match["s2"] + "</div>\n" +
+							"			</div>\n" +
+							"		</div>\n" +
+							"	</div>"
+						);
 					}
 				});
 				
