@@ -103,14 +103,11 @@ function tioConverterJS() {
 	}
 	
 	this.loadTioFile = function(reload) {
-		console.log("Loading data");
-		if ((typeof reload != 'undefined') && (reload == true)) {
-			_js.loading = true;
-		} else {
-			_js.loading = false;
-		}
+		_js.loading = (typeof reload != 'undefined' && reload == true);
 		
 		if (_js.loading == false) {
+			console.log("Loading remote data");
+			
 			$.getJSON("?get=data", function(hashData) {
 				if (hashData.md5 != _js.md5) {
 					_js.md5 = hashData.md5;
