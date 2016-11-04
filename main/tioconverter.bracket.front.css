@@ -52,6 +52,17 @@ body {
 	font-size: 1.5em;
 	margin-bottom: 30px;
 }
+.tournament-list { width: 100%; }
+.tournament-list td.col-2 {
+	font-family: monospace;
+}
+.tournament-list th, .tournament-list td { padding: 1px 5px }
+.tournament-list th { background-color: #b0b0c0 }
+.tournament-list td { background-color: #fff }
+.tournament-list td.col-0 { width: 30px; text-align: center }
+.tournament-list td.col-1 { background-color: #e0e0e0; }
+.tournament-list td.col-2 { width: 250px }
+.tournament-list tr.bottom-border { border-bottom: 1px solid black }
 
 /**
  * Rounds

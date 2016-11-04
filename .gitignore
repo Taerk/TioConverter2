@@ -8,6 +8,7 @@
 **/etc/tioconverter.log
 **/etc/library.json
 **/etc/passwd
+**/broken/*
 archive/*-*
 archive/*/*
 settings.php
