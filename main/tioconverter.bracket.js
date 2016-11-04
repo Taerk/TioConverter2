@@ -110,72 +110,73 @@ function tioConverterJS() {
 			_js.loading = false;
 		}
 		
-		$.getJSON("?get=data", function(hashData) {
-			if (hashData.md5 != _js.md5) {
-				_js.md5 = hashData.md5;
-				console.log("There was a change in md5 -- new md5 is: " + hashData.md5);
-		
-				if (!_js.first_load) {
-					_js.win_ctx.clearRect(0, _js.win_lines.width, 0, _js.win_lines.height);
-					_js.los_ctx.clearRect(0, _js.lose_lines.width, 0, _js.lose_lines.height);
-					
-					$('#bracket').css('display', 'none');
-					_js.changeStatus();
-					return false;
-				}
-				
-				_js.changeStatus('loading');
-				
-				var succeeded = false;
-				_js.loading = true;
-				
-				$.getJSON("?get", function(data) {
-					try {
-						_js.tio_data = data;
+		if (_js.loading == false) {
+			$.getJSON("?get=data", function(hashData) {
+				if (hashData.md5 != _js.md5) {
+					_js.md5 = hashData.md5;
+					console.log("There was a change in md5 -- new md5 is: " + hashData.md5);
+			
+					if (!_js.first_load) {
+						_js.win_ctx.clearRect(0, _js.win_lines.width, 0, _js.win_lines.height);
+						_js.los_ctx.clearRect(0, _js.lose_lines.width, 0, _js.lose_lines.height);
 						
-						// Count the number of rounds in the tournament
-						var used_rounds = [];
-						_js.winners_round_count = 0;
-						_js.losers_round_count = 0;
-						
-						$.each(data[_js.selected_tournament]['events'][_js.selected_event]['matches'], function(key,_match) {
-							if ($.inArray(_match['round'], used_rounds) == -1) {
-								if (parseInt(_match['round']) > 0) {
-									_js.winners_round_count++;
-								}
-								if (parseInt(_match['round']) < 0) {
-									_js.losers_round_count++;
-								}	
-								used_rounds.push(_match['round']);
-							}
-						});
-						
-						if (data[_js.selected_tournament]['events'][_js.selected_event]['matches'].length === 0) {
-							_js.changeStatus('no-matches');
-						}
-						
-					} catch(e) {
-						console.log(e.toString());
-						_js.changeStatus('parse-failed');
+						$('#bracket').css('display', 'none');
+						_js.changeStatus();
+						return false;
 					}
-				})
-				.always(function() {
-					_js.loading = false;
-				})
-				.done(function() {
-					_js.changeStatus();
-					_js.drawBracket(reload);
-					return true;
-				})
-				.fail(function() {
-					_js.changeStatus('connect-failed');
-					return false;
-				});
-			} else {
-				console.log("No changes in md5");
-			}
-		});
-		
+					
+					_js.changeStatus('loading');
+					
+					var succeeded = false;
+					_js.loading = true;
+					
+					$.getJSON("?get", function(data) {
+						try {
+							_js.tio_data = data;
+							
+							// Count the number of rounds in the tournament
+							var used_rounds = [];
+							_js.winners_round_count = 0;
+							_js.losers_round_count = 0;
+							
+							$.each(data[_js.selected_tournament]['events'][_js.selected_event]['matches'], function(key,_match) {
+								if ($.inArray(_match['round'], used_rounds) == -1) {
+									if (parseInt(_match['round']) > 0) {
+										_js.winners_round_count++;
+									}
+									if (parseInt(_match['round']) < 0) {
+										_js.losers_round_count++;
+									}	
+									used_rounds.push(_match['round']);
+								}
+							});
+							
+							if (data[_js.selected_tournament]['events'][_js.selected_event]['matches'].length === 0) {
+								_js.changeStatus('no-matches');
+							}
+							
+						} catch(e) {
+							console.log(e.toString());
+							_js.changeStatus('parse-failed');
+						}
+					})
+					.always(function() {
+						_js.loading = false;
+					})
+					.done(function() {
+						_js.changeStatus();
+						_js.drawBracket(reload);
+						return true;
+					})
+					.fail(function() {
+						_js.changeStatus('connect-failed');
+						return false;
+					});
+				} else {
+					console.log("No changes in md5");
+				}
+			});
+		}
 	}
 
 	this.getRound = function(round) {
