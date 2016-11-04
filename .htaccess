@@ -6,9 +6,9 @@ Options -Indexes
 ########################
 # FORCE HTTPS ON SITE
 ########################
-RewriteEngine on
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+# RewriteEngine on
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
 
 ########################
 # Everything Else

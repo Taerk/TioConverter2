@@ -5,8 +5,9 @@
 **/*.tio
 **/.ftpquota
 **/cgi-bin
-etc/tioconverter.log
-etc/library.json
+**/etc/tioconverter.log
+**/etc/library.json
 archive/*-*
 archive/*/*
 settings.php
+.htaccess
