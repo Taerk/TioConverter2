@@ -79,3 +79,8 @@ pipeline:
             description: ""
             required: true
             value: se_gabriel_nieves
+          - name: CX_APIKEY
+            type: Secret
+            description: ""
+            required: false
+            value: CxOne_API_Key
