@@ -1,0 +1,14 @@
+inputSet:
+  name: Build_Taerk_TioConverter2_1722013971782-pr-trigger-input-set
+  identifier: Build_Taerk_TioConverter2_1722013971782prtriggerinputset
+  orgIdentifier: default
+  projectIdentifier: default_project
+  pipeline:
+    identifier: Build_Taerk_TioConverter2_1722013971782
+    properties:
+      ci:
+        codebase:
+          build:
+            type: PR
+            spec:
+              number: <+trigger.prNumber>
