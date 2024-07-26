@@ -57,10 +57,11 @@ pipeline:
                         -e CX_APIKEY="$CX_APIKEY" \
                         -e CX_BASE_URI="$CX_BASE_URI" \
                         -e CX_TENANT="$CX_TENANT" \
+                        -v .:/project
                         checkmarx/ast-cli scan create \
                         --project-name "<+project.name>" \
                         --branch "<+pipeline.branch>" \
-                        -s .
+                        -s /project
           platform:
             os: Linux
             arch: Amd64
