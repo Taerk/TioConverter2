@@ -21,10 +21,10 @@ pipeline:
             steps:
               - step:
                   identifier: echo
-                  name: ls
+                  name: env
                   spec:
                     shell: Sh
-                    command: ls
+                    command: env
                   timeout: ""
                   type: Run
               - step:
@@ -68,3 +68,14 @@ pipeline:
             type: Cloud
             spec: {}
         type: CI
+        variables:
+          - name: CX_BASEURI
+            type: String
+            description: ""
+            required: true
+            value: https://ast.checkmarx.net/
+          - name: CX_TENANT
+            type: String
+            description: ""
+            required: true
+            value: se_gabriel_nieves
