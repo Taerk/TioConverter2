@@ -27,6 +27,40 @@ pipeline:
                     command: ls
                   timeout: ""
                   type: Run
+              - step:
+                  type: Run
+                  name: Pull AST-CLI
+                  identifier: Pull_ASTCLI
+                  spec:
+                    shell: Sh
+                    command: docker pull checkmarx/ast-cli
+              - step:
+                  type: Run
+                  name: Validate CxOne Authentication
+                  identifier: Validate_CxOne_Authentication
+                  spec:
+                    shell: Sh
+                    command: |-
+                      docker run \
+                        -e CX_APIKEY="$CX_APIKEY" \
+                        -e CX_BASE_URI="$CX_BASE_URI" \
+                        -e CX_TENANT="$CX_TENANT" \
+                        checkmarx/ast-cli auth validate
+              - step:
+                  type: Run
+                  name: Run Scan
+                  identifier: Run_Scan
+                  spec:
+                    shell: Sh
+                    command: |-
+                      docker run \
+                        -e CX_APIKEY="$CX_APIKEY" \
+                        -e CX_BASE_URI="$CX_BASE_URI" \
+                        -e CX_TENANT="$CX_TENANT" \
+                        checkmarx/ast-cli scan create \
+                        --project <+project.name> \
+                        --branch <+pipeline.branch> \
+                        -s .
           platform:
             os: Linux
             arch: Amd64
