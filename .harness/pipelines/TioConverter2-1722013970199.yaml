@@ -58,7 +58,7 @@ pipeline:
                         -e CX_BASE_URI="$CX_BASE_URI" \
                         -e CX_TENANT="$CX_TENANT" \
                         checkmarx/ast-cli scan create \
-                        --project <+project.name> \
+                        --project-name <+project.name> \
                         --branch <+pipeline.branch> \
                         -s .
           platform:
