@@ -72,8 +72,6 @@ pipeline:
                       fail_on_severity: high
                     ingestion:
                       file: cx_result.sarif
-                  when:
-                    stageStatus: All
           platform:
             os: Linux
             arch: Amd64
