@@ -45,6 +45,7 @@ pipeline:
                       ./cx scan create \
                         --project-name "<+project.name>" \
                         --branch "<+pipeline.branch>" \
+                        --report-format sarif \
                         -s .
           platform:
             os: Linux
