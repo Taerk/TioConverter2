@@ -42,11 +42,19 @@ pipeline:
                   spec:
                     shell: Sh
                     command: |-
+                      # https://docs.checkmarx.com/en/34965-68643-scan.html
                       ./cx scan create \
                         --project-name "<+project.name>" \
                         --branch "<+pipeline.branch>" \
+                        --threshold "sast-high=10; sast-medium=20; sca-high=10" \
                         --report-format sarif \
+                        --output-path results.json \
                         -s .
+                    reports:
+                      type: JUnit
+                      spec:
+                        paths:
+                          - results.json
           platform:
             os: Linux
             arch: Amd64
