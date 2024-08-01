@@ -82,16 +82,16 @@ pipeline:
         variables:
           - name: CX_BASEURI
             type: String
-            description: ""
+            description: The URL of the Checkmarx One server.
             required: true
             value: https://ast.checkmarx.net/
           - name: CX_TENANT
             type: String
-            description: ""
+            description: The customer's tenant name.
             required: true
             value: se_gabriel_nieves
           - name: CX_APIKEY
             type: Secret
-            description: ""
+            description: An API Key to login to the Checkmarx One server.
             required: false
             value: CxOne_API_Key
