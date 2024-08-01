@@ -93,5 +93,5 @@ pipeline:
           - name: CX_APIKEY
             type: Secret
             description: An API Key to login to the Checkmarx One server.
-            required: false
+            required: true
             value: CxOne_API_Key
