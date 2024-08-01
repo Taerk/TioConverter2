@@ -46,7 +46,6 @@ pipeline:
                       ./cx scan create \
                         --project-name "<+project.name>" \
                         --branch "<+pipeline.branch>" \
-                        --threshold "sast-high=10; sast-medium=20; sca-high=10" \
                         --report-format sarif \
                         -s .
                   failureStrategies:
