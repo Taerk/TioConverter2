@@ -48,12 +48,13 @@ pipeline:
                         --branch "<+pipeline.branch>" \
                         --threshold "sast-high=10; sast-medium=20; sca-high=10" \
                         --report-format sarif \
-                        --output-path ast-results \
                         -s .
-                      echo $? > cx.result
-
-                      # To prevent this step from failing out before results are ingested
-                      true
+                  failureStrategies:
+                    - onFailure:
+                        errors:
+                          - AllErrors
+                        action:
+                          type: MarkAsFailure
               - step:
                   type: CustomIngest
                   name: Ingest SAST Results
@@ -71,7 +72,7 @@ pipeline:
                         level: info
                       fail_on_severity: high
                     ingestion:
-                      file: ast-results/cx_result.sarif
+                      file: cx_result.sarif
           platform:
             os: Linux
             arch: Amd64
