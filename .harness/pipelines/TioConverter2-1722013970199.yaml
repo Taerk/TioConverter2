@@ -48,13 +48,30 @@ pipeline:
                         --branch "<+pipeline.branch>" \
                         --threshold "sast-high=10; sast-medium=20; sca-high=10" \
                         --report-format sarif \
-                        --output-path results.json \
+                        --output-path ast-results \
                         -s .
-                    reports:
-                      type: JUnit
-                      spec:
-                        paths:
-                          - results.json
+                      echo $? > cx.result
+
+                      # To prevent this step from failing out before results are ingested
+                      true
+              - step:
+                  type: CustomIngest
+                  name: Ingest SAST Results
+                  identifier: Ingest_SAST_Results
+                  spec:
+                    mode: ingestion
+                    config: sarif
+                    target:
+                      type: repository
+                      detection: manual
+                      name: <+pipeline.name>
+                      variant: <+pipeline.branch>
+                    advanced:
+                      log:
+                        level: info
+                      fail_on_severity: high
+                    ingestion:
+                      file: ast-results/cx_result.sarif
           platform:
             os: Linux
             arch: Amd64
